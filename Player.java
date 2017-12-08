@@ -1,4 +1,5 @@
 import greenfoot.*;
+import java.util.*;
 
 /**
  * Write a description of class Player here.dd
@@ -43,9 +44,9 @@ public class Player extends Entity
         
     }
     
-    public void update()
+    public void update(List<Entity> entities)
     {
-        super.update();
+        super.update(entities);
         
         // Hier Gravitation berechnen und Keypresses abfangen
         
@@ -55,6 +56,6 @@ public class Player extends Entity
         setOrientation("right");
         setAnimationIndex(getFrameCounter()/5);
         
-        System.out.println("Eigenschaften von "+getName()+" gesetzt");
+        //System.out.println("Eigenschaften von "+getName()+" gesetzt");
     }
 }

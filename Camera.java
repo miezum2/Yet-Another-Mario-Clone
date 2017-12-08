@@ -154,6 +154,16 @@ public class Camera
             entity.setCameraX(mapX(entity.getPosX()));
             entity.setCameraY(mapY(entity.getPosY()));   
             
+            // Objekt deaktivieren, wenn es sich außerhalb des Bildschirms befindet
+            if (entity.getCameraX() < - entity.getImage().getWidth() || entity.getCameraX() > widthPixels + entity.getImage().getWidth()
+                || entity.getCameraY() < - entity.getImage().getHeight() || entity.getCameraY() > heightPixels + entity.getImage().getHeight())
+            {
+                entity.disable();
+            }
+            else
+            {
+                entity.enable();
+            }            
         }
         
         /*

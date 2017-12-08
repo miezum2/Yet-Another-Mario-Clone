@@ -98,25 +98,29 @@ public class UserInterface extends World
         
         level.update();        
         
-        // Kamera-Objekt anweisen, den aktuellen Bildausschnitt zu berechnen
+        // Kamera-Objekt anweisen, die Position der Entities in der Welt in Bildschirm-Koordinaten umzurechnen
+        // nicht sichtbare Entities deaktivieren
         List<Entity> allEntities = level.getEntities();
         camera.calculatePositions(allEntities);
             
-        // Active auf true oder false setzen
+        // Alle Objekte durchgehen
         for (Entity entity : allEntities)
         {
-            entity.enable();
-            entity.update();
-            graphics.setScale(camera.getScale());
-            entity.setImage(graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex()));
-            entity.calculateExactPos();
-            addObject(entity, (int)entity.getCameraX(), (int)entity.getCameraY());
+            // Objekt aktualisieren und zeichnen, wenn es nicht deaktiviert ist
+            if (entity.isEnabled())
+            {
+                entity.update(allEntities);
+                graphics.setScale(camera.getScale());
+                entity.setImage(graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex()));
+                entity.calculateExactPos();            
+                addObject(entity, (int)entity.getCameraX(), (int)entity.getCameraY());
+            }
         }
         
         entityCounter.setText(currentEntities.size()+" Entities");
         entityCounter.setLocation(entityCounter.getImage().getWidth()/2, 18);
         
-        System.out.println("UserInterface Act");
+        //System.out.println("UserInterface Act");
         
         checkMous();
     }
