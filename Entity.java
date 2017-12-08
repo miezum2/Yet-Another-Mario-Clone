@@ -22,6 +22,8 @@ public abstract class Entity extends Actor
     private int animationIndex;
     private GreenfootImage image;
     private boolean enabled;
+    private int heightUnits;
+    private int widthUnits;
     
     public Entity()
     {
@@ -178,5 +180,25 @@ public abstract class Entity extends Actor
     public boolean isEnabled()
     {
         return enabled;
+    }
+    
+    public int getHeightUnits()
+    {
+        return heightUnits;
+    }
+    
+    public void setHeightUnits(int heightUnits)
+    {
+        this.heightUnits = heightUnits;
+    }
+    
+    public int getWidthUnits()
+    {
+        return widthUnits;
+    }
+    
+    public void setWidthUnits(int widthUnits)
+    {
+        this.widthUnits = widthUnits;
     }
 }

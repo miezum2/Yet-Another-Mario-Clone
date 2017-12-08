@@ -114,7 +114,7 @@ public class UserInterface extends World
                 GreenfootImage image = graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex());
                 entity.setHeightUnits(image.getHeight());
                 entity.setWidthUnits(image.getWidth());
-                graphics.setScale(camera.getScale());
+                graphics.setScale(camera.getScale()
                 entity.setImage(graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex()));
                 entity.calculateExactPos();            
                 addObject(entity, (int)entity.getCameraX(), (int)entity.getCameraY());

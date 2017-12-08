@@ -46,25 +46,70 @@ public class Player extends Entity
     {
         super.update(entities);
         
-        // Hier Gravitation berechnen und Keypresses abfangen
-        if(Greenfoot.isKeyDown("w"))
+        int floor = 0;
+        int right = 1000000;
+        int left = 0;
+        for (Entity entity : entities)
         {
+            if (entity.getPosX() + entity.getWidthUnits() > getPosX() && getPosX() + getWidthUnits() > entity.getPosX() && !(entity.getClass() == Player.class))
+            {
+                if (entity.getPosY()+entity.getHeightUnits() > floor)
+                {
+                    floor = (int)entity.getPosY()+entity.getHeightUnits();
+                }
+            }
             
-        }
-        if(Greenfoot.isKeyDown("a"))
-        {
-            setPosX(getPosX() + movement.move(180));
-        }
-        if(Greenfoot.isKeyDown("s"))
-        {
+            if (entity.getPosY() + entity.getHeightUnits() > getPosY() && getPosY() + getHeightUnits() > entity.getPosY() && !(entity.getClass() == Player.class))
+            {
+                if (entity.getPosX()+entity.getWidthUnits() > left)
+                {
+                    left = (int)entity.getPosX()+entity.getWidthUnits();
+                }
+            }
             
-        }
-        if(Greenfoot.isKeyDown("d"))
-        {
-            setPosX(getPosX() + movement.move(0));
         }
         
-        setPosY(getPosY() + movement.gravity());
+        System.out.println(floor);
+        
+        // Mario steuer
+        if (getName().equals("Mario"))
+        {
+            if(Greenfoot.isKeyDown("w"))
+            {
+                
+            }
+            if(Greenfoot.isKeyDown("a"))
+            {
+                int newX = (int)getPosX() + (int)movement.move(180);
+                if (newX < left)
+                {
+                    setPosX(left);
+                }
+                else
+                {
+                    setPosX(newX);
+                }
+            }
+            if(Greenfoot.isKeyDown("s"))
+            {
+                
+            }
+            if(Greenfoot.isKeyDown("d"))
+            {
+                setPosX(getPosX() + movement.move(0));
+            }
+        }
+        
+        int newY = (int)getPosY() + (int)movement.gravity();
+        if (newY < floor)
+        {
+            setPosY(floor);
+        }
+        else
+        {
+            setPosY(newY);
+        }
+        
         
         
         // Daten ermitteln       
@@ -73,6 +118,6 @@ public class Player extends Entity
         setOrientation("right");
         setAnimationIndex(getFrameCounter()/5);
         
-        //System.out.println("Eigenschaften von "+getName()+" gesetzt");
+        //System.out.println("Height: "+getHeightUnits()+" Width: "+getWidthUnits());
     }
 }

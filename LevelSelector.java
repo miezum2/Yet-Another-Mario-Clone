@@ -2,6 +2,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.*;
 //https://www.greenfoot.org/doc/native_loader
 //http://repo1.maven.org/maven2/com/google/code/gson/gson/2.8.0/
 
@@ -44,5 +45,10 @@ public class LevelSelector extends Selector
     public List<String> getLevelList()
     {
          return levels;        
+    }
+    
+    public String getLevelName(String path)
+    {
+        return "Todo: Name auslesen";
     }
 }
