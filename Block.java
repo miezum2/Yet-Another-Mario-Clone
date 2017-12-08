@@ -9,9 +9,9 @@ import java.util.*;
  */
 public class Block extends Entity
 {
-    public Block(String name, String id, double x, double y, GreenfootImage image, String state)
+    public Block(String name, String id, double x, double y, GreenfootImage image)
     {
-        super(name, id, x, y, image, state);
+        super(name, id, x, y, image);
     }
     
     /**
@@ -138,6 +138,8 @@ public class Block extends Entity
                     setActivity("grass");
                 }
             }
+            
+            setState("grass");
             setOrientation("right");
             setAnimationIndex(0);
         }
