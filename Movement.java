@@ -41,8 +41,12 @@ public class Movement
     {
        if (jumpcount == 3)
        {
-           Y= 70;
+           Y= 10;
            jumpcount = 0;
+       }
+       else
+       {
+          Y= 5; 
        }
        return Y;
     }
@@ -57,5 +61,8 @@ public class Movement
         
     }
 
-    
+    public void setSpeed (int speed)
+    {
+        this.speed=speed;
+    }
 }
