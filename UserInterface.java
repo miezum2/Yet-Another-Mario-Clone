@@ -19,6 +19,7 @@ public class UserInterface extends World
     private static final String nameP1 = "Mario";
     private static final String[] controlsP1 = {"w","a","s","d","space"};   
     
+    private String mode;
     private GraphicsManager graphics;
     private LevelSelector levelSelector;
     private Level level;
@@ -58,7 +59,7 @@ public class UserInterface extends World
         levelSelector = new LevelSelector(levelDir);
         
         // Level erstellen
-        level = new Level(levelSelector.getLevelList().get(0));
+        //level = new Level(levelSelector.getLevelList().get(0));
         
         // Kamera erstellen
         camera = new Camera(width, height);
@@ -71,6 +72,8 @@ public class UserInterface extends World
         addObject(entityCounter, 20, 18);
         //addObject(new CameraZones(width, height, 50, 100, 50), width/2, height/2);
         
+        mode = "levelSelector";
+        
         //addObject(new Player(nameP1, graphics.getImage(nameP1, "small", "walking", "right", 0), controlsP1), 100, 100);
         //addObject(new Object("Mystery_Block"), 200, 200);        
         //addObject(new LevelSelector(), 0, 0);
@@ -78,7 +81,7 @@ public class UserInterface extends World
         //JsonObject jsonObject = new JsonParser().parse("{\"name\": \"John\"}").getAsJsonObject();
         //System.out.println(jsonObject.get("name").getAsString());
         levelMaker = new LevelMaker();
-        addObject(levelMaker,200,200);
+        //addObject(levelMaker,200,200);
     }
     
     private long lastNanoTime = 0;
@@ -92,36 +95,48 @@ public class UserInterface extends World
         fpsCounter.setText(fps);
         fpsCounter.setLocation(fpsCounter.getImage().getWidth()/2, 6);
         
-        // Alle Objekte vom Bildschirm löschen
-        List<Entity> currentEntities = getObjects(Entity.class);
-        removeObjects(currentEntities);
-        
-        level.update();        
-        
-        // Kamera-Objekt anweisen, die Position der Entities in der Welt in Bildschirm-Koordinaten umzurechnen
-        // nicht sichtbare Entities deaktivieren
-        List<Entity> allEntities = level.getEntities();
-        camera.calculatePositions(allEntities);
-            
-        // Alle Objekte durchgehen
-        for (Entity entity : allEntities)
+        if (mode.equals("levelSelector"))
         {
-            // Objekt aktualisieren und zeichnen, wenn es nicht deaktiviert ist
-            if (entity.isEnabled())
-            {
-                entity.update(allEntities);
-                graphics.setScale(1);
-                GreenfootImage image = graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex());
-                entity.setHeightUnits(image.getHeight());
-                entity.setWidthUnits(image.getWidth());
-                graphics.setScale(camera.getScale());
-                entity.setImage(graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex()));
-                entity.calculateExactPos();            
-                addObject(entity, (int)entity.getCameraX(), (int)entity.getCameraY());
-            }
-        }
+            GreenfootImage background = Tools.loadImage("images/levelselection20.png");
+            background.scale(width, height);
+            setBackground(background);  
         
-        entityCounter.setText(currentEntities.size()+" Entities");
+        
+        
+        } else if (mode.equals("ingame"))
+        {
+            // Alle Entities vom Bildschirm löschen
+            List<Entity> currentEntities = getObjects(Entity.class);
+            removeObjects(currentEntities);
+            
+            level.update();        
+            
+            // Kamera-Objekt anweisen, die Position der Entities in der Welt in Bildschirm-Koordinaten umzurechnen
+            // nicht sichtbare Entities deaktivieren
+            List<Entity> allEntities = level.getEntities();
+            camera.calculatePositions(allEntities);
+                
+            // Alle Objekte durchgehen
+            for (Entity entity : allEntities)
+            {
+                // Objekt aktualisieren und zeichnen, wenn es nicht deaktiviert ist
+                if (entity.isEnabled())
+                {
+                    entity.update(allEntities);
+                    graphics.setScale(1);
+                    GreenfootImage image = graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex());
+                    entity.setHeightUnits(image.getHeight());
+                    entity.setWidthUnits(image.getWidth());
+                    graphics.setScale(camera.getScale());
+                    entity.setImage(graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex()));
+                    entity.calculateExactPos();            
+                    addObject(entity, (int)entity.getCameraX(), (int)entity.getCameraY());
+                }
+            } 
+            
+            entityCounter.setText(currentEntities.size()+" Entities");
+        }        
+        
         entityCounter.setLocation(entityCounter.getImage().getWidth()/2, 18);
         
         //System.out.println("UserInterface Act");
