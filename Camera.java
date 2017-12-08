@@ -9,7 +9,7 @@ import java.util.*;
  */
 public class Camera
 {
-    private static final int defaultHeightUnits = 200;
+    private static final int defaultHeightUnits = 20;
     
     GraphicsManager graphics;
     

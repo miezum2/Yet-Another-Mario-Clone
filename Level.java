@@ -73,7 +73,7 @@ public class Level
             // Typ: player
             if (entity.getType().equals("player"))
             {
-                Entity newEntity = new Player(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage());
+                Entity newEntity = new Player(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState());
                 entities.add(newEntity);
             }
             
@@ -87,16 +87,23 @@ public class Level
                     // Wenn ein Ground-Block gefunden, dann Welt bis zum Boden mit Ground-Blöcken füllen
                     for (double i = entity.getY(); i >= 0; i -= 16)
                     {
-                        Entity newEntity = new Block(entity.getName(), "0", entity.getX(), i, graphics.getImage());
+                        Entity newEntity = new Block(entity.getName(), "0", entity.getX(), i, graphics.getImage(), entity.getState());
                         entities.add(newEntity);
                     }
                 }
                 else
                 {
                     // Standardprozedur für Blöcke
-                    Entity newEntity = new Block(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage());
+                    Entity newEntity = new Block(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState());
                     entities.add(newEntity);
                 }
+            }
+            
+            // Typ: koopa
+            if (entity.getType().equals("koopa"))
+            {
+                Entity newEntity = new Koopa(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState());
+                entities.add(newEntity);
             }
         }        
         /*

@@ -37,19 +37,20 @@ public abstract class Entity extends Actor
         setImage(image);
     }
     
-    public Entity(String name, String id, double posX, double posY, GreenfootImage image)
+    public Entity(String name, String id, double posX, double posY, GreenfootImage image, String state)
     {
         this.name = name;
         this.id = id;
         this.posX = posX;
         this.posY = posY;
         this.image = image;
+        this.state = state;
         setImage(image);
     }
     
     public Entity(Entity entity)
     {
-        this(entity.getName(), entity.getId(), entity.getPosX(), entity.getPosY(), entity.getImage());
+        this(entity.getName(), entity.getId(), entity.getPosX(), entity.getPosY(), entity.getImage(), entity.getState());
     }
     
     /**
