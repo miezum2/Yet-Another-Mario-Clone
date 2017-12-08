@@ -14,7 +14,9 @@ import java.util.*;
  */
 public class LevelSelector extends Selector
 {
-    List<String> levels;
+    private List<String> levels;
+    private boolean show = false;
+    private List<SelectionBox> boxes;
     
     public LevelSelector(String levelDir)
     {
@@ -24,6 +26,8 @@ public class LevelSelector extends Selector
         // Levelliste initialisieren
         levels = new ArrayList<String>();
         
+        boxes = new ArrayList<SelectionBox>();
+        
         for(File file: levelFiles)
         {
             // Levelpfad in Liste hinzufügen
@@ -31,6 +35,9 @@ public class LevelSelector extends Selector
             levels.add(file.getPath());
             //System.out.println(Tools.getFileContent(file.getPath()));
         }
+        
+        boxes.add(new SelectionBox(50, 50));
+        
     }
     
     /**
@@ -39,8 +46,12 @@ public class LevelSelector extends Selector
      */
     public void act() 
     {
-        // Add your action code here.
-    }    
+        getWorld().addObject(new SelectionBox(50, 50), 20, 20);
+        if (isShown())
+        {
+            
+        }
+    }   
     
     public List<String> getLevelList()
     {
@@ -51,4 +62,20 @@ public class LevelSelector extends Selector
     {
         return "Todo: Name auslesen";
     }
+    
+    public boolean isShown()
+    {
+        return show;
+    }
+    
+    public void show()
+    {
+        show = true;
+    }
+    
+    public void hide()
+    {
+        show = false;
+    }
+    
 }

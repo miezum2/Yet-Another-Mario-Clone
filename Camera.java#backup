@@ -9,7 +9,7 @@ import java.util.*;
  */
 public class Camera
 {
-    private static final int defaultHeightUnits = 200;
+    private static final int defaultHeightUnits = 20;
     
     GraphicsManager graphics;
     
@@ -38,7 +38,7 @@ public class Camera
         this.heightPixels = height;        
     }  
 
-    public List<Entity> calculatePositions(List<Entity> allEntities)
+    public void calculatePositions(List<Entity> allEntities)
     {
         // Alle Player heraussuchen
         List<Entity> players = new ArrayList<Entity>();
@@ -145,19 +145,25 @@ public class Camera
         System.out.println("maxX: "+maxX);
         System.out.println("scale: "+scale);      */ 
         
-        List<Entity> newEntities = new ArrayList<Entity>();
         
         // Alle Objekte durchgehen und Position im Level in Position auf Welt umrechnen
         for (Entity entity : allEntities)
         {
-            // entity kopieren
-            Entity newEntity = new Entity(entity);
             
             // Koordinaten in neuen Bereich mappen
-            newEntity.setPosX(mapX(newEntity.getPosX()));
-            newEntity.setPosY(mapY(newEntity.getPosY()));   
+            entity.setCameraX(mapX(entity.getPosX()));
+            entity.setCameraY(mapY(entity.getPosY()));   
             
-            newEntities.add(newEntity);
+            // Objekt deaktivieren, wenn es sich außerhalb des Bildschirms befindet
+            if (entity.getCameraX() < - entity.getImage().getWidth() || entity.getCameraX() > widthPixels + entity.getImage().getWidth()
+                || entity.getCameraY() < - entity.getImage().getHeight() || entity.getCameraY() > heightPixels + entity.getImage().getHeight())
+            {
+                entity.disable();
+            }
+            else
+            {
+                entity.enable();
+            }            
         }
         
         /*
@@ -167,10 +173,9 @@ public class Camera
         System.out.println("map maxY: "+maxY+" -> "+mapY(maxY));
         */
         
-        return newEntities;
         //Entity test = new Entity("0", graphics.getImage("Ground", "default", "dirt", "right", 0));
         //getWorld().addObject(new SmoothMover(), 100, 100);
-    }    
+    }      
     
     // An map() Funktion aus der Arduino Library angelehnt
     private int map(double value, double in_min, double in_max, double out_min, double out_max)

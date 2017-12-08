@@ -59,7 +59,7 @@ public class UserInterface extends World
         levelSelector = new LevelSelector(levelDir);
         
         // Level erstellen
-        //level = new Level(levelSelector.getLevelList().get(0));
+        level = new Level(levelSelector.getLevelList().get(0));
         
         // Kamera erstellen
         camera = new Camera(width, height);
@@ -100,6 +100,15 @@ public class UserInterface extends World
             GreenfootImage background = Tools.loadImage("images/levelselection20.png");
             background.scale(width, height);
             setBackground(background);  
+            
+            if (levelSelector.isShown())
+            {
+                
+            }
+            else
+            {
+                levelSelector.show();
+            }
         
         
         
