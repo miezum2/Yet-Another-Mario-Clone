@@ -27,6 +27,8 @@ public class UserInterface extends World
     private Text fpsCounter;
     private Text entityCounter;
     
+    private LevelMaker levelMaker; 
+    
     // Quelle: https://www.greenfoot.org/doc/native_loader
     static {
         NativeLoader loader = new NativeLoader();        
@@ -75,7 +77,8 @@ public class UserInterface extends World
         
         //JsonObject jsonObject = new JsonParser().parse("{\"name\": \"John\"}").getAsJsonObject();
         //System.out.println(jsonObject.get("name").getAsString());
-        
+        levelMaker = new LevelMaker();
+        addObject(levelMaker,200,200);
     }
     
     private long lastNanoTime = 0;
@@ -114,5 +117,53 @@ public class UserInterface extends World
         entityCounter.setLocation(entityCounter.getImage().getWidth()/2, 18);
         
         System.out.println("UserInterface Act");
+        
+        checkMous();
+    }
+    
+    
+    private boolean frage = false;
+    public void checkMous ()
+    {
+        int x;
+        int y;
+        boolean aenderung = false;
+        MouseInfo Maus = Greenfoot.getMouseInfo();
+            if (Maus != null)
+            {
+                if (Maus.getButton()==1)
+                {
+                    if (Maus.getActor() != null)
+                    {
+                        Actor object = Maus.getActor();
+                        String name = object.toString();
+                        name = name.intern();
+                        System.out.println(name);
+                        //prüfen welcher Actor vorliegt
+                        if (name.contains("Block"))
+                        {
+                            aenderung = true;
+                        }
+                        //prüfen ob object Levelmaker Angesteuert wird
+                        if (!frage)
+                        {
+                            if (name.contains("LevelMaker"))
+                            {
+                                levelMaker.createLevelSelector();
+                                frage=true;
+                            }
+                        } 
+                        //ändern der Postition je nach Actor
+                        if (aenderung)
+                        {
+                            y= Maus.getY();
+                            x= Maus.getX();
+                            object.setLocation(x,y);
+                        }
+                         
+                        
+                    }
+                } 
+            }
     }
 }

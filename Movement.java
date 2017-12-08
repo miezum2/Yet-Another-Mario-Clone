@@ -2,17 +2,13 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 public class Movement
 {
-    private Vector movement;
-    private double X;
     private double Y;
     //Gibt die Beschleunigung der Entity an
     private double acceleration;
-    //Sprung Vector
-    private Vector jump = new Vector(0,0);
+    //Sprung
+    private double jumpcount;
     //Lauf Vector
     private double speed;
-    //Erdanziegung
-    Vector gravityforce = new Vector(0,0.5);
     
     public Movement(double speed, double accel)
     {    
@@ -38,58 +34,25 @@ public class Movement
             speed = speed - acceleration;
         }
         
-        return X;
-       
+        return speed;
     }
     
-    public void jump()
+    public double jump()
     {
-       
-        if (jump.getY()>-2.5)
-        {
-            jump.add(new Vector(0,-acceleration));          
-            //System.out.println(jump.getY());
-            //System.out.println(jump.getX());    
-        }
-        
-        /*
-        if (exactY>=(getWorld().getHeight()/4)*3)
-        {
-            exactY=(getWorld().getHeight()/4)*3;
-        }
-        */
-       
+       if (jumpcount == 3)
+       {
+           Y= 70;
+           jumpcount = 0;
+       }
+       return Y;
     }
     
     public void gravity ()
     {
-        
-        //exactY = exactY + gravityforce.getY();
-        /*
-        if (exactY>=(getWorld().getHeight()/4)*3)
+        if (Y > -70)
         {
-            exactY=(getWorld().getHeight()/4)*3;
+        Y -= 10;
         }
-        */
-       /*
-        if (walk.getX() != 0)
-        {
-            if (walk.getX() < 0)
-            {
-                move(180);
-                walk.add(new Vector(acceleration*2,0));
-            }
-            else
-            {
-                if (walk.getX() > 0)
-                {
-                    move(0);
-                    walk.add(new Vector(-acceleration*2,0));
-                }
-            }
-        }
-        */
-        
         
     }
 
