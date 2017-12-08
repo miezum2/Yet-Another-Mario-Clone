@@ -27,6 +27,8 @@ public class UserInterface extends World
     private Text fpsCounter;
     private Text entityCounter;
     
+    private LevelMaker levelMaker; 
+    
     // Quelle: https://www.greenfoot.org/doc/native_loader
     static {
         NativeLoader loader = new NativeLoader();        
@@ -67,7 +69,7 @@ public class UserInterface extends World
         addObject(fpsCounter, 20, 6);
         entityCounter = new Text();
         addObject(entityCounter, 20, 18);
-        addObject(new CameraZones(width, height, 50, 100, 50), width/2, height/2);
+        //addObject(new CameraZones(width, height, 50, 100, 50), width/2, height/2);
         
         //addObject(new Player(nameP1, graphics.getImage(nameP1, "small", "walking", "right", 0), controlsP1), 100, 100);
         //addObject(new Object("Mystery_Block"), 200, 200);        
@@ -75,7 +77,8 @@ public class UserInterface extends World
         
         //JsonObject jsonObject = new JsonParser().parse("{\"name\": \"John\"}").getAsJsonObject();
         //System.out.println(jsonObject.get("name").getAsString());
-        
+        levelMaker = new LevelMaker();
+        addObject(levelMaker,200,200);
     }
     
     private long lastNanoTime = 0;
@@ -89,25 +92,86 @@ public class UserInterface extends World
         fpsCounter.setText(fps);
         fpsCounter.setLocation(fpsCounter.getImage().getWidth()/2, 6);
         
-        // Kamera-Objekt anweisen, den aktuellen Bildausschnitt darzustellen
+        // Alle Objekte vom Bildschirm löschen
         List<Entity> currentEntities = getObjects(Entity.class);
-        List<EntityData> allEntities = level.getEntities();
-        List<EntityData> newEntities = camera.calculatePositions(allEntities);
         removeObjects(currentEntities);
         
-        level.update();
+        level.update();        
         
-        // neue Objekte einzeichnen
-        for (EntityData entity : newEntities)
+        // Kamera-Objekt anweisen, die Position der Entities in der Welt in Bildschirm-Koordinaten umzurechnen
+        // nicht sichtbare Entities deaktivieren
+        List<Entity> allEntities = level.getEntities();
+        camera.calculatePositions(allEntities);
+            
+        // Alle Objekte durchgehen
+        for (Entity entity : allEntities)
         {
-            //System.out.println(entity.getName());
-            Entity newEntity = new Entity("", graphics.getImage(camera.getScale()));            
-            //System.out.println(entity.getX()+" "+entity.getY());            
-            addObject(newEntity, (int)entity.getX(), (int)entity.getY());           
+            // Objekt aktualisieren und zeichnen, wenn es nicht deaktiviert ist
+            if (entity.isEnabled())
+            {
+                entity.update(allEntities);
+                graphics.setScale(1);
+                GreenfootImage image = graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex());
+                entity.setHeightUnits(image.getHeight());
+                entity.setWidthUnits(image.getWidth());
+                graphics.setScale(camera.getScale()
+                entity.setImage(graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex()));
+                entity.calculateExactPos();            
+                addObject(entity, (int)entity.getCameraX(), (int)entity.getCameraY());
+            }
         }
         
         entityCounter.setText(currentEntities.size()+" Entities");
         entityCounter.setLocation(entityCounter.getImage().getWidth()/2, 18);
         
+        //System.out.println("UserInterface Act");
+        
+        checkMous();
+    }
+    
+    
+    private boolean frage = false;
+    public void checkMous ()
+    {
+        int x;
+        int y;
+        boolean aenderung = false;
+        MouseInfo Maus = Greenfoot.getMouseInfo();
+            if (Maus != null)
+            {
+                if (Maus.getButton()==1)
+                {
+                    if (Maus.getActor() != null)
+                    {
+                        Actor object = Maus.getActor();
+                        String name = object.toString();
+                        name = name.intern();
+                        System.out.println(name);
+                        //prüfen welcher Actor vorliegt
+                        if (name.contains("Block"))
+                        {
+                            aenderung = true;
+                        }
+                        //prüfen ob object Levelmaker Angesteuert wird
+                        if (!frage)
+                        {
+                            if (name.contains("LevelMaker"))
+                            {
+                                //levelMaker.createLevelSelector(levelSelector.getLevelList());
+                                frage=true;
+                            }
+                        } 
+                        //ändern der Postition je nach Actor
+                        if (aenderung)
+                        {
+                            y= Maus.getY();
+                            x= Maus.getX();
+                            object.setLocation(x,y);
+                        }
+                         
+                        
+                    }
+                } 
+            }
     }
 }
