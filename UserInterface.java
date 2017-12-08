@@ -149,7 +149,7 @@ public class UserInterface extends World
                         {
                             if (name.contains("LevelMaker"))
                             {
-                                levelMaker.createLevelSelector();
+                                levelMaker.createLevelSelector(levelSelector.getLevelList());
                                 frage=true;
                             }
                         } 

@@ -1,5 +1,6 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-
+import java.util.List;
+import java.util.ArrayList;
 /**
  * Write a description of class LevelMaker here.
  * 
@@ -10,19 +11,9 @@ public class LevelMaker extends Selector
 {
     public LevelMaker ()
     {   
-        
     }
     
-    /**
-     * Act - do whatever the LevelMaker wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    public void act() 
-    {
-        // Add your action code here.
-    }    
-    
-    public void createLevelSelector ()
+    public void createLevelSelector (List<String> name)
     {
         int height = getWorld().getHeight();
         int width = getWorld().getWidth()/2;
@@ -31,9 +22,18 @@ public class LevelMaker extends Selector
         //image.setColor(Color.BLACK);
         image.setColor(new Color(0,0,80,25));
         image.fillRect(0,0,width,height);
-        setImage(image);
+        //Schrift
+        Font font = image.getFont();
+        font = font.deriveFont(20.0f);
+        image.setFont(font);
+        image.setColor(Color.BLACK);
+        /*
+        for (List m :fileName)
+        {
+        image.drawString("Hallo",10,30);
+        }
+        */
         setLocation(width,height/2);
-        
-        
+        setImage(image);
     }
 }
