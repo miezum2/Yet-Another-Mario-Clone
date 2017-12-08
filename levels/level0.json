@@ -1,0 +1,15 @@
+{
+	"levelInfo":{
+		"name":"Level 1",
+		"date":"2017-11-18",
+		"desc":"Testlevel"
+	},
+	"levelData":[
+		{"type":"player","name":"Mario","x":100,"y":32,"state":"small","data":""},
+		{"type":"player","name":"Luigi","x":132,"y":32,"state":"small","data":""},
+		{"type":"block","name":"Ground","x":0,"y":0,"state":"grass","data":"test"},
+		{"type":"block","name":"Ground","x":100,"y":16,"state":"grass","data":"test"},
+		{"type":"block","name":"Ground","x":116,"y":16,"state":"grass","data":"test"},
+		{"type":"block","name":"Ground","x":132,"y":16,"state":"grass","data":"test"}		
+	]
+}

@@ -1,0 +1,76 @@
+import greenfoot.*;
+import java.util.Map;
+import java.util.HashMap;
+import java.io.File;
+
+/**
+ * Write a description of class CharacterGraphics here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class CharacterGraphics  
+{
+    private static final String imageDirectory = "images";
+    private static final String noImageFile = "noImage.png";
+    
+    private GreenfootImage noImage;
+    private Map<String, AnimationSet> states;
+    private String name;
+    private String currentState;
+    private String currentActivity;
+    private String currentOrientation;
+    
+    /**
+     * Constructor for objects of class CharacterGraphics
+     */
+    public CharacterGraphics(String name)
+    {
+        this.name = name;   
+        currentState = "noState";
+        currentActivity = "noActivity";
+        
+        // Variablen vorbereiten
+        states = new HashMap<String, AnimationSet>();
+        noImage = new GreenfootImage(imageDirectory+"/"+name+"/"+noImageFile);
+        
+        // Aktuelles Verzeichnis ermitteln
+        String path = imageDirectory+"/"+name;
+        
+        // Alle Ordner im aktuellen Verzeichnis auflisten
+        // https://stackoverflow.com/questions/5125242/java-list-only-subdirectories-from-a-directory-not-files
+        // user: headsvk
+        File[] directories = new File(path).listFiles(File::isDirectory);
+        
+        // Alle gefundenen Objekte durchgehen und auswerten
+        for(File file: directories)
+        {
+            // Für jedes gefundene Verzeichnis ein AnimationSet anlegen
+            System.out.println("Zustand: "+file.getName()+" - "+file.getPath());
+            states.put(file.getName(), new AnimationSet(file.getPath()));
+            
+        }  
+    }
+    
+    public void setState(String state)
+    {
+        currentState = state;
+    }
+    
+    public void setActivity(String activity)
+    {
+        currentActivity = activity;
+    }
+    
+    public void setOrientation(String orientation)
+    {
+        currentOrientation = orientation;
+    }
+
+    public GreenfootImage getImage()
+    {
+        AnimationSet state = states.get(currentState);
+        //noImage.scale(noImage.getWidth()*8+5,noImage.getHeight()*8+5);
+        return noImage;
+    }
+}

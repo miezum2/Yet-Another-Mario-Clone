@@ -1,0 +1,11 @@
+{
+	"levelInfo":{
+		"name":"Level 1",
+		"date":"2017-11-18",
+		"desc":"Testlevel"
+	},
+	"levelData":[
+		{"id":1,"x":100,"y":50,"s":"small","data":"test"},
+		{"id":10,"x":100,"y":20,"s":"default","data":"test"}
+	]
+}
