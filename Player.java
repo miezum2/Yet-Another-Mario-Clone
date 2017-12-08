@@ -18,15 +18,15 @@ public class Player extends Entity
         /* Konstruktor der Superklasse aufrufen*/
     }
     
-    public Player(String name, String id, double x, double y, GreenfootImage image, String state)
+    public Player(String name, String id, double x, double y, GreenfootImage image)
     {
-        super(name, id, x, y, image, state);
-        movement = new Movement(0, 0.5);
+        super(name, id, x, y, image);
+        movement = new Movement(0, 0.1);
     }
     
     public Player(Entity entity)
     {
-        this(entity.getName(), entity.getId(), entity.getPosX(), entity.getPosY(), entity.getImage(), entity.getState());
+        this(entity.getName(), entity.getId(), entity.getPosX(), entity.getPosY(), entity.getImage());
     }
     
     public Player()
@@ -42,6 +42,8 @@ public class Player extends Entity
         
     }
     
+    private boolean pressda = false;
+    private boolean pressdd = false;
     public void update(List<Entity> entities)
     {
         super.update(entities);
@@ -76,18 +78,28 @@ public class Player extends Entity
         {
             if(Greenfoot.isKeyDown("w"))
             {
-                
+                setPosY(getPosY() + movement.jump());
             }
             if(Greenfoot.isKeyDown("a"))
             {
-                int newX = (int)getPosX() + (int)movement.move(180);
-                if (newX < left)
+                if (!pressdd)
                 {
-                    setPosX(left);
+                    setPosX(getPosX() + movement.move(180));
+                    pressda = true;
                 }
-                else
+            }
+            else
+            {
+                if (pressda)
                 {
-                    setPosX(newX);
+                    if (movement.move(0) < 0 )
+                    {
+                        setPosX(getPosX() + movement.move(0));
+                    }
+                    else
+                    {
+                        pressda = false;
+                    }
                 }
             }
             if(Greenfoot.isKeyDown("s"))
@@ -96,9 +108,28 @@ public class Player extends Entity
             }
             if(Greenfoot.isKeyDown("d"))
             {
-                setPosX(getPosX() + movement.move(0));
+                if (!pressda)
+                {
+                    setPosX(getPosX() + movement.move(0));
+                    pressdd = true;
+                }
+            }
+            else
+            {
+                if (pressdd)
+                {
+                    if (movement.move(180) > 0 )
+                    {
+                        setPosX(getPosX() + movement.move(180));
+                    }
+                    else
+                    {
+                        pressdd = false;
+                    }
+                }
             }
         }
+        
         
         int newY = (int)getPosY() + (int)movement.gravity();
         if (newY < floor)
