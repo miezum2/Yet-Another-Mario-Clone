@@ -47,12 +47,13 @@ public class Movement
        return Y;
     }
     
-    public void gravity ()
+    public double gravity ()
     {
         if (Y > -70)
         {
-        Y -= 10;
+            Y -= 1;
         }
+        return Y;
         
     }
 

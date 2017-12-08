@@ -120,11 +120,11 @@ public class Level
             
             if (entity.getName().equals("Mario"))
             {
-                mario = (Player)entity;
+                //mario = (Player)entity;
             }
             if (entity.getName().equals("Luigi"))
             {
-                luigi = (Player)entity;
+                //luigi = (Player)entity;
             }
             
         }

@@ -7,11 +7,8 @@ import java.util.*;
  */
 public class Player extends Entity
 {
-
-    /* (World, Actor, GreenfootImage, Greenfoot and MouseInfo)*/
-
-    /* Player initialisieren*/
-
+    private Movement movement;
+        
     /**
      * 
      */
@@ -24,6 +21,7 @@ public class Player extends Entity
     public Player(String name, String id, double x, double y, GreenfootImage image)
     {
         super(name, id, x, y, image);
+        movement = new Movement(0, 0.5);
     }
     
     public Player(Entity entity)
@@ -49,6 +47,25 @@ public class Player extends Entity
         super.update(entities);
         
         // Hier Gravitation berechnen und Keypresses abfangen
+        if(Greenfoot.isKeyDown("w"))
+        {
+            
+        }
+        if(Greenfoot.isKeyDown("a"))
+        {
+            setPosX(getPosX() + movement.move(180));
+        }
+        if(Greenfoot.isKeyDown("s"))
+        {
+            
+        }
+        if(Greenfoot.isKeyDown("d"))
+        {
+            setPosX(getPosX() + movement.move(0));
+        }
+        
+        setPosY(getPosY() + movement.gravity());
+        
         
         // Daten ermitteln       
         setState("small");
