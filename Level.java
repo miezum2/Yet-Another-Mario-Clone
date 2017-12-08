@@ -77,11 +77,26 @@ public class Level
                 entities.add(newEntity);
             }
             
-            // Typ: Ground
+            // Typ: block
             if (entity.getType().equals("block"))
             {
-                Entity newEntity = new Block(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage());
-                entities.add(newEntity);
+                // Spezialfälle bearbeiten
+                // Name: Ground
+                if (entity.getName().equals("Ground"))
+                {
+                    // Wenn ein Ground-Block gefunden, dann Welt bis zum Boden mit Ground-Blöcken füllen
+                    for (double i = entity.getY(); i >= 0; i -= 16)
+                    {
+                        Entity newEntity = new Block(entity.getName(), "0", entity.getX(), i, graphics.getImage());
+                        entities.add(newEntity);
+                    }
+                }
+                else
+                {
+                    // Standardprozedur für Blöcke
+                    Entity newEntity = new Block(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage());
+                    entities.add(newEntity);
+                }
             }
         }        
         /*

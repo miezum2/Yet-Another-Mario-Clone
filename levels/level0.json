@@ -5,11 +5,29 @@
 		"desc":"Testlevel"
 	},
 	"levelData":[
-		{"type":"player","name":"Mario","x":100,"y":32,"state":"small","data":""},
-		{"type":"player","name":"Luigi","x":132,"y":32,"state":"small","data":""},
-		{"type":"block","name":"Ground","x":0,"y":0,"state":"grass","data":"test"},
-		{"type":"block","name":"Ground","x":100,"y":16,"state":"grass","data":"test"},
-		{"type":"block","name":"Ground","x":116,"y":16,"state":"grass","data":"test"},
-		{"type":"block","name":"Ground","x":132,"y":16,"state":"grass","data":"test"}		
+		{"type":"player","name":"Mario","x":96,"y":32,"state":"small","data":""},
+		{"type":"player","name":"Luigi","x":128,"y":32,"state":"small","data":""},
+		{"type":"block","name":"Ground","x":0,"y":16,"state":"grass","data":""},
+		{"type":"block","name":"Ground","x":16,"y":16,"state":"grass","data":""},
+		{"type":"block","name":"Ground","x":32,"y":16,"state":"grass","data":""},
+		{"type":"block","name":"Ground","x":48,"y":16,"state":"grass","data":""},
+		{"type":"block","name":"Ground","x":64,"y":16,"state":"grass","data":""},
+		{"type":"block","name":"Ground","x":80,"y":16,"state":"grass","data":""},
+		{"type":"block","name":"Ground","x":96,"y":16,"state":"grass","data":""},
+		{"type":"block","name":"Ground","x":64,"y":32,"state":"grass","data":""},
+		{"type":"block","name":"Ground","x":80,"y":32,"state":"grass","data":""},
+		{"type":"block","name":"Ground","x":96,"y":32,"state":"grass","data":""},
+		{"type":"block","name":"Ground","x":80,"y":48,"state":"grass","data":""},
+		{"type":"block","name":"Ground","x":112,"y":16,"state":"grass","data":""},
+		
+		
+		{"type":"block","name":"Mystery_Block","x":64,"y":64,"state":"yellow","data":""},
+		{"type":"block","name":"Ground","x":160,"y":16,"state":"grass","data":""},
+		{"type":"block","name":"Ground","x":176,"y":16,"state":"grass","data":""},	
+		{"type":"block","name":"Ground","x":192,"y":16,"state":"grass","data":""},	
+		{"type":"block","name":"Ground","x":208,"y":16,"state":"grass","data":""},	
+		{"type":"block","name":"Ground","x":224,"y":16,"state":"grass","data":""},	
+		{"type":"block","name":"Ground","x":240,"y":16,"state":"grass","data":""},	
+		{"type":"block","name":"Ground","x":256,"y":16,"state":"grass","data":""}		
 	]
 }

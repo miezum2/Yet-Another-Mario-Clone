@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.*;
 
 /**
  * Write a description of class Entity here.
@@ -58,9 +59,9 @@ public abstract class Entity extends Actor
         // Add your action code here.
     }    
     
-    public void update()
+    public void update(List<Entity> entities)
     {
-        frameCounter++;
+        frameCounter++;        
     }
     
     public void calculateExactPos()
