@@ -125,14 +125,6 @@ public class UserInterface extends World
             background.scale(width, height);
             setBackground(background);  
             
-            if (levelSelector.isShown())
-            {
-                
-            }
-            else
-            {
-                levelSelector.show();
-            }     
         } else if (mode.equals("ingame"))
         {
             // Alle Entities vom Bildschirm löschen

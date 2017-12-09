@@ -3,6 +3,7 @@ import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.*;
+import com.google.gson.*;
 //https://www.greenfoot.org/doc/native_loader
 //http://repo1.maven.org/maven2/com/google/code/gson/gson/2.8.0/
 
@@ -14,9 +15,8 @@ import java.util.*;
  */
 public class LevelSelector extends Selector
 {
-    private List<String> levels;
-    private boolean show = false;
-    private List<SelectionBox> boxes;
+    List<String> levels;
+    Map<String, String> levelnames;
     
     public LevelSelector(String levelDir)
     {
@@ -25,19 +25,32 @@ public class LevelSelector extends Selector
         
         // Levelliste initialisieren
         levels = new ArrayList<String>();
-        
-        boxes = new ArrayList<SelectionBox>();
+        levelnames = new HashMap<String, String>();
         
         for(File file: levelFiles)
         {
             // Levelpfad in Liste hinzufügen
             Tools.log("Level: "+file.getName(), "level");
             levels.add(file.getPath());
-            //System.out.println(Tools.getFileContent(file.getPath()));
+            String fileContent = Tools.getFileContent(file.getPath());
+            
+            // Dateiinhalt verarbeiten
+            // Gson-Objekte erstellen
+            Gson gson = new Gson();
+            JsonParser parser = new JsonParser();
+            
+            // Levelinfo extrahieren
+            Map<String, String> levelInfo = new HashMap<String, String>();
+            JsonObject levelInfoObject = parser.parse(fileContent)
+                            .getAsJsonObject().getAsJsonObject("levelInfo");
+            
+            // Quelle: https://stackoverflow.com/questions/2779251/how-can-i-convert-json-to-a-hashmap-using-gson
+            // Nutzer: Angel
+            levelInfo = (Map<String, String>) 
+                            gson.fromJson(levelInfoObject, levelInfo.getClass());
+            // Levelname speichern
+            levelnames.put(file.getPath(), levelInfo.get("name"));
         }
-        
-        boxes.add(new SelectionBox(50, 50));
-        
     }
     
     /**
@@ -46,36 +59,24 @@ public class LevelSelector extends Selector
      */
     public void act() 
     {
-        getWorld().addObject(new SelectionBox(50, 50), 20, 20);
-        if (isShown())
-        {
-            
-        }
-    }   
+        // Add your action code here.
+    }    
     
     public List<String> getLevelList()
     {
          return levels;        
     }
     
-    public List getLevelName(String path)
+    public String getLevelName(String path)
     {
-        return levels;
+        String name = levelnames.get(path);
+        if (name == null)
+        {
+            return "missing name";
+        }
+        else
+        {
+            return name;
+        }
     }
-    
-    public boolean isShown()
-    {
-        return show;
-    }
-    
-    public void show()
-    {
-        show = true;
-    }
-    
-    public void hide()
-    {
-        show = false;
-    }
-    
 }

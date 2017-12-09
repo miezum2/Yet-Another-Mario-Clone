@@ -44,6 +44,9 @@ public class Player extends Entity
     
     private boolean pressda = false;
     private boolean pressdd = false;
+    private int jumpcount = 0;
+    private boolean jumpanable = true;
+    private boolean jumpabel = true;
     public void update(List<Entity> entities)
     {
         super.update(entities);
@@ -51,6 +54,7 @@ public class Player extends Entity
         int floor = 0;
         int right = 1000000;
         int left = 0;
+        
         for (Entity entity : entities)
         {
             if (entity.getPosX() + entity.getWidthUnits() > getPosX() && getPosX() + getWidthUnits() > entity.getPosX() && !(entity.getClass() == Player.class))
@@ -78,7 +82,23 @@ public class Player extends Entity
         {
             if(Greenfoot.isKeyDown("w"))
             {
-                setPosY(getPosY() + movement.jump());
+                if (jumpabel)
+                {
+                    if (jumpanable)
+                    {
+                        setPosY(getPosY() + movement.jump(1));
+                        jumpanable=false;
+                        jumpabel = false;
+                    }
+                    else
+                    {
+                        if (movement.getYMove() <= 0)
+                        {
+                            jumpanable = true; 
+                        }
+                    }
+                }
+                
             }
             if(Greenfoot.isKeyDown("a"))
             {
@@ -132,9 +152,10 @@ public class Player extends Entity
         
         
         int newY = (int)getPosY() + (int)movement.gravity();
-        if (newY < floor)
+        if (newY <= floor)
         {
             setPosY(floor);
+            jumpabel= true;
         }
         else
         {

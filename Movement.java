@@ -37,9 +37,9 @@ public class Movement
         return speed;
     }
     
-    public double jump()
+    public double jump(int i)
     {
-       if (jumpcount == 3)
+       if (i == 3)
        {
            Y= 10;
            jumpcount = 0;
@@ -55,7 +55,7 @@ public class Movement
     {
         if (Y > -70)
         {
-            Y -= 1;
+            Y -= 0.25;
         }
         return Y;
         
@@ -64,5 +64,10 @@ public class Movement
     public void setSpeed (int speed)
     {
         this.speed=speed;
+    }
+    
+    public double getYMove ()
+    {
+        return Y;
     }
 }
