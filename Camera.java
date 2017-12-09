@@ -116,7 +116,7 @@ public class Camera
         currentPosX = targetPosX;
         currentPosY = targetPosY; 
         
-        // vorläufigen Kameraausschnitt berechnen              
+        // Kameraausschnitt berechnen              
         minY = currentPosY - heightUnits/2;
         maxY = currentPosY + heightUnits/2;
         minX = currentPosX - widthUnits/2;
@@ -196,5 +196,15 @@ public class Camera
     public double getScale()
     {
         return scale;
+    }
+    
+    public double getMinX()
+    {
+        return minX;
+    }
+    
+    public double getMinY()
+    {
+        return minY;
     }
 }

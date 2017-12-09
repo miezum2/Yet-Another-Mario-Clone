@@ -6,7 +6,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class CameraZones extends DebuggingOverlay
+public class CameraZones
 {
     private int width;
     private int height;
@@ -14,7 +14,7 @@ public class CameraZones extends DebuggingOverlay
     private int heightRoom;
     private int maxSpeed;
     private GreenfootImage image;
-    
+    /*
     public CameraZones(int width, int height, int widthRoom, int heightRoom, int maxSpeed)
     {
         this.width = width;
@@ -39,7 +39,7 @@ public class CameraZones extends DebuggingOverlay
         image.drawLine(maxX, maxY, minX, maxY);
         image.drawLine(minX, maxY, minX, minY);
         setImage(image);
-    }
+    } */
     
     /**
      * Act - do whatever the CameraZones wants to do. This method is called whenever

@@ -71,7 +71,7 @@ public class Player extends Entity
             
         }
         
-        System.out.println(floor);
+        //System.out.println(floor);
         
         // Mario steuer
         if (getName().equals("Mario"))

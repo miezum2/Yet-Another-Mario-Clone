@@ -29,6 +29,7 @@ public class UserInterface extends World
     private Text entityCounter;
     
     private LevelMaker levelMaker; 
+    private Overlay makergrid;
     
     private ArrayList<Select> editor = new ArrayList<Select>();
     
@@ -76,7 +77,7 @@ public class UserInterface extends World
         addObject(entityCounter, 20, 18);
         //addObject(new CameraZones(width, height, 50, 100, 50), width/2, height/2);
         
-        mode = "levelSelector";
+        mode = "editor";
         
         //addObject(new Player(nameP1, graphics.getImage(nameP1, "small", "walking", "right", 0), controlsP1), 100, 100);
         //addObject(new Object("Mystery_Block"), 200, 200);        
@@ -85,8 +86,24 @@ public class UserInterface extends World
         //JsonObject jsonObject = new JsonParser().parse("{\"name\": \"John\"}").getAsJsonObject();
         //System.out.println(jsonObject.get("name").getAsString());
         levelMaker = new LevelMaker();
+        
+        //addObject(levelMaker,200,200);
+        makergrid = new Overlay(width, height);
+
         addObject(levelMaker,50,10);
         
+        selectIni();
+        int position=getWidth()/2-40;
+        
+        for(Select s:editor)
+        {
+            addObject(s,position,10);
+            position +=20;
+        }  
+        
+        
+        
+
     }
     
     private long lastNanoTime = 0;
@@ -99,6 +116,8 @@ public class UserInterface extends World
         
         fpsCounter.setText(fps);
         fpsCounter.setLocation(fpsCounter.getImage().getWidth()/2, 6);
+        
+        removeObject(makergrid);
         
         if (mode.equals("levelSelector"))
         {
@@ -113,10 +132,7 @@ public class UserInterface extends World
             else
             {
                 levelSelector.show();
-            }
-        
-        
-        
+            }     
         } else if (mode.equals("ingame"))
         {
             // Alle Entities vom Bildschirm löschen
@@ -149,7 +165,42 @@ public class UserInterface extends World
             } 
             
             entityCounter.setText(currentEntities.size()+" Entities");
-        }        
+        } else if (mode.equals("editor"))   
+        {
+            // Alle Entities vom Bildschirm löschen
+            List<Entity> currentEntities = getObjects(Entity.class);
+            removeObjects(currentEntities);
+            
+            level.update();        
+            
+            // Kamera-Objekt anweisen, die Position der Entities in der Welt in Bildschirm-Koordinaten umzurechnen
+            // nicht sichtbare Entities deaktivieren
+            List<Entity> allEntities = level.getEntities();
+            camera.calculatePositions(allEntities);
+                
+            // Alle Objekte durchgehen
+            for (Entity entity : allEntities)
+            {
+                // Objekt aktualisieren und zeichnen, wenn es nicht deaktiviert ist
+                if (entity.isEnabled())
+                {
+                    entity.update(allEntities);
+                    graphics.setScale(1);
+                    GreenfootImage image = graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex());
+                    entity.setHeightUnits(image.getHeight());
+                    entity.setWidthUnits(image.getWidth());
+                    graphics.setScale(camera.getScale());
+                    entity.setImage(graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex()));
+                    entity.calculateExactPos();            
+                    addObject(entity, (int)entity.getCameraX(), (int)entity.getCameraY());
+                }
+            }    
+            
+            // Gitter zeichnen
+            
+            addObject(makergrid, width/2, height/2);
+            makergrid.drawGrid(camera.getScale(), camera.getMinX(), camera.getMinY());
+        }
         
         entityCounter.setLocation(entityCounter.getImage().getWidth()/2, 18);
         
