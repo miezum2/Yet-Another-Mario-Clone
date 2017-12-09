@@ -87,18 +87,6 @@ public class UserInterface extends World
         levelMaker = new LevelMaker();
         addObject(levelMaker,50,10);
         
-        selectIni();
-        int position=getWidth()/2-40;
-        
-        for(Select s:editor)
-        {
-            addObject(s,position,10);
-            position +=20;
-        }
-        
-        
-        
-        
     }
     
     private long lastNanoTime = 0;
@@ -172,6 +160,7 @@ public class UserInterface extends World
     
     
     private boolean frage = false;
+    private boolean edit = false;
     public void checkMous ()
     {
         int x;
@@ -198,8 +187,10 @@ public class UserInterface extends World
                         {
                             if (name.contains("LevelMaker"))
                             {
+                                //Levelasuwahl zeichen und anzeigen
                                 levelMaker.createLevelSelector(levelSelector.getLevelList());
                                 frage=true;
+                                //Buttons für jedes Level erstellen (Play und Edit
                                 createButtonLevel(levelSelector.getLevelList());
                             }
                         } 
@@ -210,6 +201,8 @@ public class UserInterface extends World
                             x= Maus.getX();
                             object.setLocation(x,y);
                         }
+                        
+                        //Buttonabfrage für die jeweiligen Editor Buttons
                         for(Select s:editor)
                         {
                             if (object.equals(s))
@@ -230,40 +223,121 @@ public class UserInterface extends World
                                 {
                                     System.out.println(s.getName());
                                 }
+                                if (s.getName() == "bloecke")
+                                {
+                                    int height = getHeight();
+                                    int width = getWidth()/2;
+        
+                                    GreenfootImage image = new GreenfootImage(width,(height/4)*3) ;
+                                    //image.setColor(Color.BLACK);
+                                    image.setColor(new Color(0,0,80,25));
+                                    image.fillRect(0,0,width,height);
+                                    s.setImage(image);
+                                }
                             }
                         } 
                         
+                        //Buttonabfrage für die Levelauswahl oder das Editiren der jeweiligen Level
+                        if (!levelButton.isEmpty())
+                        {
+                        for (Select s: levelButton)
+                        {
+                            
+                            if (object.equals(s))
+                            {
+                                System.out.println(s.getName());
+                                if (s.getName().contains("Edit"))
+                                {
+                                    if (!edit)
+                                    {
+                                        editMode();
+                                        edit = true;
+                                        removeLevelMaker();
+                                    }
+                                }
+                            
+                            }
+                        }
+                    }
                     }
                 } 
             }
     }
     
+    /**
+     * Initalisierung der Editor Buttons in das ArrayList editor
+     */
     private void selectIni ()
     {
+        editor.add(new Select("bloecke","missingImage.png"));
         editor.add(new Select("stamp","missingImage.png"));
         editor.add(new Select("trashcan","missingImage.png"));
         editor.add(new Select("worldleft","missingImage.png"));
         editor.add(new Select("worldright","missingImage.png"));
-   
-        
     }
     
+    /**
+     * Initalisirung der Levelauswahl Buttons in die Arrylist levelButton. Für jedes Level ein Play und Edit Button
+     */
     private void buttonLevel (String name)
     {
         levelButton.add(new Select(name,"missingImage.png"));
         levelButton.add(new Select(name+"Edit","missingImage.png"));
+        System.out.println(name);
     }
     
+    /**
+     * Erzeugen und setzen der Levelauswahl Buttons
+     */
     private void createButtonLevel (List<String> name)
     {
+        int width = getWidth()/4*3;
+        int height = getHeight()/8;
+        int i = 0;
         for (String n :name)
         {
             buttonLevel(n);
         }
         for(Select s:levelButton)
         {
-            addObject(s,0,10);
-           
+            if ((i % 2 ) == 0) 
+            {
+                addObject(s,width-50,height+20);
+            }
+            else
+            {
+                addObject(s,width-20,height+20);
+                height+=30;
+            }
+            i ++;
         }
+    }
+    
+    /**
+     * Startet den Editor modus. Erzeugt werkzeuge.
+     */
+    private void editMode ()
+    {
+        selectIni();
+        int position=getWidth()/2-40;
+        for(Select e:editor)
+        {
+            addObject(e,position,10);
+            position +=20;
+        }
+    }
+    
+    private void removeLevelMaker ()
+    {
+        removeObjects(getObjects(LevelMaker.class));
+        for (Select s:levelButton)
+        {
+            removeObject(s);
+        }
+        levelMaker = new LevelMaker();
+        addObject(levelMaker,50,10);
+        frage=false;
+        edit=false;
+        //levelButton.clear();
     }
 }

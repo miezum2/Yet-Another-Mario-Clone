@@ -36,7 +36,7 @@ public class LevelMaker extends Selector
             image.drawString(n,10,i);
             i+=30;
         }
-        image.drawString("hallo",10,100);
+        
         setLocation(width,height/2);
         setImage(image);
     }
