@@ -2,6 +2,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 public class Movement
 {
+    //Gibt die Bewegung in Y-Richtung an
     private double Y;
     //Gibt die Beschleunigung der Entity an
     private double acceleration;
@@ -18,7 +19,8 @@ public class Movement
    
 
     /**
-     * Bewegt sich in die aktuelle Bewegungsrichtung. 
+     * Bewegt sich in die aktuelle Bewegungsrichtung.
+     * Direction gibt die laufrichtung an, dabei ist 0 nach rechts und 180 nach links.
      */
     public double move(int direction) 
     {
@@ -37,6 +39,9 @@ public class Movement
         return speed;
     }
     
+    /**
+     * Gibt den Wert der Sprung änderung wieder
+     */
     public double jump(int i)
     {
        if (i == 3)
@@ -50,7 +55,9 @@ public class Movement
        }
        return Y;
     }
-    
+    /**
+     * Läst auf den Körper der Figur eine Graditation wirken.
+     */
     public double gravity ()
     {
         if (Y > -70)

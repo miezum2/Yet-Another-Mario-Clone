@@ -64,7 +64,8 @@ public class UserInterface extends World
         levelSelector = new LevelSelector(levelDir);
         
         // Level erstellen
-        level = new Level(levelSelector.getLevelList().get(0));
+        
+        //level = new Level(levelSelector.getLevelList().get(0));
         
         // Kamera erstellen
         camera = new Camera(width, height);
@@ -77,7 +78,7 @@ public class UserInterface extends World
         addObject(entityCounter, 20, 18);
         //addObject(new CameraZones(width, height, 50, 100, 50), width/2, height/2);
         
-        mode = "editor";
+        mode = "Hallo";
         
         //addObject(new Player(nameP1, graphics.getImage(nameP1, "small", "walking", "right", 0), controlsP1), 100, 100);
         //addObject(new Object("Mystery_Block"), 200, 200);        
@@ -85,7 +86,7 @@ public class UserInterface extends World
         
         //JsonObject jsonObject = new JsonParser().parse("{\"name\": \"John\"}").getAsJsonObject();
         //System.out.println(jsonObject.get("name").getAsString());
-        levelMaker = new LevelMaker();
+        levelMaker = new LevelMaker(levelDir);
         
         //addObject(levelMaker,200,200);
         makergrid = new Overlay(width, height);
@@ -93,17 +94,6 @@ public class UserInterface extends World
         addObject(levelMaker,50,10);
         
         selectIni();
-        int position=getWidth()/2-40;
-        
-        for(Select s:editor)
-        {
-            addObject(s,position,10);
-            position +=20;
-        }  
-        
-        
-        
-
     }
     
     private long lastNanoTime = 0;
@@ -201,110 +191,126 @@ public class UserInterface extends World
         checkMous();
     }
     
-    
-    private boolean frage = false;
+    //gibt an ob der LevelMaker gezeichnet wurde
+    private boolean levelMakerdraw = false;
+    //gebit an ob der Editormodus an ist
     private boolean edit = false;
+    /**
+     * Eine Mausabfrage welche das händling mit den Actorn ermöglicht.
+     */
     public void checkMous ()
     {
         int x;
         int y;
         boolean aenderung = false;
         MouseInfo Maus = Greenfoot.getMouseInfo();
-            if (Maus != null)
-            {
-                if (Maus.getButton()==1)
-                {
-                    if (Maus.getActor() != null)
-                    {
-                        Actor object = Maus.getActor();
-                        String name = object.toString();
-                        name = name.intern();
-                        System.out.println(name);
-                        //prüfen welcher Actor vorliegt
-                        if (name.contains("Block"))
-                        {
-                            aenderung = true;
-                        }
-                        //prüfen ob object Levelmaker Angesteuert wird
-                        if (!frage)
-                        {
-                            if (name.contains("LevelMaker"))
-                            {
-                                //Levelasuwahl zeichen und anzeigen
-                                levelMaker.createLevelSelector(levelSelector.getLevelList());
-                                frage=true;
-                                //Buttons für jedes Level erstellen (Play und Edit
-                                createButtonLevel(levelSelector.getLevelList());
-                            }
-                        } 
-                        //ändern der Postition je nach Actor
-                        if (aenderung)
-                        {
-                            y= Maus.getY();
-                            x= Maus.getX();
-                            object.setLocation(x,y);
-                        }
-                        
-                        //Buttonabfrage für die jeweiligen Editor Buttons
-                        for(Select s:editor)
-                        {
-                            if (object.equals(s))
-                            {
-                                if (s.getName() == "stamp")
-                                {
-                                    System.out.println(s.getName());
-                                }
-                                if (s.getName() == "trashcan")
-                                {
-                                    System.out.println(s.getName());
-                                }
-                                if (s.getName() == "worldleft")
-                                {
-                                    System.out.println(s.getName());
-                                }
-                                if (s.getName() == "worldright")
-                                {
-                                    System.out.println(s.getName());
-                                }
-                                if (s.getName() == "bloecke")
-                                {
-                                    int height = getHeight();
-                                    int width = getWidth()/2;
         
-                                    GreenfootImage image = new GreenfootImage(width,(height/4)*3) ;
-                                    //image.setColor(Color.BLACK);
-                                    image.setColor(new Color(0,0,80,25));
-                                    image.fillRect(0,0,width,height);
-                                    s.setImage(image);
-                                }
-                            }
-                        } 
-                        
-                        //Buttonabfrage für die Levelauswahl oder das Editiren der jeweiligen Level
-                        if (!levelButton.isEmpty())
+        //Prüfen das die Maus einen Actor anglickt
+        if (Maus != null)
+        {
+            //Prüfen welche Taste gedrückt wurde
+            if (Maus.getButton()==1)
+            {
+                if (Maus.getActor() != null)
+                {
+                    Actor object = Maus.getActor();
+                    String name = object.toString();
+                    name = name.intern();
+                    System.out.println(name);
+                    //prüfen welcher Actor vorliegt
+                    if (name.contains("Block"))
+                    {
+                        aenderung = true;
+                    }
+                    //prüfen ob object Levelmaker Angesteuert wird
+                    if (!levelMakerdraw)
+                    {
+                        if (name.contains("LevelMaker"))
                         {
-                        for (Select s: levelButton)
+                            //Levelasuwahl zeichen und anzeigen
+                            levelMaker.createLevelSelector(levelSelector.getLevelList());
+                            levelMakerdraw = true;
+                            //Buttons für jedes Level erstellen (Play und Edit
+                            createButtonLevel(levelSelector.getLevelList());
+                        }
+                    } 
+                    //ändern der Postition je nach Actor
+                    if (aenderung)
+                    {
+                        y= Maus.getY();
+                        x= Maus.getX();
+                        object.setLocation(x,y);
+                    }
+                    
+                    //Buttonabfrage für die jeweiligen Editor Buttons
+                    for(Select s:editor)
+                    {
+                        if (object.equals(s))
                         {
-                            
-                            if (object.equals(s))
+                            if (s.getName() == "stamp")
                             {
                                 System.out.println(s.getName());
-                                if (s.getName().contains("Edit"))
-                                {
-                                    if (!edit)
-                                    {
-                                        editMode();
-                                        edit = true;
-                                        removeLevelMaker();
-                                    }
-                                }
-                            
+                            }
+                            if (s.getName() == "trashcan")
+                            {
+                                System.out.println(s.getName());
+                            }
+                            if (s.getName() == "worldleft")
+                            {
+                                System.out.println(s.getName());
+                            }
+                            if (s.getName() == "worldright")
+                            {
+                                System.out.println(s.getName());
+                            }
+                            if (s.getName() == "bloecke")
+                            {
+                                int height = getHeight();
+                                int width = getWidth();
+    
+                                GreenfootImage image = new GreenfootImage(width/8*7,height/8*1) ;
+                                //image.setColor(Color.BLACK);
+                                image.setColor(new Color(0,0,80,25));
+                                image.fillRect(0,0,width,height);
+                                s.setImage(image);
+                                s.setLocation(width/2,50);
                             }
                         }
+                    } 
+                    
+                    //Buttonabfrage für die Levelauswahl oder das Editiren der jeweiligen Level
+                    if (!levelButton.isEmpty())
+                    {
+                    for (Select s: levelButton)
+                    {
+                        
+                        if (object.equals(s))
+                        {
+                            System.out.println(s.getName());
+                            if (s.getName().contains("Play"))
+                            {
+                                level = new Level(levelSelector.getLevelList().get(0));
+                                mode = "ingame";
+                                removeEditor();
+                                removeLevelMaker();
+                            }
+                            if (s.getName().contains("Edit"))
+                            {
+                                if (!edit)
+                                {
+                                    removeEditor();
+                                    editMode();
+                                    edit = true;
+                                    removeLevelMaker();
+                                }
+                            }
+                        
+                        }
                     }
-                    }
-                } 
-            }
+                }
+                }
+            } 
+        }
     }
     
     /**
@@ -324,7 +330,7 @@ public class UserInterface extends World
      */
     private void buttonLevel (String name)
     {
-        levelButton.add(new Select(name,"missingImage.png"));
+        levelButton.add(new Select(name+"Play","missingImage.png"));
         levelButton.add(new Select(name+"Edit","missingImage.png"));
         System.out.println(name);
     }
@@ -361,7 +367,6 @@ public class UserInterface extends World
      */
     private void editMode ()
     {
-        selectIni();
         int position=getWidth()/2-40;
         for(Select e:editor)
         {
@@ -369,7 +374,9 @@ public class UserInterface extends World
             position +=20;
         }
     }
-    
+    /**
+     * Setzt den LevelMaker zurück auf den Urzustand
+     */
     private void removeLevelMaker ()
     {
         removeObjects(getObjects(LevelMaker.class));
@@ -377,10 +384,22 @@ public class UserInterface extends World
         {
             removeObject(s);
         }
-        levelMaker = new LevelMaker();
+        levelMaker = new LevelMaker(levelDir);
         addObject(levelMaker,50,10);
-        frage=false;
+        levelMakerdraw=false;
         edit=false;
-        //levelButton.clear();
+        levelButton = new ArrayList<Select>(); 
     }
+    /**
+     * setzt den Editor zurück / die Buttons
+     */
+    private void removeEditor ()
+    {
+        for (Select s:editor)
+        {
+            removeObject(s);
+        }
+        edit=false;
+    }
+    
 }
