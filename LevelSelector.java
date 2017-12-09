@@ -58,9 +58,9 @@ public class LevelSelector extends Selector
          return levels;        
     }
     
-    public String getLevelName(String path)
+    public List getLevelName(String path)
     {
-        return "Todo: Name auslesen";
+        return levels;
     }
     
     public boolean isShown()
