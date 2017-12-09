@@ -32,7 +32,7 @@ public class UserInterface extends World
     
     private ArrayList<Select> editor = new ArrayList<Select>();
     
-    private List<Select> levelButton; 
+    private ArrayList<Select> levelButton = new ArrayList<Select>(); 
     
     // Quelle: https://www.greenfoot.org/doc/native_loader
     static {
@@ -87,7 +87,7 @@ public class UserInterface extends World
         levelMaker = new LevelMaker();
         addObject(levelMaker,50,10);
         
-        SelectIni();
+        selectIni();
         int position=getWidth()/2-40;
         
         for(Select s:editor)
@@ -95,6 +95,9 @@ public class UserInterface extends World
             addObject(s,position,10);
             position +=20;
         }
+        
+        
+        
         
     }
     
@@ -195,8 +198,9 @@ public class UserInterface extends World
                         {
                             if (name.contains("LevelMaker"))
                             {
-                                //levelMaker.createLevelSelector(levelSelector.getLevelList());
+                                levelMaker.createLevelSelector(levelSelector.getLevelList());
                                 frage=true;
+                                createButtonLevel(levelSelector.getLevelList());
                             }
                         } 
                         //ändern der Postition je nach Actor
@@ -234,7 +238,7 @@ public class UserInterface extends World
             }
     }
     
-    private void SelectIni ()
+    private void selectIni ()
     {
         editor.add(new Select("stamp","missingImage.png"));
         editor.add(new Select("trashcan","missingImage.png"));
@@ -242,5 +246,24 @@ public class UserInterface extends World
         editor.add(new Select("worldright","missingImage.png"));
    
         
+    }
+    
+    private void buttonLevel (String name)
+    {
+        levelButton.add(new Select(name,"missingImage.png"));
+        levelButton.add(new Select(name+"Edit","missingImage.png"));
+    }
+    
+    private void createButtonLevel (List<String> name)
+    {
+        for (String n :name)
+        {
+            buttonLevel(n);
+        }
+        for(Select s:levelButton)
+        {
+            addObject(s,0,10);
+           
+        }
     }
 }

@@ -9,8 +9,10 @@ import java.util.ArrayList;
  */
 public class LevelMaker extends Selector
 {
+    
     public LevelMaker ()
     {   
+        setImage("missingImage.png");
     }
     
     public void createLevelSelector (List<String> name)
@@ -27,12 +29,14 @@ public class LevelMaker extends Selector
         font = font.deriveFont(20.0f);
         image.setFont(font);
         image.setColor(Color.BLACK);
-        /*
-        for (List m :fileName)
+        
+        int  i =30;
+        for (String n :name)
         {
-        image.drawString("Hallo",10,30);
+            image.drawString(n,10,i);
+            i+=30;
         }
-        */
+        image.drawString("hallo",10,100);
         setLocation(width,height/2);
         setImage(image);
     }
