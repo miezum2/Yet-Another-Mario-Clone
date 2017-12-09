@@ -31,6 +31,10 @@ public class UserInterface extends World
     private LevelMaker levelMaker; 
     private Overlay makergrid;
     
+    private ArrayList<Select> editor = new ArrayList<Select>();
+    
+    private ArrayList<Select> levelButton = new ArrayList<Select>(); 
+    
     // Quelle: https://www.greenfoot.org/doc/native_loader
     static {
         NativeLoader loader = new NativeLoader();        
@@ -82,8 +86,24 @@ public class UserInterface extends World
         //JsonObject jsonObject = new JsonParser().parse("{\"name\": \"John\"}").getAsJsonObject();
         //System.out.println(jsonObject.get("name").getAsString());
         levelMaker = new LevelMaker();
+        
         //addObject(levelMaker,200,200);
         makergrid = new Overlay(width, height);
+
+        addObject(levelMaker,50,10);
+        
+        selectIni();
+        int position=getWidth()/2-40;
+        
+        for(Select s:editor)
+        {
+            addObject(s,position,10);
+            position +=20;
+        }  
+        
+        
+        
+
     }
     
     private long lastNanoTime = 0;
@@ -217,8 +237,9 @@ public class UserInterface extends World
                         {
                             if (name.contains("LevelMaker"))
                             {
-                                //levelMaker.createLevelSelector(levelSelector.getLevelList());
+                                levelMaker.createLevelSelector(levelSelector.getLevelList());
                                 frage=true;
+                                createButtonLevel(levelSelector.getLevelList());
                             }
                         } 
                         //ändern der Postition je nach Actor
@@ -228,10 +249,60 @@ public class UserInterface extends World
                             x= Maus.getX();
                             object.setLocation(x,y);
                         }
-                         
+                        for(Select s:editor)
+                        {
+                            if (object.equals(s))
+                            {
+                                if (s.getName() == "stamp")
+                                {
+                                    System.out.println(s.getName());
+                                }
+                                if (s.getName() == "trashcan")
+                                {
+                                    System.out.println(s.getName());
+                                }
+                                if (s.getName() == "worldleft")
+                                {
+                                    System.out.println(s.getName());
+                                }
+                                if (s.getName() == "worldright")
+                                {
+                                    System.out.println(s.getName());
+                                }
+                            }
+                        } 
                         
                     }
                 } 
             }
+    }
+    
+    private void selectIni ()
+    {
+        editor.add(new Select("stamp","missingImage.png"));
+        editor.add(new Select("trashcan","missingImage.png"));
+        editor.add(new Select("worldleft","missingImage.png"));
+        editor.add(new Select("worldright","missingImage.png"));
+   
+        
+    }
+    
+    private void buttonLevel (String name)
+    {
+        levelButton.add(new Select(name,"missingImage.png"));
+        levelButton.add(new Select(name+"Edit","missingImage.png"));
+    }
+    
+    private void createButtonLevel (List<String> name)
+    {
+        for (String n :name)
+        {
+            buttonLevel(n);
+        }
+        for(Select s:levelButton)
+        {
+            addObject(s,0,10);
+           
+        }
     }
 }
