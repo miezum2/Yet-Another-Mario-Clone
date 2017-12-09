@@ -16,5 +16,9 @@ public class Select extends Actor
         this.setImage(image);
     }
     
+    public String getName()
+    {
+        return name;
+    }
     
 }

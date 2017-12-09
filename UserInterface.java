@@ -30,6 +30,10 @@ public class UserInterface extends World
     
     private LevelMaker levelMaker; 
     
+    private ArrayList<Select> editor = new ArrayList<Select>();
+    
+    private List<Select> levelButton; 
+    
     // Quelle: https://www.greenfoot.org/doc/native_loader
     static {
         NativeLoader loader = new NativeLoader();        
@@ -81,7 +85,17 @@ public class UserInterface extends World
         //JsonObject jsonObject = new JsonParser().parse("{\"name\": \"John\"}").getAsJsonObject();
         //System.out.println(jsonObject.get("name").getAsString());
         levelMaker = new LevelMaker();
-        //addObject(levelMaker,200,200);
+        addObject(levelMaker,50,10);
+        
+        SelectIni();
+        int position=getWidth()/2-40;
+        
+        for(Select s:editor)
+        {
+            addObject(s,position,10);
+            position +=20;
+        }
+        
     }
     
     private long lastNanoTime = 0;
@@ -192,10 +206,41 @@ public class UserInterface extends World
                             x= Maus.getX();
                             object.setLocation(x,y);
                         }
-                         
+                        for(Select s:editor)
+                        {
+                            if (object.equals(s))
+                            {
+                                if (s.getName() == "stamp")
+                                {
+                                    System.out.println(s.getName());
+                                }
+                                if (s.getName() == "trashcan")
+                                {
+                                    System.out.println(s.getName());
+                                }
+                                if (s.getName() == "worldleft")
+                                {
+                                    System.out.println(s.getName());
+                                }
+                                if (s.getName() == "worldright")
+                                {
+                                    System.out.println(s.getName());
+                                }
+                            }
+                        } 
                         
                     }
                 } 
             }
+    }
+    
+    private void SelectIni ()
+    {
+        editor.add(new Select("stamp","missingImage.png"));
+        editor.add(new Select("trashcan","missingImage.png"));
+        editor.add(new Select("worldleft","missingImage.png"));
+        editor.add(new Select("worldright","missingImage.png"));
+   
+        
     }
 }
