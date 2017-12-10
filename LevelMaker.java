@@ -11,12 +11,16 @@ public class LevelMaker extends Selector
 {
     private LevelSelector levelSelector;
     private String levelDir;
+    private GreenfootImage image;
     /**
      * Konstruktor vom Levelmaker.
      */
     public LevelMaker (String levelDir)
     {   
-        setImage("missingImage.png");
+        setImage("menu.png");
+        image = this.getImage();
+        image.scale(28,28);
+        setImage(image);
         levelSelector = new LevelSelector(levelDir);
         this.levelDir = levelDir;
     }

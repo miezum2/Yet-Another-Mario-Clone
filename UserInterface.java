@@ -33,8 +33,15 @@ public class UserInterface extends World
     
     private ArrayList<Select> editor = new ArrayList<Select>();
     
-    private ArrayList<Select> levelButton = new ArrayList<Select>(); 
+    private ArrayList<Select> levelButton = new ArrayList<Select>();
     
+    private FloatingEntity floatingEntity;
+    
+    private Select blockChosing;
+    
+    private Select ingameEdit;
+    
+    private Select editIngame;
     // Quelle: https://www.greenfoot.org/doc/native_loader
     static {
         NativeLoader loader = new NativeLoader();        
@@ -78,7 +85,7 @@ public class UserInterface extends World
         addObject(entityCounter, 20, 18);
         //addObject(new CameraZones(width, height, 50, 100, 50), width/2, height/2);
         
-        mode = "ingame";
+        mode = "editor";
         
         //addObject(new Player(nameP1, graphics.getImage(nameP1, "small", "walking", "right", 0), controlsP1), 100, 100);
         //addObject(new Object("Mystery_Block"), 200, 200);        
@@ -91,8 +98,9 @@ public class UserInterface extends World
         //addObject(levelMaker,200,200);
         makergrid = new Overlay(width, height);
 
-        addObject(levelMaker,50,10);
-        
+        addObject(levelMaker,getWidth()/8*2,30);
+        levelMakerhandler();
+        mode="levelSelector";
         selectIni();
     }
     
@@ -163,6 +171,11 @@ public class UserInterface extends World
             entityCounter.setText(currentEntities.size()+" Entities");
         } else if (mode.equals("editor"))   
         {
+            if (level == null)
+            {
+                level = new Level(levelSelector.getLevelList().get(0));
+            }
+            
             // Alle Entities vom Bildschirm löschen
             List<Entity> currentEntities = getObjects(Entity.class);
             removeObjects(currentEntities);
@@ -200,8 +213,11 @@ public class UserInterface extends World
         
         entityCounter.setLocation(entityCounter.getImage().getWidth()/2, 18);
         
-        //System.out.println("UserInterface Act");
-        
+        //System.out.println("UserInterface Act")
+        if (switchClock<10)
+        {
+            switchClock+=1;
+        }
         checkMous();
     }
     
@@ -209,6 +225,7 @@ public class UserInterface extends World
     private boolean levelMakerdraw = false;
     //gebit an ob der Editormodus an ist
     private boolean edit = false;
+    private int switchClock =0;
     /**
      * Eine Mausabfrage welche das händling mit den Actorn ermöglicht.
      */
@@ -217,44 +234,63 @@ public class UserInterface extends World
         int x;
         int y;
         boolean aenderung = false;
+       
         MouseInfo Maus = Greenfoot.getMouseInfo();
         
         //Prüfen das die Maus einen Actor anglickt
         if (Maus != null)
         {
             //Prüfen welche Taste gedrückt wurde
+            //System.out.println("X:"+Maus.getX());
+            //System.out.println("Y:"+Maus.getY());
+            //System.out.println("Maus:"+Maus.getButton());
+            if (floatingEntity != null && Maus.getButton()== 0)
+            {
+                removeObject(floatingEntity);
+                floatingEntity = null;
+                System.out.println("geslöscht");
+            }
             if (Maus.getButton()==1)
             {
+                if (floatingEntity != null)
+                    {
+                        //System.out.println(Maus.getX());
+                        floatingEntity.setLocation(Maus.getX(),Maus.getY());
+                    }
                 if (Maus.getActor() != null)
                 {
                     Actor object = Maus.getActor();
                     String name = object.toString();
                     name = name.intern();
                     System.out.println(name);
+                   
                     //prüfen welcher Actor vorliegt
-                    if (name.contains("Block"))
+                    if(object instanceof Entity)
                     {
                         aenderung = true;
                     }
+                    
+                    //ändern der Postition je nach Actor
+                    if (aenderung && floatingEntity == null)
+                    {
+                        ((Entity)object).remove();
+                        floatingEntity = new FloatingEntity(object.getImage());
+                        addObject(floatingEntity,Maus.getX(),Maus.getY());
+                        aenderung = false;
+                    }
+                    
+                    
+                    
                     //prüfen ob object Levelmaker Angesteuert wird
                     if (!levelMakerdraw)
                     {
                         if (name.contains("LevelMaker"))
                         {
-                            //Levelasuwahl zeichen und anzeigen
-                            levelMaker.createLevelSelector(levelSelector.getLevelList());
-                            levelMakerdraw = true;
-                            //Buttons für jedes Level erstellen (Play und Edit
-                            createButtonLevel(levelSelector.getLevelList());
+                            levelMakerhandler();
+                            removeEditor();
                         }
                     } 
-                    //ändern der Postition je nach Actor
-                    if (aenderung)
-                    {
-                        y= Maus.getY();
-                        x= Maus.getX();
-                        object.setLocation(x,y);
-                    }
+                    
                     
                     //Buttonabfrage für die jeweiligen Editor Buttons
                     for(Select s:editor)
@@ -279,15 +315,21 @@ public class UserInterface extends World
                             }
                             if (s.getName() == "bloecke")
                             {
-                                int height = getHeight();
-                                int width = getWidth();
-    
-                                GreenfootImage image = new GreenfootImage(width/8*7,height/8*1) ;
-                                //image.setColor(Color.BLACK);
-                                image.setColor(new Color(0,0,80,25));
-                                image.fillRect(0,0,width,height);
-                                s.setImage(image);
-                                s.setLocation(width/2,50);
+                                if (switchClock ==10)
+                                {
+                                    if (blockChosing == null )
+                                    {
+                                        blockChosing = new Select("bloeckes",0,"missingImage.png");
+                                        blockChosing.setImage(blockChois());
+                                        addObject(blockChosing,width/2,height/8+15);
+                                    }
+                                    else
+                                    {
+                                        removeObject(blockChosing);
+                                        blockChosing = null;
+                                    }
+                                    switchClock=0;
+                                }
                             }
                         }
                     } 
@@ -295,33 +337,44 @@ public class UserInterface extends World
                     //Buttonabfrage für die Levelauswahl oder das Editiren der jeweiligen Level
                     if (!levelButton.isEmpty())
                     {
-                    for (Select s: levelButton)
-                    {
-                        
-                        if (object.equals(s))
+                        for (Select s: levelButton)
                         {
-                            System.out.println(s.getName());
-                            if (s.getName().contains("Play"))
+                            
+                            if (object.equals(s))
                             {
-                                level = new Level(levelSelector.getLevelList().get(0));
-                                mode = "ingame";
-                                removeEditor();
-                                removeLevelMaker();
-                            }
-                            if (s.getName().contains("Edit"))
-                            {
-                                if (!edit)
+                                System.out.println(s.getName());
+                                if (s.getName().contains("Play"))
                                 {
-                                    removeEditor();
-                                    editMode();
-                                    edit = true;
-                                    removeLevelMaker();
+                                    playButton(s);
                                 }
+                                if (s.getName().contains("Edit"))
+                                {
+                                    editButton(s);
+                                
+                                }
+                            
                             }
-                        
                         }
                     }
-                }
+                    if (switchClock == 10)
+                    {
+                        //edit
+                        if (object.equals(ingameEdit))
+                        {
+                            editButton(ingameEdit);
+                            removeObject(ingameEdit);
+                            ingameEdit=null;
+                        }
+                        //Play
+                        if (object.equals(editIngame))
+                        {
+                            playButton(editIngame);
+                            removeObject(editIngame);
+                            editIngame=null;
+                            System.out.println("Hallo");
+                        }
+                        switchClock=0;
+                    }
                 }
             } 
         }
@@ -332,20 +385,20 @@ public class UserInterface extends World
      */
     private void selectIni ()
     {
-        editor.add(new Select("bloecke","missingImage.png"));
-        editor.add(new Select("stamp","missingImage.png"));
-        editor.add(new Select("trashcan","missingImage.png"));
-        editor.add(new Select("worldleft","missingImage.png"));
-        editor.add(new Select("worldright","missingImage.png"));
+        editor.add(new Select("bloecke",0,"missingImage.png"));
+        editor.add(new Select("stamp",0,"stamp.png"));
+        editor.add(new Select("trashcan",0,"delete.png"));
+        editor.add(new Select("worldleft",0,"arrowleft.png"));
+        editor.add(new Select("worldright",0,"arrowright.png"));
     }
     
     /**
      * Initalisirung der Levelauswahl Buttons in die Arrylist levelButton. Für jedes Level ein Play und Edit Button
      */
-    private void buttonLevel (String name)
+    private void buttonLevel (String name, int i)
     {
-        levelButton.add(new Select(name+"Play","missingImage.png"));
-        levelButton.add(new Select(name+"Edit","missingImage.png"));
+        levelButton.add(new Select(name+"Play",i,"play-button.png"));
+        levelButton.add(new Select(name+"Edit",0,"wrench.png"));
         System.out.println(name);
     }
     
@@ -359,8 +412,10 @@ public class UserInterface extends World
         int i = 0;
         for (String n :name)
         {
-            buttonLevel(n);
+            buttonLevel(n,i);
+            i++;
         }
+        i=0;
         for(Select s:levelButton)
         {
             if ((i % 2 ) == 0) 
@@ -384,10 +439,11 @@ public class UserInterface extends World
         int position=getWidth()/2-40;
         for(Select e:editor)
         {
-            addObject(e,position,10);
-            position +=20;
+            addObject(e,position,20);
+            position +=30;
         }
     }
+    
     /**
      * Setzt den LevelMaker zurück auf den Urzustand
      */
@@ -399,11 +455,12 @@ public class UserInterface extends World
             removeObject(s);
         }
         levelMaker = new LevelMaker(levelDir);
-        addObject(levelMaker,50,10);
+        addObject(levelMaker,getWidth()/8*1+15,20);
         levelMakerdraw=false;
         edit=false;
         levelButton = new ArrayList<Select>(); 
     }
+    
     /**
      * setzt den Editor zurück / die Buttons
      */
@@ -414,6 +471,54 @@ public class UserInterface extends World
             removeObject(s);
         }
         edit=false;
+    }
+    
+    private void levelMakerhandler()
+    {
+        //Levelasuwahl zeichen und anzeigen
+        levelMaker.createLevelSelector(levelSelector.getLevelList());
+        levelMakerdraw = true;
+        //Buttons für jedes Level erstellen (Play und Edit
+        createButtonLevel(levelSelector.getLevelList());
+        mode="levelSelector";
+        List<Entity> currentEntities = getObjects(Entity.class);
+        removeObjects(currentEntities);
+    }
+    
+    private GreenfootImage blockChois ()
+    {
+        int height = getHeight();
+        int width = getWidth();
+        GreenfootImage image = new GreenfootImage(width/8*7,height/8*1) ;
+        //image.setColor(Color.BLACK);
+        image.setColor(new Color(0,0,80,25));
+        image.fillRect(0,0,width,height);
+        return image;
+        //setImage(image);
+        //setLocation(width/2,height/8+15);
+    }
+    
+    private void playButton(Select s)
+    {
+        System.out.println("Test:"+s.getLevelNumber());
+        level = new Level(levelSelector.getLevelList().get(s.getLevelNumber()));
+        mode = "ingame";
+        removeEditor();
+        removeLevelMaker();
+        System.out.println(s.getLevelNumber());
+        ingameEdit = new Select(s.getName()+"Edit",s.getLevelNumber(),"wrench.png");
+        addObject(ingameEdit,getWidth()-20,20);
+        System.out.println(s.getLevelNumber());
+    }
+    private void editButton(Select s)
+    {
+        removeEditor();
+        editMode();
+        edit = true;
+        removeLevelMaker();
+        mode="editor";
+        editIngame = new Select(s.getName()+"Play",s.getLevelNumber(),"play-button.png");
+        addObject(editIngame,getWidth()-20,20);
     }
     
 }

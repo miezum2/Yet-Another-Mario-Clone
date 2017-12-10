@@ -41,7 +41,10 @@ public class Player extends Entity
      */
     public void act()
     {
-        
+        if (jumpcount< 3)
+        {
+            jumpcount++;
+        }
     }
     
     private boolean pressda = false;
@@ -70,7 +73,14 @@ public class Player extends Entity
                 {
                     if (jumpanable)
                     {
-                        setPosY(getPosY() + movement.jump(1));
+                        if (jumpcount==3)
+                        {
+                           setPosY(getPosY() + movement.jump(3)); 
+                        }
+                        else
+                        {
+                            setPosY(getPosY() + movement.jump(1));
+                        }
                         jumpanable=false;
                         jumpabel = false;
                     }
@@ -95,17 +105,26 @@ public class Player extends Entity
             }
             else
             {
-                if (pressda)
-                {
-                    if (getPosX() - movement.move(0, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()) > 0 )
+                if (movement.isTouchingLeftObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
                     {
-                        setPosX(movement.move(0, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+                        movement.setSpeed(0);
+                        pressda = false;
                     }
                     else
                     {
-                        pressda = false;
+                        if (pressda)
+                        {
+                            if (movement.getSpeed() < 0 )
+                            {
+                                setPosX(movement.move(0, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+                            }
+                            else
+                            {
+                                movement.setSpeed(0);
+                                pressda = false;
+                            }
+                        }
                     }
-                }
             }
             if(Greenfoot.isKeyDown("s"))
             {
@@ -124,13 +143,22 @@ public class Player extends Entity
             {
                 if (pressdd)
                 {
-                    if (getPosX() - movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()) < 0 )
+                    if (movement.isTouchingRightObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
                     {
-                        setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+                        movement.setSpeed(0);
+                        pressdd = false;
                     }
                     else
                     {
-                        pressdd = false;
+                        if (movement.getSpeed() > 0 )
+                        {
+                            setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+                        }
+                        else
+                        {
+                            movement.setSpeed(0);
+                            pressdd = false;
+                        }
                     }
                 }
             }
@@ -140,6 +168,12 @@ public class Player extends Entity
         if (movement.isTouchedByObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class) && getName().equals("Mario"))
         {
             
+        }
+        
+        if (movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class))
+        {
+            System.out.println("test");
+            setPosY(getPosY() +movement.jump(2));   
         }
         
         setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));

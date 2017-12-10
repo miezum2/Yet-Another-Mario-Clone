@@ -9,16 +9,24 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Select extends Actor
 {
     private String name;
-    
-    public Select (String name, String image)
+    private int levelNumber;
+    private GreenfootImage image;
+    public Select (String name,int levelNumber, String imag)
     {
         this.name = name;
-        this.setImage(image);
+        this.setImage(imag);
+        image = this.getImage();
+        image.scale(28,28);
+        setImage(image);
+        this.levelNumber=levelNumber;
     }
     
     public String getName()
     {
         return name;
     }
-    
+    public int getLevelNumber()
+    {
+        return levelNumber;
+    }
 }
