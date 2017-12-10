@@ -87,6 +87,8 @@ public class Movement
             Y -= 0.25;
         }
         
+        //System.out.println(Y);
+        
         double newY = posY + Y;
         double floor = getObjectBelow(posX, posY, widthUnits, heightUnits, Block.class);
         if (newY <= floor)
