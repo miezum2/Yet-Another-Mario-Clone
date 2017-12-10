@@ -120,6 +120,8 @@ public class Level
     public void update()
     {
         // Objekte löschen, die im letzten Durchlauf entfernt wurden
+        // Quelle: https://stackoverflow.com/questions/18448671/how-to-avoid-concurrentmodificationexception-while-removing-elements-from-arr
+        // Nutzer: arshajii
         Iterator<Entity> iter = entities.iterator();
         while (iter.hasNext()) {
             Entity entity = iter.next();
