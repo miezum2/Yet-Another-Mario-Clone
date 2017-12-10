@@ -101,7 +101,7 @@ public class Movement
     
     public double getObjectBelow(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
-        int floor = 0;        
+        double floor = 0;        
         
         for (Entity entity : entities)
         {
@@ -109,16 +109,40 @@ public class Movement
             {
                 if (entity.getPosY()+entity.getHeightUnits() > floor)
                 {
-                    floor = (int)entity.getPosY()+entity.getHeightUnits();
+                    floor = entity.getPosY()+entity.getHeightUnits();
                 }
             }            
         }
         return floor;        
     }
     
+    public double getObjectAbove(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
+    {
+        double ceiling = 100000;
+        int tolerance = 4;
+        
+        for (Entity entity : entities)
+        {
+            if (entity.getPosY() >= posY + heightUnits - tolerance && entity.getPosX() + entity.getWidthUnits() > posX && posX + widthUnits > entity.getPosX()  && (entity.getClass() == cls))
+            {
+                if (entity.getPosY() - heightUnits < ceiling)
+                {
+                    ceiling = entity.getPosY() - heightUnits;
+                }
+            }            
+        }
+        
+        return ceiling;  
+    }
+    
     public boolean isTouchingObjectBelow(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
         return posY <= getObjectBelow(posX, posY, widthUnits, heightUnits, cls);
+    }
+    
+    public boolean isTouchingObjectAbove(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
+    {
+        return posY >= getObjectAbove(posX, posY, widthUnits, heightUnits, cls);
     }
     
     public boolean isTouchingLeftObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
@@ -133,7 +157,7 @@ public class Movement
     
     public double getLeftObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
-        int left = 0;
+        double left = 0;
         int tolerance = 4;
         
         for (Entity entity : entities)
@@ -143,7 +167,7 @@ public class Movement
             {
                 if (entity.getPosX()+entity.getWidthUnits() > left)
                 {
-                    left = (int)entity.getPosX()+entity.getWidthUnits();
+                    left = entity.getPosX()+entity.getWidthUnits();
                 }
             }
             
@@ -154,7 +178,7 @@ public class Movement
     
     public double getRightObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
-        int right = 100000;
+        double right = 100000;
         int tolerance = 4;
         
         for (Entity entity : entities)
@@ -164,7 +188,7 @@ public class Movement
             {
                 if (entity.getPosX() - widthUnits < right)
                 {
-                    right = (int)entity.getPosX() - (int)widthUnits;
+                    right = entity.getPosX() - widthUnits;
                 }
             }
             
