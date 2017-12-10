@@ -77,6 +77,13 @@ public class Level
                 entities.add(newEntity);
             }
             
+            // Typ: Koopa
+            if (entity.getType().equals("koopa"))
+            {
+                Entity newEntity = new Koopa(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState());
+                entities.add(newEntity);
+            }
+            
             // Typ: block
             if (entity.getType().equals("block"))
             {

@@ -67,7 +67,7 @@ public class Player extends Entity
                 }
             }
             
-            if (entity.getPosY() + entity.getHeightUnits() > getPosY() && getPosY() + getHeightUnits() > entity.getPosY() && !(entity.getClass() == Player.class) && !(entity.getClass() == Koopa.class))
+            if (entity.getPosY() + entity.getHeightUnits() > getPosY() && getPosY() + getHeightUnits() > entity.getPosY() && !(entity.getClass() == Player.class))
             {
                 if (entity.getPosX()+entity.getWidthUnits() > left)
                 {

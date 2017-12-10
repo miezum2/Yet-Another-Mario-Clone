@@ -2,12 +2,12 @@
 	"levelInfo":{
 		"name":"Level 1",
 		"date":"2017-11-18",
-		"desc":"Testlevel"
+		"desc":"Demolevel"
 	},
 	"levelData":[
 		{"type":"player","name":"Mario","x":80,"y":128,"state":"small","data":""},
 		{"type":"player","name":"Luigi","x":208,"y":128,"state":"small","data":""},
-		{"type":"koopa","name":"Koopa","x":288,"y":128,"state":"red","data":""},
+		{"type":"koopa","name":"Koopa","x":288,"y":64,"state":"red","data":""},
 		{"type":"block","name":"Ground","x":0,"y":16,"state":"grass","data":""},
 		{"type":"block","name":"Ground","x":16,"y":16,"state":"grass","data":""},
 		{"type":"block","name":"Ground","x":32,"y":16,"state":"grass","data":""},
