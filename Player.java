@@ -18,15 +18,15 @@ public class Player extends Entity
         /* Konstruktor der Superklasse aufrufen*/
     }
     
-    public Player(String name, String id, double x, double y, GreenfootImage image)
+    public Player(String name, String id, double x, double y, GreenfootImage image, String state)
     {
-        super(name, id, x, y, image);
+        super(name, id, x, y, image, state);
         movement = new Movement(0, 0.1);
     }
     
     public Player(Entity entity)
     {
-        this(entity.getName(), entity.getId(), entity.getPosX(), entity.getPosY(), entity.getImage());
+        this(entity.getName(), entity.getId(), entity.getPosX(), entity.getPosY(), entity.getImage(), entity.getState());
     }
     
     public Player()

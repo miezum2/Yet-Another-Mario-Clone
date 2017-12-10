@@ -9,9 +9,9 @@ import java.util.*;
  */
 public class Block extends Entity
 {
-    public Block(String name, String id, double x, double y, GreenfootImage image)
+    public Block(String name, String id, double x, double y, GreenfootImage image, String state)
     {
-        super(name, id, x, y, image);
+        super(name, id, x, y, image, state);
     }
     
     /**
