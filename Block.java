@@ -12,6 +12,14 @@ public class Block extends Entity
     public Block(String name, String id, double x, double y, GreenfootImage image, String state)
     {
         super(name, id, x, y, image, state);
+        
+        // Mystery_Block
+        if (getName().equals("Mystery_Block"))
+        {
+            setState("yellow");
+            setActivity("spinning");
+            setOrientation("right");
+        }
     }
     
     /**
@@ -27,16 +35,7 @@ public class Block extends Entity
     {
         super.update(entities);
         
-        // Block je nach Typ setzen
-        
-        // Mystery_Block
-        if (getName().equals("Mystery_Block"))
-        {
-            setState("yellow");
-            setActivity("spinning");
-            setOrientation("right");
-            setAnimationIndex(getFrameCounter()/8);
-        }
+        // Block je nach Typ setzen       
         
         // Ground
         if (getName().equals("Ground"))
@@ -140,10 +139,19 @@ public class Block extends Entity
             }
             
             setState("grass");
-            setOrientation("right");
+            setOrientation("right");  
             setAnimationIndex(0);
         }
         
         //System.out.println("Eigenschaften von "+getName()+" gesetzt");       
+    }
+    
+    public void simulate(List<Entity> entities)
+    {
+        // Mystery_Block
+        if (getName().equals("Mystery_Block"))
+        {
+            setAnimationIndex(getFrameCounter()/8);
+        }
     }
 }

@@ -5,9 +5,13 @@
 		"desc":"Demolevel"
 	},
 	"levelData":[
-		{"type":"player","name":"Mario","x":80,"y":128,"state":"small","data":""},
-		{"type":"player","name":"Luigi","x":208,"y":128,"state":"small","data":""},
-		{"type":"koopa","name":"Koopa","x":288,"y":64,"state":"red","data":""},
+		{"type":"player","name":"Mario","x":80,"y":64,"state":"small","data":""},
+		{"type":"player","name":"Luigi","x":208,"y":32,"state":"small","data":""},
+		{"type":"koopa","name":"Koopa","x":142,"y":32,"state":"red","data":""},
+		{"type":"koopa","name":"Koopa","x":177,"y":32,"state":"red","data":""},
+		{"type":"koopa","name":"Koopa","x":207,"y":32,"state":"red","data":""},
+		{"type":"koopa","name":"Koopa","x":242,"y":32,"state":"red","data":""},
+		{"type":"koopa","name":"Koopa","x":271,"y":32,"state":"red","data":""},
 		{"type":"block","name":"Ground","x":0,"y":16,"state":"grass","data":""},
 		{"type":"block","name":"Ground","x":16,"y":16,"state":"grass","data":""},
 		{"type":"block","name":"Ground","x":32,"y":16,"state":"grass","data":""},
@@ -44,6 +48,7 @@
 		{"type":"block","name":"Ground","x":448,"y":16,"state":"grass","data":""},
 		{"type":"block","name":"Ground","x":464,"y":16,"state":"grass","data":""},
 		{"type":"block","name":"Ground","x":480,"y":16,"state":"grass","data":""},
-		{"type":"block","name":"Ground","x":496,"y":16,"state":"grass","data":""}
+		{"type":"block","name":"Ground","x":496,"y":16,"state":"grass","data":""},
+		{"type":"block","name":"Ground","x":496,"y":32,"state":"grass","data":""}
 	]
 }

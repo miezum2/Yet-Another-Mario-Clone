@@ -68,7 +68,7 @@ public class Level
         for (EntityData entity: levelData)
         {
             // neuen Entity erstellen           
-            System.out.println(entity.getType()+" - "+entity.getName());
+            //System.out.println(entity.getType()+" - "+entity.getName());
             
             // Typ: player
             if (entity.getType().equals("player"))

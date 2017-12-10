@@ -49,35 +49,17 @@ public class Player extends Entity
     private int jumpcount = 0;
     private boolean jumpanable = true;
     private boolean jumpabel = true;
+    
     public void update(List<Entity> entities)
     {
         super.update(entities);
         
-        int floor = 0;
-        int right = 1000000;
-        int left = 0;
-        
-        for (Entity entity : entities)
-        {
-            if (entity.getPosY() + entity.getHeightUnits() <= getPosY() && entity.getPosX() + entity.getWidthUnits() > getPosX() && getPosX() + getWidthUnits() > entity.getPosX() && !(entity.getClass() == Player.class) && !(entity.getClass() == Koopa.class))
-            {
-                if (entity.getPosY()+entity.getHeightUnits() > floor)
-                {
-                    floor = (int)entity.getPosY()+entity.getHeightUnits();
-                }
-            }
-            
-            if (entity.getPosY() + entity.getHeightUnits() > getPosY() && getPosY() + getHeightUnits() > entity.getPosY() && !(entity.getClass() == Player.class) && !(entity.getClass() == Koopa.class))
-            {
-                if (entity.getPosX()+entity.getWidthUnits() > left)
-                {
-                    left = (int)entity.getPosX()+entity.getWidthUnits();
-                }
-            }
-            
-        }
-        
-        //System.out.println(floor);
+    }
+    
+    public void simulate(List<Entity> entities)
+    {
+        // Aktuelle Welt an Movement übergeben, um Kollisionsprüfung zu erlauben
+        movement.setEntities(entities);            
         
         // Mario steuer
         if (getName().equals("Mario"))
@@ -106,7 +88,7 @@ public class Player extends Entity
             {
                 if (!pressdd)
                 {
-                    setPosX(getPosX() + movement.move(180));
+                    setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
                     pressda = true;
                     setOrientation("left");
                 }
@@ -115,9 +97,9 @@ public class Player extends Entity
             {
                 if (pressda)
                 {
-                    if (movement.move(0) < 0 )
+                    if (getPosX() - movement.move(0, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()) > 0 )
                     {
-                        setPosX(getPosX() + movement.move(0));
+                        setPosX(movement.move(0, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
                     }
                     else
                     {
@@ -133,7 +115,7 @@ public class Player extends Entity
             {
                 if (!pressda)
                 {
-                    setPosX(getPosX() + movement.move(0));
+                    setPosX(movement.move(0, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
                     pressdd = true;
                     setOrientation("right");
                 }
@@ -142,9 +124,9 @@ public class Player extends Entity
             {
                 if (pressdd)
                 {
-                    if (movement.move(180) > 0 )
+                    if (getPosX() - movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()) < 0 )
                     {
-                        setPosX(getPosX() + movement.move(180));
+                        setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
                     }
                     else
                     {
@@ -152,22 +134,15 @@ public class Player extends Entity
                     }
                 }
             }
-        }
+        }        
         
         
-        int newY = (int)getPosY() + (int)movement.gravity();
-        if (newY <= floor)
-        {
-            setPosY(floor);
-            jumpabel= true;
-        }
-        else
-        {
-            setPosY(newY);
-        }
+        
+        setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+        
+        jumpabel = movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class);
+        
                         
         setAnimationIndex(getFrameCounter()/5);
-        
-        //System.out.println("Height: "+getHeightUnits()+" Width: "+getWidthUnits());
     }
 }

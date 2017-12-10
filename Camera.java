@@ -149,14 +149,15 @@ public class Camera
         // Alle Objekte durchgehen und Position im Level in Position auf Welt umrechnen
         for (Entity entity : allEntities)
         {
+            double range = 16*scale;
             
             // Koordinaten in neuen Bereich mappen
             entity.setCameraX(mapX(entity.getPosX()));
             entity.setCameraY(mapY(entity.getPosY()));   
             
             // Objekt deaktivieren, wenn es sich außerhalb des Bildschirms befindet
-            if (entity.getCameraX() < - entity.getImage().getWidth() || entity.getCameraX() > widthPixels + entity.getImage().getWidth()
-                || entity.getCameraY() < - entity.getImage().getHeight() || entity.getCameraY() > heightPixels + entity.getImage().getHeight())
+            if (entity.getCameraX() < - range || entity.getCameraX() > widthPixels + range
+                || entity.getCameraY() < - range || entity.getCameraY() > heightPixels + range)
             {
                 entity.disable();
             }

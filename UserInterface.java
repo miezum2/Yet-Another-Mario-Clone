@@ -132,18 +132,27 @@ public class UserInterface extends World
             // nicht sichtbare Entities deaktivieren
             List<Entity> allEntities = level.getEntities();
             camera.calculatePositions(allEntities);
-                
-            // Alle Objekte durchgehen
+            
+            // Neuen Zustand aller Objekte ermitteln
             for (Entity entity : allEntities)
             {
-                // Objekt aktualisieren und zeichnen, wenn es nicht deaktiviert ist
                 if (entity.isEnabled())
                 {
                     entity.update(allEntities);
                     graphics.setScale(1);
                     GreenfootImage image = graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex());
                     entity.setHeightUnits(image.getHeight());
-                    entity.setWidthUnits(image.getWidth());
+                    entity.setWidthUnits(image.getWidth());                    
+                }
+            }
+            
+            // Objekte simulieren und einzeichnen
+            for (Entity entity : allEntities)
+            {
+                // Objekt aktualisieren und zeichnen, wenn es nicht deaktiviert ist
+                if (entity.isEnabled())
+                {
+                    entity.simulate(allEntities);
                     graphics.setScale(camera.getScale());
                     entity.setImage(graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex()));
                     entity.calculateExactPos();            

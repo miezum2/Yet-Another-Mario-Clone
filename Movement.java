@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.*;
 
 public class Movement
 {
@@ -11,18 +12,24 @@ public class Movement
     //Lauf Vector
     private double speed;
     
+    private List<Entity> entities;
+        
     public Movement(double speed, double accel)
     {    
         this.speed = speed;
         this.acceleration = accel;
+    }   
+    
+    public void setEntities(List<Entity> entities)
+    {
+        this.entities = entities;
     }
-   
 
     /**
      * Bewegt sich in die aktuelle Bewegungsrichtung.
      * Direction gibt die laufrichtung an, dabei ist 0 nach rechts und 180 nach links.
      */
-    public double move(int direction) 
+    public double move(int direction, double posX, double posY, double widthUnits, double heightUnits) 
     {
         
         //Bewegung nach rechst
@@ -36,7 +43,21 @@ public class Movement
             speed = speed - acceleration;
         }
         
-        return speed;
+        double newX = posX + speed;
+        double leftWall = getLeftObject(posX, posY, widthUnits, heightUnits, Block.class);
+        double rightWall = getRightObject(posX, posY, widthUnits, heightUnits, Block.class);
+        if (newX <= leftWall)
+        {
+            return leftWall;
+        }
+        else if (newX >= rightWall)
+        {
+            return rightWall;
+        } 
+        else
+        {
+            return newX;
+        }        
     }
     
     /**
@@ -55,22 +76,111 @@ public class Movement
        }
        return Y;
     }
+    
     /**
      * Läst auf den Körper der Figur eine Graditation wirken.
      */
-    public double gravity ()
+    public double gravity (double posX, double posY, double widthUnits, double heightUnits)
     {
         if (Y > -70)
         {
             Y -= 0.25;
         }
-        return Y;
         
+        double newY = posY + Y;
+        double floor = getObjectBelow(posX, posY, widthUnits, heightUnits, Block.class);
+        if (newY <= floor)
+        {
+            return floor;
+        }        
+        else
+        {
+            return newY;
+        }
+    }
+    
+    public double getObjectBelow(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
+    {
+        int floor = 0;        
+        
+        for (Entity entity : entities)
+        {
+            if (entity.getPosY() + entity.getHeightUnits() <= posY && entity.getPosX() + entity.getWidthUnits() > posX && posX + widthUnits > entity.getPosX()  && (entity.getClass() == cls))
+            {
+                if (entity.getPosY()+entity.getHeightUnits() > floor)
+                {
+                    floor = (int)entity.getPosY()+entity.getHeightUnits();
+                }
+            }            
+        }
+        return floor;        
+    }
+    
+    public boolean isTouchingObjectBelow(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
+    {
+        return posY <= getObjectBelow(posX, posY, widthUnits, heightUnits, cls);
+    }
+    
+    public boolean isTouchingLeftObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
+    {
+        return posX <= getLeftObject(posX, posY, widthUnits, heightUnits, cls);
+    }
+    
+    public boolean isTouchingRightObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
+    {
+        return posX >= getRightObject(posX, posY, widthUnits, heightUnits, cls);
+    }
+    
+    public double getLeftObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
+    {
+        int left = 0;
+        int tolerance = 4;
+        
+        for (Entity entity : entities)
+        {
+                        
+            if (entity.getPosX() + entity.getWidthUnits() <= posX + tolerance  && entity.getPosY() + entity.getHeightUnits() > posY && posY + heightUnits > entity.getPosY() && (entity.getClass() == cls))
+            {
+                if (entity.getPosX()+entity.getWidthUnits() > left)
+                {
+                    left = (int)entity.getPosX()+entity.getWidthUnits();
+                }
+            }
+            
+        }
+        
+        return left;
+    }
+    
+    public double getRightObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
+    {
+        int right = 100000;
+        int tolerance = 4;
+        
+        for (Entity entity : entities)
+        {
+                        
+            if (entity.getPosX() >= posX + widthUnits - tolerance && entity.getPosY() + entity.getHeightUnits() > posY && posY + heightUnits > entity.getPosY() && (entity.getClass() == cls))
+            {
+                if (entity.getPosX() - widthUnits < right)
+                {
+                    right = (int)entity.getPosX() - (int)widthUnits;
+                }
+            }
+            
+        }
+        
+        return right;
     }
 
-    public void setSpeed (int speed)
+    public void setSpeed (double speed)
     {
         this.speed=speed;
+    }
+    
+    public double getSpeed ()
+    {
+        return speed;
     }
     
     public double getYMove ()

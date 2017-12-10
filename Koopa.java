@@ -10,11 +10,14 @@ import java.util.*;
 public class Koopa extends Entity
 {
     private Movement movement;
+    private int turningCounter;
     
     public Koopa(String name, String id, double x, double y, GreenfootImage image, String state)
     {
         super(name, id, x, y, image, state);
         movement = new Movement(-0.5, 0);
+        setActivity("walking");
+        setOrientation("left");
     }
     
     /**
@@ -28,46 +31,56 @@ public class Koopa extends Entity
     
     public void update(List<Entity> entities)
     {
-        super.update(entities);
+        super.update(entities);                
         
-        int floor = 0;
-        int right = 1000000;
-        int left = 0;
-        
-        for (Entity entity : entities)
+        if (getActivity().equals("turning"))
         {
-            if (entity.getPosY() + entity.getHeightUnits() <= getPosY() && entity.getPosX() + entity.getWidthUnits() > getPosX() && getPosX() + getWidthUnits() > entity.getPosX() && !(entity.getClass() == Player.class) && !(entity.getClass() == Koopa.class))
+            turningCounter++;
+            if (turningCounter == 4)
             {
-                if (entity.getPosY()+entity.getHeightUnits() > floor)
+                if (getOrientation().equals("left"))
                 {
-                    floor = (int)entity.getPosY()+entity.getHeightUnits();
+                    setOrientation("right");
+                }
+                else
+                {
+                    setOrientation("left");
                 }
             }
-            
-            if (entity.getPosY() + entity.getHeightUnits() > getPosY() && getPosY() + getHeightUnits() > entity.getPosY() && !(entity.getClass() == Player.class) && !(entity.getClass() == Koopa.class))
+            if (turningCounter == 8)
             {
-                if (entity.getPosX()+entity.getWidthUnits() > left)
-                {
-                    left = (int)entity.getPosX()+entity.getWidthUnits();
-                }
+                setActivity("walking");
             }
+        }
             
-        }
-        
-        setPosX(getPosX()+movement.move(180));
-        
-        int newY = (int)getPosY() + (int)movement.gravity();
-        if (newY <= floor)
-        {
-            setPosY(floor);
-        }
-        else
-        {
-            setPosY(newY);
-        }
-        
-        setActivity("walking");
-        setOrientation("left");
-        setAnimationIndex(getFrameCounter()/12);
     }   
+    
+    public void simulate(List<Entity> entities)
+    {
+        movement.setEntities(entities);   
+        
+        setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+        setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+        
+        // Richtungsänderung
+        if (movement.isTouchingLeftObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class)
+            || movement.isTouchingLeftObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class))
+        {
+            setActivity("turning");
+            setOrientation("left");
+            turningCounter = 0;
+            movement.setSpeed(0.5);
+        }
+        
+        if (movement.isTouchingRightObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class)
+            || movement.isTouchingRightObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class))
+        {
+            setActivity("turning");
+            setOrientation("right");
+            turningCounter = 0;
+            movement.setSpeed(-0.5);
+        }        
+        
+        setAnimationIndex(getFrameCounter()/8);
+    }
 }

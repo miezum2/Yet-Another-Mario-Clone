@@ -67,6 +67,11 @@ public abstract class Entity extends Actor
         frameCounter++;        
     }
     
+    public void simulate(List<Entity> entities)
+    {
+        
+    }
+    
     public void calculateExactPos()
     {
         setCameraX(getCameraX() + getImage().getWidth() / 2);
