@@ -78,7 +78,7 @@ public class UserInterface extends World
         addObject(entityCounter, 20, 18);
         //addObject(new CameraZones(width, height, 50, 100, 50), width/2, height/2);
         
-        mode = "Hallo";
+        mode = "ingame";
         
         //addObject(new Player(nameP1, graphics.getImage(nameP1, "small", "walking", "right", 0), controlsP1), 100, 100);
         //addObject(new Object("Mystery_Block"), 200, 200);        
@@ -117,6 +117,11 @@ public class UserInterface extends World
             
         } else if (mode.equals("ingame"))
         {
+            if (level == null)
+            {
+                level = new Level(levelSelector.getLevelList().get(0));
+            }
+            
             // Alle Entities vom Bildschirm löschen
             List<Entity> currentEntities = getObjects(Entity.class);
             removeObjects(currentEntities);

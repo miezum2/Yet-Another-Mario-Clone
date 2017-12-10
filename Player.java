@@ -57,7 +57,7 @@ public class Player extends Entity
         
         for (Entity entity : entities)
         {
-            if (entity.getPosX() + entity.getWidthUnits() > getPosX() && getPosX() + getWidthUnits() > entity.getPosX() && !(entity.getClass() == Player.class))
+            if (entity.getPosY() + entity.getHeightUnits() <= getPosY() && entity.getPosX() + entity.getWidthUnits() > getPosX() && getPosX() + getWidthUnits() > entity.getPosX() && !(entity.getClass() == Player.class))
             {
                 if (entity.getPosY()+entity.getHeightUnits() > floor)
                 {
