@@ -119,57 +119,15 @@ public class Level
     
     public void update()
     {
-        // in Entities nach Mario suchen
-        Player mario = new Player();
-        Player luigi = new Player();
-        for (Entity entity : entities)
-        {
-            
-            if (entity.getName().equals("Mario"))
-            {
-                //mario = (Player)entity;
-            }
-            if (entity.getName().equals("Luigi"))
-            {
-                //luigi = (Player)entity;
-            }
-            
-        }
+        // Objekte löschen, die im letzten Durchlauf entfernt wurden
+        Iterator<Entity> iter = entities.iterator();
+        while (iter.hasNext()) {
+            Entity entity = iter.next();
         
-        int speed = 3;        
-        if(Greenfoot.isKeyDown("w"))
-        {
-            mario.setPosY(mario.getPosY()+speed);
-        }
-        if(Greenfoot.isKeyDown("a"))
-        {
-            mario.setPosX(mario.getPosX()-speed);
-        }
-        if(Greenfoot.isKeyDown("s"))
-        {
-            mario.setPosY(mario.getPosY()-speed);
-        }
-        if(Greenfoot.isKeyDown("d"))
-        {
-            mario.setPosX(mario.getPosX()+speed);
-        }
-               
-        if(Greenfoot.isKeyDown("up"))
-        {
-            luigi.setPosY(luigi.getPosY()+speed);
-        }
-        if(Greenfoot.isKeyDown("left"))
-        {
-            luigi.setPosX(luigi.getPosX()-speed);
-        }
-        if(Greenfoot.isKeyDown("down"))
-        {
-            luigi.setPosY(luigi.getPosY()-speed);
-        }
-        if(Greenfoot.isKeyDown("right"))
-        {
-            luigi.setPosX(luigi.getPosX()+speed);
-        }
-        
+            if (entity.isRemoved())
+            {
+                iter.remove();
+            }
+        }      
     }
 }

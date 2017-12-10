@@ -73,7 +73,7 @@ public class Movement
        else
        {
           Y= 5; 
-       }
+       }       
        return Y;
     }
     
@@ -87,14 +87,19 @@ public class Movement
             Y -= 0.25;
         }
         
-        //System.out.println(Y);
+        
         
         double newY = posY + Y;
         double floor = getObjectBelow(posX, posY, widthUnits, heightUnits, Block.class);
+        double ceiling = getObjectAbove(posX, posY, widthUnits, heightUnits, Block.class);        
         if (newY <= floor)
         {
             return floor;
         }        
+        else if (newY >= ceiling)
+        {
+            return ceiling;
+        }
         else
         {
             return newY;
@@ -155,6 +160,11 @@ public class Movement
     public boolean isTouchingRightObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
         return posX >= getRightObject(posX, posY, widthUnits, heightUnits, cls);
+    }
+    
+    public boolean isTouchedByObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
+    {
+        return isTouchingObjectAbove(posX, posY, widthUnits, heightUnits, cls) || isTouchingLeftObject(posX, posY, widthUnits, heightUnits, cls) || isTouchingRightObject(posX, posY, widthUnits, heightUnits, cls);
     }
     
     public double getLeftObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)

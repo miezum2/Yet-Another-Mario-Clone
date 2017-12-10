@@ -136,7 +136,11 @@ public class Player extends Entity
             }
         }        
         
-        
+        // Spieler wird von Koopa verletzt
+        if (movement.isTouchedByObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class) && getName().equals("Mario"))
+        {
+            
+        }
         
         setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
         

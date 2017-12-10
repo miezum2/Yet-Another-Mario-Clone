@@ -79,8 +79,18 @@ public class Koopa extends Entity
             setOrientation("right");
             turningCounter = 0;
             movement.setSpeed(-0.5);
-        }        
+        }     
+        
+        // Spieler springt auf Koopa
+        if (movement.isTouchingObjectAbove(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Player.class))
+        {
+            remove();   
+        }
         
         setAnimationIndex(getFrameCounter()/8);
+        
+        
+        
+        
     }
 }

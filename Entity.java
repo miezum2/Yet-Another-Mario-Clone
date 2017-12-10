@@ -24,6 +24,7 @@ public abstract class Entity extends Actor
     private boolean enabled;
     private int heightUnits;
     private int widthUnits;
+    private boolean removed = false;
     
     public Entity()
     {
@@ -206,5 +207,15 @@ public abstract class Entity extends Actor
     public void setWidthUnits(int widthUnits)
     {
         this.widthUnits = widthUnits;
+    }
+    
+    public void remove()
+    {
+        removed = true;
+    }
+    
+    public boolean isRemoved()
+    {
+        return removed;
     }
 }
