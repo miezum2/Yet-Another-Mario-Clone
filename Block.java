@@ -9,9 +9,12 @@ import java.util.*;
  */
 public class Block extends Entity
 {
+    private Movement movement;
+    
     public Block(String name, String id, double x, double y, GreenfootImage image, String state)
     {
         super(name, id, x, y, image, state);
+        //movement = new Movement(0, 0);
         
         // Mystery_Block
         if (getName().equals("Mystery_Block"))
@@ -148,7 +151,7 @@ public class Block extends Entity
     
     public void checkCollision(List<Entity> entities)
     {
-        movement.setEntities(entities);
+        //movement.setEntities(entities);
     }
     
     public void simulate(List<Entity> entities)

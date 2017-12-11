@@ -72,8 +72,6 @@ public class Player extends Entity
         //System.out.println("check Koopa");
         if (movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class))
         {
-            System.out.println("jump Koopa");
-            //setPosY(getPosY() +movement.jump(2));   
             movement.setY(2.5);
             jumpabel=true;            
         }    
@@ -103,7 +101,6 @@ public class Player extends Entity
                         {
                             setPosY(getPosY() + movement.jump(1));
                         }
-                        System.out.println("Testausgabe");
                         jumpanable=false;
                         jumpabel = false;
                     }

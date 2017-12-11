@@ -46,7 +46,7 @@ public class Level
         // Leveldata extrahieren
         String levelDataString = parser.parse(fileContent)
             .getAsJsonObject().getAsJsonArray("levelData").toString();
-        //System.out.println(levelDataString);
+        //System.out.println(levelDataString.replace("},{", "\n"));
         
         // Quelle: https://stackoverflow.com/questions/5554217/google-gson-deserialize-listclass-object-generic-type
         // Nutzer: DevNG

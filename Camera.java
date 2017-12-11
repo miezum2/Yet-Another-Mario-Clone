@@ -179,19 +179,29 @@ public class Camera
     }      
     
     // An map() Funktion aus der Arduino Library angelehnt
-    private int map(double value, double in_min, double in_max, double out_min, double out_max)
+    private double map(double value, double in_min, double in_max, double out_min, double out_max)
     {
-        return (int)((value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
+        return ((value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
     }    
     
-    private int mapX(double value)
+    private double mapX(double value)
     {
         return map(value, minX, maxX, 0, widthPixels);
     }
     
-    private int mapY(double value)
+    private double mapY(double value)
     {
         return map(value, minY, maxY, heightPixels, 0);
+    }
+    
+    public double mapToWorldX(int screenX)
+    {
+        return Math.round(map(screenX, 0, widthPixels, minX, maxX));
+    }
+    
+    public double mapToWorldY(int screenY)
+    {
+        return Math.round(map(screenY, 0, heightPixels, maxY, minY));
     }
     
     public double getScale()

@@ -75,11 +75,11 @@ public class GraphicsManager
         {
             if (mode.equals("ingame"))
             {
-                scale += 0.07;
+                scale += 0.1;
             }
             else
             {
-                scale -= 0.05;
+                scale -= 0.07;
             }
             
             GreenfootImage scaledImage = new GreenfootImage(image);

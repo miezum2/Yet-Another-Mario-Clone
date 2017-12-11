@@ -117,8 +117,8 @@ public class Tools
     
     public static void log(String content, String type)
     {
-        List <String> types = Arrays.asList("image", "activity", "state", "entity",
-                                            "level");
+        List <String> types = Arrays.asList("image_", "activity_", "state_", "entity_",
+                                            "level_");
         if (types.contains(type))
         {
             System.out.println(content);
