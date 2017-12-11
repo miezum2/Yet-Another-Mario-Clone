@@ -42,6 +42,8 @@ public class UserInterface extends World
     private Select ingameEdit;
     
     private Select editIngame;
+    
+    private Select newLevel;
     // Quelle: https://www.greenfoot.org/doc/native_loader
     static {
         NativeLoader loader = new NativeLoader();        
@@ -100,6 +102,8 @@ public class UserInterface extends World
 
         addObject(levelMaker,getWidth()/8*2,30);
         levelMakerhandler();
+        newLevel = new Select("newLevel",0,"missingImage.png");
+        addObject(newLevel,getWidth()/8*1+15,20);
         mode="levelSelector";
         selectIni();
     }
@@ -288,8 +292,14 @@ public class UserInterface extends World
                         {
                             levelMakerhandler();
                             removeEditor();
+                            addObject(newLevel,getWidth()/8*1+15,20);
                         }
                     } 
+                    
+                    if (object.equals(newLevel))
+                    {
+                        System.out.println(newLevel.getName());
+                    }
                     
                     
                     //Buttonabfrage für die jeweiligen Editor Buttons
@@ -450,6 +460,7 @@ public class UserInterface extends World
     private void removeLevelMaker ()
     {
         removeObjects(getObjects(LevelMaker.class));
+        removeObject(newLevel);
         for (Select s:levelButton)
         {
             removeObject(s);
@@ -514,6 +525,7 @@ public class UserInterface extends World
     {
         removeEditor();
         editMode();
+        level = new Level(levelSelector.getLevelList().get(s.getLevelNumber()));
         edit = true;
         removeLevelMaker();
         mode="editor";

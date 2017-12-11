@@ -174,6 +174,7 @@ public class Player extends Entity
         {
             System.out.println("test");
             setPosY(getPosY() +movement.jump(2));   
+            jumpabel=true;
         }
         
         setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
