@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class UserInterface extends World
 {
-    private static final int width = 600;
+    private static final int width = 1000;
     private static final int height = 400;
     private static final String imageDir = "images";
     private static final String levelDir = "levels";
@@ -29,7 +29,6 @@ public class UserInterface extends World
     private Text entityCounter;
     
     private LevelMaker levelMaker; 
-    private Overlay makergrid;
     
     private ArrayList<Select> editor = new ArrayList<Select>();
     
@@ -39,13 +38,16 @@ public class UserInterface extends World
     
     private Select blockChosing;
     
-    private Select ingameEdit;
+    private Select ingameToEditor;
     
-    private Select editIngame;
+    private Select editorToIngame;
     
     private Select newLevel;
     
     private boolean mouseButtonLeft;
+    
+    private int buttonScale;
+    private int buttonYPos;
     
     // Quelle: https://www.greenfoot.org/doc/native_loader
     static {
@@ -98,16 +100,18 @@ public class UserInterface extends World
         
         //JsonObject jsonObject = new JsonParser().parse("{\"name\": \"John\"}").getAsJsonObject();
         //System.out.println(jsonObject.get("name").getAsString());
-        levelMaker = new LevelMaker(levelDir);
+        
         
         //addObject(levelMaker,200,200);
-        makergrid = new Overlay(width, height);
-
+        buttonScale = (int)(getHeight()*0.06);
+        buttonYPos = (int)(buttonScale/2+getHeight()*0.0125);
+        
+        levelMaker = new LevelMaker(levelDir, buttonScale);
         addObject(levelMaker,getWidth()/8*2,30);
         levelMakerhandler();
         
-        newLevel = new Select("newLevel",0,"missingImage.png");
-        addObject(newLevel,getWidth()/8*1+15,20);
+        newLevel = new Select("newLevel",0,"newLevel.png",buttonScale);
+        addObject(newLevel,getWidth()/8*2+(newLevel.getImage().getWidth()/2),buttonYPos);
         
         mode="levelSelector";
         selectIni();
@@ -124,7 +128,6 @@ public class UserInterface extends World
         fpsCounter.setText(fps);
         fpsCounter.setLocation(fpsCounter.getImage().getWidth()/2, 6);
         
-        removeObject(makergrid);
         
         if (mode.equals("levelSelector"))
         {
@@ -215,11 +218,6 @@ public class UserInterface extends World
                     addObject(entity, (int)entity.getCameraX(), (int)entity.getCameraY());
                 }
             }    
-            
-            // Gitter zeichnen
-            
-            addObject(makergrid, width/2, height/2);
-            makergrid.drawGrid(camera.getScale(), camera.getMinX(), camera.getMinY());
         }
         
         entityCounter.setLocation(entityCounter.getImage().getWidth()/2, 18);
@@ -260,9 +258,11 @@ public class UserInterface extends World
     }
     
     //gibt an ob der LevelMaker gezeichnet wurde
-    private boolean levelMakerdraw = false;
+    private boolean levelMakerdraw;
     //gebit an ob der Editormodus an ist
-    private boolean edit = false;
+    private boolean edit;
+    private boolean stampActiv;
+    private boolean trashcanActiv;
     private int switchClock =0;
     /**
      * Eine Mausabfrage welche das händling mit den Actorn ermöglicht.
@@ -321,7 +321,8 @@ public class UserInterface extends World
                         {
                             levelMakerhandler();
                             removeEditor();
-                            addObject(newLevel,getWidth()/8*1+15,20);
+                            removeObject(ingameToEditor);
+                            addObject(newLevel,getWidth()/8*2+(newLevel.getImage().getWidth()/2),buttonYPos);
                         }
                     } 
                     
@@ -358,7 +359,7 @@ public class UserInterface extends World
                                 {
                                     if (blockChosing == null )
                                     {
-                                        blockChosing = new Select("bloeckes",0,"missingImage.png");
+                                        blockChosing = new Select("bloeckes",0,"missingImage.png",buttonScale);
                                         blockChosing.setImage(blockChois());
                                         addObject(blockChosing,width/2,height/8+15);
                                     }
@@ -398,18 +399,18 @@ public class UserInterface extends World
                     if (switchClock == 10)
                     {
                         //edit
-                        if (object.equals(ingameEdit))
+                        if (object.equals(ingameToEditor))
                         {
-                            editButton(ingameEdit);
-                            removeObject(ingameEdit);
-                            ingameEdit=null;
+                            editButton(ingameToEditor);
+                            removeObject(ingameToEditor);
+                            ingameToEditor=null;
                         }
                         //Play
-                        if (object.equals(editIngame))
+                        if (object.equals(editorToIngame))
                         {
-                            playButton(editIngame);
-                            removeObject(editIngame);
-                            editIngame=null;
+                            playButton(editorToIngame);
+                            removeObject(editorToIngame);
+                            editorToIngame=null;
                             System.out.println("Hallo");
                         }
                         switchClock=0;
@@ -424,11 +425,11 @@ public class UserInterface extends World
      */
     private void selectIni ()
     {
-        editor.add(new Select("bloecke",0,"missingImage.png"));
-        editor.add(new Select("stamp",0,"stamp.png"));
-        editor.add(new Select("trashcan",0,"delete.png"));
-        editor.add(new Select("worldleft",0,"arrowleft.png"));
-        editor.add(new Select("worldright",0,"arrowright.png"));
+        editor.add(new Select("bloecke",0,"newBlock.png",buttonScale));
+        editor.add(new Select("stamp",0,"stamp.png",buttonScale));
+        editor.add(new Select("trashcan",0,"delete.png",buttonScale));
+        editor.add(new Select("worldleft",0,"arrowleft.png",buttonScale));
+        editor.add(new Select("worldright",0,"arrowright.png",buttonScale));
     }
     
     /**
@@ -436,8 +437,8 @@ public class UserInterface extends World
      */
     private void buttonLevel (String name, int i)
     {
-        levelButton.add(new Select(name+"Play",i,"play-button.png"));
-        levelButton.add(new Select(name+"Edit",0,"wrench.png"));
+        levelButton.add(new Select(name+"Play",i,"play-button.png",28));
+        levelButton.add(new Select(name+"Edit",0,"wrench.png",28));
         System.out.println(name);
     }
     
@@ -478,7 +479,7 @@ public class UserInterface extends World
         int position=getWidth()/2-40;
         for(Select e:editor)
         {
-            addObject(e,position,20);
+            addObject(e,position,buttonYPos);
             position +=30;
         }
     }
@@ -494,8 +495,8 @@ public class UserInterface extends World
         {
             removeObject(s);
         }
-        levelMaker = new LevelMaker(levelDir);
-        addObject(levelMaker,getWidth()/8*1+15,20);
+        levelMaker = new LevelMaker(levelDir,buttonScale);
+        addObject(levelMaker,getWidth()/8*2+(buttonYPos),buttonYPos);
         levelMakerdraw=false;
         edit=false;
         levelButton = new ArrayList<Select>(); 
@@ -511,6 +512,7 @@ public class UserInterface extends World
             removeObject(s);
         }
         edit=false;
+        removeObject(editorToIngame);
     }
     
     private void levelMakerhandler()
@@ -546,8 +548,8 @@ public class UserInterface extends World
         removeEditor();
         removeLevelMaker();
         System.out.println(s.getLevelNumber());
-        ingameEdit = new Select(s.getName()+"Edit",s.getLevelNumber(),"wrench.png");
-        addObject(ingameEdit,getWidth()-20,20);
+        ingameToEditor = new Select(s.getName()+"Edit",s.getLevelNumber(),"wrench.png",buttonScale);
+        addObject(ingameToEditor,getWidth()-buttonYPos,buttonYPos);
         System.out.println(s.getLevelNumber());
     }
     private void editButton(Select s)
@@ -562,8 +564,8 @@ public class UserInterface extends World
         edit = true;
         removeLevelMaker();
         mode="editor";
-        editIngame = new Select(s.getName()+"Play",s.getLevelNumber(),"play-button.png");
-        addObject(editIngame,getWidth()-20,20);
+        editorToIngame = new Select(s.getName()+"Play",s.getLevelNumber(),"play-button.png",buttonScale);
+        addObject(editorToIngame,getWidth()-buttonYPos,buttonYPos);
     }
     
 }

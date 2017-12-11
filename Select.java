@@ -11,12 +11,12 @@ public class Select extends Actor
     private String name;
     private int levelNumber;
     private GreenfootImage image;
-    public Select (String name,int levelNumber, String imag)
+    public Select (String name,int levelNumber, String imag, int scale)
     {
         this.name = name;
         this.setImage(imag);
         image = this.getImage();
-        image.scale(28,28);
+        image.scale(scale,scale);
         setImage(image);
         this.levelNumber=levelNumber;
     }

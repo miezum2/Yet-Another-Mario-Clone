@@ -15,11 +15,11 @@ public class LevelMaker extends Selector
     /**
      * Konstruktor vom Levelmaker.
      */
-    public LevelMaker (String levelDir)
+    public LevelMaker (String levelDir, int scale )
     {   
         setImage("menu.png");
         image = this.getImage();
-        image.scale(28,28);
+        image.scale(scale,scale);
         setImage(image);
         levelSelector = new LevelSelector(levelDir);
         this.levelDir = levelDir;
