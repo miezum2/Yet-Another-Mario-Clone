@@ -14,6 +14,7 @@ public class GraphicsManager
     private static GreenfootImage noImage;
     private Map<String, EntityGraphics> entities;
     private double scale;
+    private String mode;
     
     public GraphicsManager()
     {
@@ -29,6 +30,7 @@ public class GraphicsManager
         entities = new HashMap<String, EntityGraphics>();
         noImage = Tools.loadImage("");
         scale = 1;
+        mode = "ingame";
         
         // Alle Ordner im angegebenen Pfad suchen
         File[] directories = Tools.getDirContent(path, "dir");
@@ -63,7 +65,7 @@ public class GraphicsManager
         } 
     }
     
-    public GreenfootImage scaleImage(GreenfootImage image, double scale)
+    private GreenfootImage scaleImage(GreenfootImage image, double scale)
     {
         if (scale == 1)
         {
@@ -71,10 +73,15 @@ public class GraphicsManager
         }
         else
         {
-            //scale += scale*0.002;
-            scale += 0.07;
-            //scale -= 0.05
-            ;
+            if (mode.equals("ingame"))
+            {
+                scale += 0.07;
+            }
+            else
+            {
+                scale -= 0.05;
+            }
+            
             GreenfootImage scaledImage = new GreenfootImage(image);
             scaledImage.scale((int)(image.getWidth()*scale), (int)(image.getHeight()*scale));
             return scaledImage;
