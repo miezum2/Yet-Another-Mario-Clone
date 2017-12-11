@@ -8,8 +8,22 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class FloatingEntity extends Actor
 {
+    private String name;
     public FloatingEntity (GreenfootImage image)
     {
         setImage(image);
+    }
+    
+    public FloatingEntity (String name, GreenfootImage image, double scale)
+    {
+        GreenfootImage scaledImage = new GreenfootImage(image);
+        scaledImage.scale((int)(image.getWidth()*scale), (int)(image.getHeight()*scale));
+        setImage(scaledImage);
+        this.name=name;
+    }
+    
+    public String getName()
+    {
+        return name;
     }
 }
