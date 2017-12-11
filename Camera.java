@@ -194,14 +194,14 @@ public class Camera
         return map(value, minY, maxY, heightPixels, 0);
     }
     
-    public double mapToWorldX(int screenX)
+    public int mapToWorldX(int screenX)
     {
-        return Math.round(map(screenX, 0, widthPixels, minX, maxX));
+        return (int)Math.round(map(screenX, 0, widthPixels, minX, maxX));
     }
     
-    public double mapToWorldY(int screenY)
+    public int mapToWorldY(int screenY)
     {
-        return Math.round(map(screenY, 0, heightPixels, maxY, minY));
+        return (int)Math.round(map(screenY, 0, heightPixels, maxY, minY));
     }
     
     public double getScale()
@@ -217,5 +217,19 @@ public class Camera
     public double getMinY()
     {
         return minY;
+    }
+    
+    public int alignXatGrid(int screenX)
+    {
+        // Mausposition in Weltposition umrechnen
+        // nur Vielfache von 16 zulassen
+        return (int)mapX(mapToWorldX(screenX)/16 * 16);
+    }
+    
+    public int alignYatGrid(int screenY)
+    {
+        // Mausposition in Weltposition umrechnen
+        // nur Vielfache von 16 zulassen
+        return (int)mapY(mapToWorldY(screenY)/16 * 16);
     }
 }
