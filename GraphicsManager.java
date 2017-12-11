@@ -97,4 +97,9 @@ public class GraphicsManager
     {
         this.scale = scale;
     }
-}
+    
+    public void setMode(String mode)
+    {
+        this.mode = mode;
+    }
+}   
