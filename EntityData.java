@@ -8,8 +8,8 @@ public class EntityData
 {
     private String type;
     private String name;
-    private double x;
-    private double y;
+    private int x;
+    private int y;
     private String state;
     private String data;
     
@@ -21,6 +21,16 @@ public class EntityData
         this.y = newEntity.getY();
         this.state = newEntity.getState();
         this.data = newEntity.getData();
+    }
+    
+    public EntityData(String type, String name, int x, int y, String state, String data)
+    {
+        this.type = type;
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.state = state;
+        this.data = data;
     }
     
     public EntityData()
@@ -43,12 +53,12 @@ public class EntityData
         return name; 
     }
     
-    public double getX() 
+    public int getX() 
     { 
         return x; 
     }
     
-    public double getY() 
+    public int getY() 
     { 
         return y; 
     }
@@ -68,12 +78,12 @@ public class EntityData
         this.type = type;
     }
     
-    public void setX(double x)
+    public void setX(int x)
     {
         this.x = x;
     }
     
-    public void setY(double Y)
+    public void setY(int Y)
     {
         this.y = Y;
     }

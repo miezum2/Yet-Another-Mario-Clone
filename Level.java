@@ -53,11 +53,51 @@ public class Level
         EntityData[] entityArray = gson.fromJson(levelDataString, EntityData[].class);
         levelData = new ArrayList<>(Arrays.asList(entityArray));         
         
+        EntityData[] testArray = new EntityData[levelData.size()];
+        testArray = levelData.toArray(testArray);        
+        
         generateEntities();
         
         //entities = levelData;
         //System.out.println(entities == levelData);
         //System.out.println(levelData.equals(entities));
+    }
+    
+    /**
+     * Neues Level anlegen
+     */
+    public Level(String name, String desc)
+    {
+        levelInfo = new HashMap<String, String>();
+        levelInfo.put("date", "Datum einfuegen");
+        levelInfo.put("name", name);
+        levelInfo.put("desc", desc);
+        
+        levelData = new ArrayList<EntityData>();
+        EntityData mario = new EntityData("player", "Mario", 100, 100, "small", "");
+        levelData.add(mario);
+        
+        Map<String, Map<String, String>> levelInfoMap = new HashMap<String, Map<String, String>>();
+        levelInfoMap.put("levelInfo", levelInfo);
+        
+        Map<String, List<EntityData>> levelDataMap = new HashMap<String, List<EntityData>>();
+        levelDataMap.put("levelData", levelData);
+        
+        Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
+        
+        String info = gsonBuilder.toJson(levelInfo);
+        info = info.substring(0, info.length() - 1).trim()+",";
+        System.out.println(info);
+        
+        
+        //String test = gsonBuilder.toJson(testArray, EntityData[].class);
+        //System.out.println(test);
+        
+        
+        
+        
+        
+    
     }
     
     private void generateEntities()
