@@ -8,13 +8,14 @@ import java.util.*;
 public class Player extends Entity
 {
     private Movement movement;
-        
+    private String[] controls;    
     /**
      * 
      */
     public Player(String name, GreenfootImage image, String[] controls)
     {
         super(name, image);
+        this.controls=controls;
         /* Konstruktor der Superklasse aufrufen*/
     }
     
@@ -41,17 +42,20 @@ public class Player extends Entity
      */
     public void act()
     {
-        if (jumpcount< 3)
+        /*
+        if (jumpCount< 5)
         {
-            jumpcount++;
+            jumpCount++;
         }
+        */
     }
     
-    private boolean pressda = false;
-    private boolean pressdd = false;
-    private int jumpcount = 0;
+    private boolean leftDown = false;
+    private boolean rightDown = false;
+    //private int jumpCount = 0;
     private boolean jumpanable = true;
     private boolean jumpabel = true;
+    private boolean directionChange=false;
     
     public void update(List<Entity> entities)
     {
@@ -72,6 +76,7 @@ public class Player extends Entity
         //System.out.println("check Koopa");
         if (movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class))
         {
+            setActivity("jumping");
             movement.setY(2.5);
             jumpabel=true;            
         }    
@@ -80,8 +85,7 @@ public class Player extends Entity
     public void simulate(List<Entity> entities)
     {
         // Aktuelle Welt an Movement übergeben, um Kollisionsprüfung zu erlauben
-        movement.setEntities(entities);            
-        
+        movement.setEntities(entities);         
         jumpabel = movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class);
         
         // Mario steuer
@@ -93,13 +97,17 @@ public class Player extends Entity
                 {
                     if (jumpanable)
                     {
-                        if (jumpcount==3)
+                        /*
+                        if (jumpCount==5)
                         {
                            setPosY(getPosY() + movement.jump(3)); 
+                           jumpCount=0;
                         }
                         else
+                        */
                         {
                             setPosY(getPosY() + movement.jump(1));
+                            setActivity("jumping");
                         }
                         jumpanable=false;
                         jumpabel = false;
@@ -112,15 +120,22 @@ public class Player extends Entity
                         }
                     }
                 }
-                
             }
             if(Greenfoot.isKeyDown("a"))
             {
-                if (!pressdd)
+                if (!rightDown)
                 {
                     setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
-                    pressda = true;
+                    leftDown = true;
                     setOrientation("left");
+                    if ((getActivity()!="jumping"))
+                    {
+                        setActivity("walking");
+                    }
+                }
+                if (movement.getSpeed()>0)
+                {
+                    directionChange=true;
                 }
             }
             else
@@ -128,20 +143,30 @@ public class Player extends Entity
                 if (movement.isTouchingLeftObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
                     {
                         movement.setSpeed(0);
-                        pressda = false;
+                        leftDown = false;
                     }
                     else
                     {
-                        if (pressda)
+                        if (leftDown)
                         {
+                            if (movement.getSpeed()>0)
+                            {
+                                directionChange=true;
+                            }
                             if (movement.getSpeed() < 0 )
                             {
                                 setPosX(movement.move(0, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+                                if ((movement.getSpeed()<1) && (movement.getSpeed()<0) && directionChange)
+                                {
+                                    setActivity("braking");
+                                    setOrientation("right");
+                                }
                             }
                             else
                             {
                                 movement.setSpeed(0);
-                                pressda = false;
+                                directionChange=false;
+                                leftDown = false;
                             }
                         }
                     }
@@ -152,40 +177,61 @@ public class Player extends Entity
             }
             if(Greenfoot.isKeyDown("d"))
             {
-                if (!pressda)
+                if (!leftDown)
                 {
                     setPosX(movement.move(0, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
-                    pressdd = true;
+                    rightDown = true;
                     setOrientation("right");
+                    if ((getActivity()!="jumping"))
+                    {
+                        setActivity("walking");
+                    }
+                }
+                if (movement.getSpeed()<0)
+                {
+                    directionChange=true;
                 }
             }
             else
             {
-                if (pressdd)
+                if (movement.isTouchingRightObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
                 {
-                    if (movement.isTouchingRightObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
-                    {
-                        movement.setSpeed(0);
-                        pressdd = false;
-                    }
-                    else
+                    movement.setSpeed(0);
+                    rightDown = false;
+                }
+                else
+                {
+                    if (rightDown)
                     {
                         if (movement.getSpeed() > 0 )
                         {
                             setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+                            if ((movement.getSpeed()<1) && (movement.getSpeed()>0) && directionChange)
+                            {
+                                setActivity("braking");
+                                setOrientation("left");
+                            }
                         }
                         else
                         {
                             movement.setSpeed(0);
-                            pressdd = false;
+                            rightDown = false;
+                            directionChange=false;
                         }
                     }
                 }
             }
         }    
-        
+        if (movement.getYMove()==0 && movement.getSpeed()==0)
+        {
+            setActivity("standing");
+            
+        }
+        if (movement.getYMove()<0)
+        {
+            setActivity("falling");
+        }
         setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
-                        
         setAnimationIndex(getFrameCounter()/5);
     }
 }

@@ -11,8 +11,8 @@ import java.util.*;
  */
 public class UserInterface extends World
 {
-    private static final int width = 1000;
-    private static final int height = 800;
+    private static final int width = 600;
+    private static final int height = 400;
     private static final String imageDir = "images";
     private static final String levelDir = "levels";
     
@@ -518,7 +518,7 @@ public class UserInterface extends World
     private void buttonLevel (String name, int i)
     {
         levelButton.add(new Select(name+"Play",i,"play-button.png",28));
-        levelButton.add(new Select(name+"Edit",0,"wrench.png",28));
+        levelButton.add(new Select(name+"Edit",i,"wrench.png",28));
     }
     
     /**
