@@ -146,6 +146,11 @@ public class Block extends Entity
         //System.out.println("Eigenschaften von "+getName()+" gesetzt");       
     }
     
+    public void checkCollision(List<Entity> entities)
+    {
+        movement.setEntities(entities);
+    }
+    
     public void simulate(List<Entity> entities)
     {
         // Mystery_Block

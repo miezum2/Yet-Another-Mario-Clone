@@ -166,6 +166,15 @@ public class UserInterface extends World
                 }
             }
             
+            // Kollisionsabfrage aller Objekte
+            for (Entity entity : allEntities)
+            {
+                if (entity.isEnabled())
+                {
+                    entity.checkCollision(allEntities);                  
+                }
+            }
+            
             // Objekte simulieren und einzeichnen
             for (Entity entity : allEntities)
             {

@@ -55,12 +55,9 @@ public class Koopa extends Entity
             
     }   
     
-    public void simulate(List<Entity> entities)
+    public void checkCollision(List<Entity> entities)
     {
-        movement.setEntities(entities);   
-        
-        setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
-        setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+        movement.setEntities(entities);
         
         // Richtungsänderung
         if (movement.isTouchingLeftObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class)
@@ -87,7 +84,16 @@ public class Koopa extends Entity
             //remove();  
             System.out.println("removed");
         }
+    }
+    
+    public void simulate(List<Entity> entities)
+    {
+        movement.setEntities(entities);   
         
+        setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+        setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+        
+                
         setAnimationIndex(getFrameCounter()/8);
         
         

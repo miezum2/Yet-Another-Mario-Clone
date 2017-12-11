@@ -59,10 +59,32 @@ public class Player extends Entity
         
     }
     
+    public void checkCollision(List<Entity> entities)
+    {
+        movement.setEntities(entities);
+        
+        // Spieler wird von Koopa verletzt
+        if (movement.isTouchedByObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class) && getName().equals("Mario"))
+        {
+            
+        }
+        
+        //System.out.println("check Koopa");
+        if (movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class))
+        {
+            System.out.println("jump Koopa");
+            //setPosY(getPosY() +movement.jump(2));   
+            movement.setY(2.5);
+            jumpabel=true;            
+        }    
+    }
+    
     public void simulate(List<Entity> entities)
     {
         // Aktuelle Welt an Movement übergeben, um Kollisionsprüfung zu erlauben
         movement.setEntities(entities);            
+        
+        jumpabel = movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class);
         
         // Mario steuer
         if (getName().equals("Mario"))
@@ -163,32 +185,9 @@ public class Player extends Entity
                     }
                 }
             }
-        }        
-        
-        
-        
-        // Spieler wird von Koopa verletzt
-        if (movement.isTouchedByObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class) && getName().equals("Mario"))
-        {
-            
-        }
-        
-        //System.out.println("check Koopa");
-        if (movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class))
-        {
-            System.out.println("jump Koopa");
-            //setPosY(getPosY() +movement.jump(2));   
-            movement.setY(2.5);
-            jumpabel=true;            
-        }
+        }    
         
         setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
-        
-        
-        
-        jumpabel = movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class);
-        
-        
                         
         setAnimationIndex(getFrameCounter()/5);
     }
