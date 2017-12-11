@@ -44,6 +44,9 @@ public class UserInterface extends World
     private Select editIngame;
     
     private Select newLevel;
+    
+    private boolean mouseButtonLeft;
+    
     // Quelle: https://www.greenfoot.org/doc/native_loader
     static {
         NativeLoader loader = new NativeLoader();        
@@ -102,8 +105,10 @@ public class UserInterface extends World
 
         addObject(levelMaker,getWidth()/8*2,30);
         levelMakerhandler();
+        
         newLevel = new Select("newLevel",0,"missingImage.png");
         addObject(newLevel,getWidth()/8*1+15,20);
+        
         mode="levelSelector";
         selectIni();
     }
@@ -166,6 +171,7 @@ public class UserInterface extends World
                 {
                     entity.simulate(allEntities);
                     graphics.setScale(camera.getScale());
+                    graphics.setMode("ingame");
                     entity.setImage(graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex()));
                     entity.calculateExactPos();            
                     addObject(entity, (int)entity.getCameraX(), (int)entity.getCameraY());
@@ -203,6 +209,7 @@ public class UserInterface extends World
                     entity.setHeightUnits(image.getHeight());
                     entity.setWidthUnits(image.getWidth());
                     graphics.setScale(camera.getScale());
+                    graphics.setMode("editor");
                     entity.setImage(graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex()));
                     entity.calculateExactPos();            
                     addObject(entity, (int)entity.getCameraX(), (int)entity.getCameraY());
@@ -222,7 +229,34 @@ public class UserInterface extends World
         {
             switchClock+=1;
         }
-        checkMous();
+        
+        MouseInfo Maus = Greenfoot.getMouseInfo();
+        if (Maus !=null)
+        {
+            if (Maus.getButton()==1)
+            {
+                mouseButtonLeft=true;
+            }
+        }
+        if (Greenfoot.mouseClicked(null))
+        {
+            mouseButtonLeft=false;
+        }
+        if (mouseButtonLeft)
+        {
+            checkMous();
+        }
+        else
+        {
+            if (floatingEntity != null)
+            {
+                removeObject(floatingEntity);
+                floatingEntity = null;
+                System.out.println("geslöscht");
+            }
+        }
+      
+        
     }
     
     //gibt an ob der LevelMaker gezeichnet wurde
@@ -233,7 +267,7 @@ public class UserInterface extends World
     /**
      * Eine Mausabfrage welche das händling mit den Actorn ermöglicht.
      */
-    public void checkMous ()
+    public void checkMous()
     {
         int x;
         int y;
@@ -248,13 +282,8 @@ public class UserInterface extends World
             //System.out.println("X:"+Maus.getX());
             //System.out.println("Y:"+Maus.getY());
             //System.out.println("Maus:"+Maus.getButton());
-            if (floatingEntity != null && Maus.getButton()== 0)
-            {
-                removeObject(floatingEntity);
-                floatingEntity = null;
-                System.out.println("geslöscht");
-            }
-            if (Maus.getButton()==1)
+            
+            if (mouseButtonLeft)
             {
                 if (floatingEntity != null)
                     {
@@ -526,6 +555,10 @@ public class UserInterface extends World
         removeEditor();
         editMode();
         level = new Level(levelSelector.getLevelList().get(s.getLevelNumber()));
+        GreenfootImage image = new GreenfootImage(getWidth(),getHeight());
+        image.setColor(new Color(156,227,231));
+        image.fill();
+        setBackground(image);
         edit = true;
         removeLevelMaker();
         mode="editor";

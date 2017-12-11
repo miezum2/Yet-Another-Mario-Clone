@@ -1,1 +1,1 @@
-javaw -jar "Yet Another Mario Clone.jar"
+javaw -jar "Yet-Another-Mario-Clone.jar"
