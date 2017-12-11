@@ -73,6 +73,8 @@ public class GraphicsManager
         {
             //scale += scale*0.002;
             scale += 0.07;
+            //scale -= 0.05
+            ;
             GreenfootImage scaledImage = new GreenfootImage(image);
             scaledImage.scale((int)(image.getWidth()*scale), (int)(image.getHeight()*scale));
             return scaledImage;

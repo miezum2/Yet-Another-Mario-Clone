@@ -65,15 +65,24 @@ public class Movement
      */
     public double jump(int i)
     {
-       if (i == 3)
+       if (i==3)
        {
-           Y= 10;
-           jumpcount = 0;
+           Y=5.5;
        }
        else
        {
-          Y= 5; 
-       }       
+           if (i == 2)
+           {
+               Y=2.5;
+           }
+           else
+           {
+               if (i==1)
+               {
+                  Y= 5; 
+               }    
+            }
+       }
        return Y;
     }
     
@@ -94,10 +103,12 @@ public class Movement
         double ceiling = getObjectAbove(posX, posY, widthUnits, heightUnits, Block.class);        
         if (newY <= floor)
         {
+            Y=0;
             return floor;
         }        
         else if (newY >= ceiling)
         {
+            Y=0;
             return ceiling;
         }
         else
