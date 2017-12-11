@@ -84,7 +84,8 @@ public class Koopa extends Entity
         // Spieler springt auf Koopa
         if (movement.isTouchingObjectAbove(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Player.class))
         {
-            //remove();   
+            //remove();  
+            System.out.println("removed");
         }
         
         setAnimationIndex(getFrameCounter()/8);

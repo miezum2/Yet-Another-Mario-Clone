@@ -68,6 +68,11 @@ public abstract class Entity extends Actor
         frameCounter++;        
     }
     
+    public void checkCollision(List<Entity> entities)
+    {
+    
+    }
+    
     public void simulate(List<Entity> entities)
     {
         

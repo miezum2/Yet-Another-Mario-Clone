@@ -6,7 +6,7 @@
 	},
 	"levelData":[
 		{"type":"player","name":"Mario","x":80,"y":64,"state":"small","data":""},
-		{"type":"player","name":"Luigi","x":208,"y":32,"state":"small","data":""},
+		{"type":"player2","name":"Luigi","x":208,"y":32,"state":"small","data":""},
 		{"type":"koopa","name":"Koopa","x":142,"y":32,"state":"red","data":""},
 		{"type":"koopa","name":"Koopa","x":177,"y":32,"state":"red","data":""},
 		{"type":"koopa","name":"Koopa","x":207,"y":32,"state":"red","data":""},

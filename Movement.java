@@ -86,6 +86,11 @@ public class Movement
        return Y;
     }
     
+    public void setY(double y)
+    {
+        Y = y;
+    }
+    
     /**
      * Läst auf den Körper der Figur eine Graditation wirken.
      */
@@ -95,9 +100,7 @@ public class Movement
         {
             Y -= 0.25;
         }
-        
-        
-        
+              
         double newY = posY + Y;
         double floor = getObjectBelow(posX, posY, widthUnits, heightUnits, Block.class);
         double ceiling = getObjectAbove(posX, posY, widthUnits, heightUnits, Block.class);        
@@ -120,10 +123,11 @@ public class Movement
     public double getObjectBelow(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
         double floor = 0;        
+        int tolerance = 4;
         
         for (Entity entity : entities)
         {
-            if (entity.getPosY() + entity.getHeightUnits() <= posY && entity.getPosX() + entity.getWidthUnits() > posX && posX + widthUnits > entity.getPosX()  && (entity.getClass() == cls))
+            if (entity.getPosY() + entity.getHeightUnits() - tolerance <= posY && entity.getPosX() + entity.getWidthUnits() > posX && posX + widthUnits > entity.getPosX()  && (entity.getClass() == cls))
             {
                 if (entity.getPosY()+entity.getHeightUnits() > floor)
                 {
