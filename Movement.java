@@ -33,12 +33,12 @@ public class Movement
     {
         
         //Bewegung nach rechst
-        if (speed<2 && direction==0)
+        if (speed<2.5 && direction==0)
         { 
             speed = speed + acceleration;
         }
         //bewegung nach links
-        if (speed>-2 && direction==180)
+        if (speed>-2.5 && direction==180)
         {
             speed = speed - acceleration;
         }

@@ -28,8 +28,6 @@ public class Camera
     double minY;
     double maxY;
     
-    boolean attached;
-    
     /**
      * Constructor for objects of class Camera
      */
@@ -38,12 +36,11 @@ public class Camera
         // Größe der Greenfoot-Welt speichern
         this.widthPixels = width;
         this.heightPixels = height;  
-        attached = true;
     }  
     
-    public void calculateCamera(List<Entity> entities)
+    private void calculateCameraZoom(List<Entity> entities)
     {
-        // Alle Player heraussuchen
+          // Alle Player heraussuchen
         List<Entity> players = new ArrayList<Entity>();
         for (Entity entity: entities)
         {
@@ -114,7 +111,10 @@ public class Camera
             heightUnits = distanceY+50;
             widthUnits = widthPixels*heightUnits/heightPixels; 
         }
-          
+    }
+    
+    private void calculateCameraPos()
+    {
         // Kameraposition berechnen
         currentPosX = targetPosX;
         currentPosY = targetPosY; 
@@ -130,34 +130,22 @@ public class Camera
         if (minX < 0)
         {
             maxX += Math.abs(minX);
+            targetPosX += Math.abs(minX);
             minX = 0;
         }
         
         if (minY < 0)
         {
             maxY += Math.abs(minY);
+            targetPosY += Math.abs(minY);
             minY = 0;
         }
-          
-        /*
-        System.out.println("heightUnits: "+heightUnits);
-        System.out.println("widthUnits: "+widthUnits);
-        System.out.println("minY: "+minY);
-        System.out.println("maxY: "+maxY);
-        System.out.println("minX: "+minX);
-        System.out.println("maxX: "+maxX);
-        System.out.println("scale: "+scale);      */ 
-               
+    }
         
-        /*
-        System.out.println("map minX: "+minX+" -> "+mapX(minX));        
-        System.out.println("map maxX: "+maxX+" -> "+mapX(maxX));
-        System.out.println("map minY: "+minY+" -> "+mapY(minY));        
-        System.out.println("map maxY: "+maxY+" -> "+mapY(maxY));
-        */
-        
-        //Entity test = new Entity("0", graphics.getImage("Ground", "default", "dirt", "right", 0));
-        //getWorld().addObject(new SmoothMover(), 100, 100);
+    public void calculateCamera(List<Entity> entities)
+    {
+        calculateCameraZoom(entities);
+        calculateCameraPos();        
     }   
     
     public void calculateEntities(List<Entity> entities)
@@ -239,14 +227,9 @@ public class Camera
         return (int)mapY(mapToWorldY(screenY)/16 * 16);
     }
     
-    public void attach()
+    public void moveX(double movement)
     {
-        attached = true;
-    }
-    
-    public void detach()
-    {
-        attached = false;
+        targetPosX += movement;
     }
     
 }
