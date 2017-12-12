@@ -217,7 +217,6 @@ public class UserInterface extends World
             // Kamera-Objekt anweisen, die Position der Entities in der Welt in Bildschirm-Koordinaten umzurechnen
             // nicht sichtbare Entities deaktivieren
             List<Entity> allEntities = level.getEntities();
-            camera.calculateCamera(allEntities);
             camera.calculateEntities(allEntities);
                 
             // Alle Objekte durchgehen
@@ -344,7 +343,12 @@ public class UserInterface extends World
                         }
                         else
                         {
-                            ((Entity)object).remove();
+                            if (object.getClass() != Player.class)
+                            {
+                                EntityData deleteEntity = new EntityData((Entity)object);
+                                level.removeObject(deleteEntity);
+                                mouseButtonLeft=false;
+                            }
                         }
                     }
                     
@@ -590,6 +594,7 @@ public class UserInterface extends World
             levelButton.add(new Select(name+"Play",i,"play-button.png",28));
             levelButton.add(new Select(name+"Edit",i,"wrench.png",28));
             levelButton.add(new Select(name+"Delete",i,"deleteLevel.png",28));
+            i++;
         }
     }
     
@@ -650,10 +655,6 @@ public class UserInterface extends World
     {
         removeObjects(getObjects(LevelMaker.class));
         removeObject(newLevel);
-        for (Select s:levelButton)
-        {
-            
-        }
         removeObjects(levelButton);
         levelMaker = new LevelMaker(levelDir,buttonScale);
         addObject(levelMaker,buttonYPos,buttonYPos);
@@ -748,6 +749,7 @@ public class UserInterface extends World
         level = new Level(levelSelector.getLevelList().get(s.getLevelNumber()));
         //Erstellt die Button für Editor
         editMode();
+        camera.calculateCamera(level.getEntities());
         //Hintergrundbild des Editors
         GreenfootImage image = new GreenfootImage(getWidth(),getHeight());
         image.setColor(new Color(156,227,231));

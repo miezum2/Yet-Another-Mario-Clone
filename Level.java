@@ -20,7 +20,7 @@ public class Level
     private List<Entity> entities; 
     
     private String[] controlsP1 = {"w","a","s","d","space"};
-    private String[] controlsP2 = {"up", "left", "down", "right", "return"};
+    private String[] controlsP2 = {"up", "left", "down", "right", "enter"};
     
     public Level(String path)
     {        
@@ -233,8 +233,11 @@ public class Level
                 removalIndex = levelData.indexOf(listEntity);
             }
         }   
-        levelData.remove(removalIndex);
-        save();
-        generateEntities();
+        if (removalIndex != -1)
+        {
+            levelData.remove(removalIndex);
+            save();
+            generateEntities();
+        }
     }
 }

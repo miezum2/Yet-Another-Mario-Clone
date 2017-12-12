@@ -11,7 +11,6 @@ public class Player extends Entity
     private String[] controls;  
     private boolean leftDown = false;
     private boolean rightDown = false;
-    private boolean jumpenable = true;
     private boolean jumpabel = true;
     private boolean directionChange=false;
     /**
@@ -205,8 +204,6 @@ public class Player extends Entity
             //prüft ob Spiele Springen darf, also am Boden angekommen ist
             if (jumpabel)
             {
-                //prüft ob 
-                if (jumpenable)
                 {
                     /*
                     if (jumpCount==5)
@@ -220,15 +217,7 @@ public class Player extends Entity
                         setPosY(getPosY() + movement.jump(1));
                         setActivity("jumping");
                     }
-                    jumpenable=false;
                     jumpabel = false;
-                }
-                else
-                {
-                    if (movement.getYMove() <= 0)
-                    {
-                        jumpenable = true; 
-                    }
                 }
             }
         }
