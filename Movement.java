@@ -25,19 +25,29 @@ public class Movement
         this.entities = entities;
     }
 
+
     /**
      * Bewegt sich in die aktuelle Bewegungsrichtung.
      * Direction gibt die laufrichtung an, dabei ist 0 nach rechts und 180 nach links.
+     *
+     * @param direction Ein Parameter
+     * @param posX Ein Parameter
+     * @param posY Ein Parameter
+     * @param widthUnits Ein Parameter
+     * @param heightUnits Ein Parameter
+     * @return Der Rückgabewert
      */
     public double move(int direction, double posX, double posY, double widthUnits, double heightUnits) 
     {
         
         //Bewegung nach rechst
+        //Beschleunigen bis zur Höchstgeschwindigkeit von 2.5
         if (speed<2.5 && direction==0)
         { 
             speed = speed + acceleration;
         }
         //bewegung nach links
+        //Beschleunigen bis zur Höchstgeschwindigkeit von 2.5
         if (speed>-2.5 && direction==180)
         {
             speed = speed - acceleration;

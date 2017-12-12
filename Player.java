@@ -85,7 +85,7 @@ public class Player extends Entity
     }
     
     /**
-     * Methode simulate
+     * ...
      *
      * @param entities Ein Parameter
      */
@@ -99,8 +99,10 @@ public class Player extends Entity
         //Bewegung nach links
         if(Greenfoot.isKeyDown(controls[1]))
         {
+            //nach rechts nicht gedückt
             if (!rightDown)
             {
+                //neue Position setzten 
                 setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
                 leftDown = true;
                 setOrientation("left");
@@ -116,6 +118,7 @@ public class Player extends Entity
         }
         else
         {
+            //prüfen fals Spieler gegen die Wand läuft
             if (movement.isTouchingLeftObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
                 {
                     movement.setSpeed(0);
@@ -125,10 +128,7 @@ public class Player extends Entity
                 {
                     if (leftDown)
                     {
-                        if (movement.getSpeed()>0)
-                        {
-                            directionChange=true;
-                        }
+                        //Richtungsänderung wärenden des Laufen
                         if (movement.getSpeed() < 0 )
                         {
                             setPosX(movement.move(0, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
@@ -154,8 +154,10 @@ public class Player extends Entity
         //Bewegung nach rechts
         if(Greenfoot.isKeyDown(controls[3]))
         {
+            //nach links nicht gedückt
             if (!leftDown)
             {
+                //neue Position setzten 
                 setPosX(movement.move(0, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
                 rightDown = true;
                 setOrientation("right");
@@ -171,6 +173,7 @@ public class Player extends Entity
         }
         else
         {
+            //prüfen fals Spieler gegen die Wand läuft
             if (movement.isTouchingRightObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
             {
                 movement.setSpeed(0);
@@ -180,6 +183,7 @@ public class Player extends Entity
             {
                 if (rightDown)
                 {
+                    //Richtungsänderung wärenden des Laufen
                     if (movement.getSpeed() > 0 )
                     {
                         setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
