@@ -28,6 +28,8 @@ public class Camera
     double minY;
     double maxY;
     
+    boolean attached;
+    
     /**
      * Constructor for objects of class Camera
      */
@@ -35,14 +37,15 @@ public class Camera
     {
         // Größe der Greenfoot-Welt speichern
         this.widthPixels = width;
-        this.heightPixels = height;        
+        this.heightPixels = height;  
+        attached = true;
     }  
-
-    public void calculatePositions(List<Entity> allEntities)
+    
+    public void calculateCamera(List<Entity> entities)
     {
         // Alle Player heraussuchen
         List<Entity> players = new ArrayList<Entity>();
-        for (Entity entity: allEntities)
+        for (Entity entity: entities)
         {
             if (entity.getClass() == Player.class)
             {
@@ -144,10 +147,23 @@ public class Camera
         System.out.println("minX: "+minX);
         System.out.println("maxX: "+maxX);
         System.out.println("scale: "+scale);      */ 
+               
         
+        /*
+        System.out.println("map minX: "+minX+" -> "+mapX(minX));        
+        System.out.println("map maxX: "+maxX+" -> "+mapX(maxX));
+        System.out.println("map minY: "+minY+" -> "+mapY(minY));        
+        System.out.println("map maxY: "+maxY+" -> "+mapY(maxY));
+        */
         
+        //Entity test = new Entity("0", graphics.getImage("Ground", "default", "dirt", "right", 0));
+        //getWorld().addObject(new SmoothMover(), 100, 100);
+    }   
+    
+    public void calculateEntities(List<Entity> entities)
+    {
         // Alle Objekte durchgehen und Position im Level in Position auf Welt umrechnen
-        for (Entity entity : allEntities)
+        for (Entity entity : entities)
         {
             double range = 16*scale;
             
@@ -166,17 +182,7 @@ public class Camera
                 entity.enable();
             }            
         }
-        
-        /*
-        System.out.println("map minX: "+minX+" -> "+mapX(minX));        
-        System.out.println("map maxX: "+maxX+" -> "+mapX(maxX));
-        System.out.println("map minY: "+minY+" -> "+mapY(minY));        
-        System.out.println("map maxY: "+maxY+" -> "+mapY(maxY));
-        */
-        
-        //Entity test = new Entity("0", graphics.getImage("Ground", "default", "dirt", "right", 0));
-        //getWorld().addObject(new SmoothMover(), 100, 100);
-    }      
+    }
     
     // An map() Funktion aus der Arduino Library angelehnt
     private double map(double value, double in_min, double in_max, double out_min, double out_max)
@@ -232,4 +238,15 @@ public class Camera
         // nur Vielfache von 16 zulassen
         return (int)mapY(mapToWorldY(screenY)/16 * 16);
     }
+    
+    public void attach()
+    {
+        attached = true;
+    }
+    
+    public void detach()
+    {
+        attached = false;
+    }
+    
 }

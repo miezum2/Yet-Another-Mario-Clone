@@ -13,14 +13,26 @@ public class EntityData
     private String state;
     private String data;
     
-    public EntityData(EntityData newEntity)
+    public EntityData(Entity entity)
     {
-        this.type = newEntity.getType();
-        this.name = newEntity.getName();
-        this.x = newEntity.getX();
-        this.y = newEntity.getY();
-        this.state = newEntity.getState();
-        this.data = newEntity.getData();
+        if (entity.getClass() == Block.class)
+        {
+            type = "block";
+        }
+        else if (entity.getClass() == Player.class)
+        {
+            type = "player";
+        }
+        else if (entity.getClass() == Koopa.class)
+        {
+            type = "koopa";
+        }
+        
+        name = entity.getName();
+        x = entity.getX();
+        y = entity.getY();
+        state = entity.getState();
+        data = entity.getData();
     }
     
     public EntityData(String type, String name, int x, int y, String state, String data)
@@ -33,16 +45,16 @@ public class EntityData
         this.data = data;
     }
     
-    public EntityData()
+    public boolean equals(EntityData entity)
     {
-        type = "";
-        name = "";
-        x = 0;
-        y = 0;
-        state = "";
-        data = "";
+        return entity.getType().equals(type)
+            && entity.getName().equals(name)
+            && entity.getX() == x
+            && entity.getY() == y
+            && entity.getState().equals(state)
+            && entity.getData().equals(data);
     }
-    
+        
     public String getType() 
     { 
         return type; 

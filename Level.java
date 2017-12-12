@@ -21,6 +21,7 @@ public class Level
     
     public Level(String path)
     {        
+        this.path = path;
         graphics = new GraphicsManager();
         
         String fileContent = Tools.getFileContent(path);
@@ -74,9 +75,9 @@ public class Level
         levelInfo.put("desc", desc);
         
         levelData = new ArrayList<EntityData>();
-        EntityData mario = new EntityData("player", "Mario", 100, 32, "small", "");
-        EntityData block1 = new EntityData("block", "Ground", 100, 16, "grass", "");
-        EntityData block2 = new EntityData("block", "Ground", 100, 0, "grass", "");
+        EntityData mario = new EntityData("player", "Mario", 96, 32, "small", "");
+        EntityData block1 = new EntityData("block", "Ground", 96, 16, "grass", "");
+        EntityData block2 = new EntityData("block", "Ground", 96, 0, "grass", "");
         levelData.add(mario);
         levelData.add(block1);
         
@@ -157,11 +158,13 @@ public class Level
                 // Name: Ground
                 if (entity.getName().equals("Ground"))
                 {
+                    Entity newEntity = new Block(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState());
+                    entities.add(newEntity);
                     // Wenn ein Ground-Block gefunden, dann Welt bis zum Boden mit Ground-Blöcken füllen
                     for (double i = entity.getY(); i >= 0; i -= 16)
                     {
-                        Entity newEntity = new Block(entity.getName(), "0", entity.getX(), i, graphics.getImage(), entity.getState());
-                        entities.add(newEntity);
+                        //Entity newEntity = new Block(entity.getName(), "0", entity.getX(), i, graphics.getImage(), entity.getState());
+                        //entities.add(newEntity);
                     }
                 }
                 else
@@ -197,5 +200,24 @@ public class Level
                 iter.remove();
             }
         }      
+    }
+    
+    public void addObject(EntityData entity)
+    {
+        levelData.add(entity);
+        System.out.println(path);
+        save();
+        generateEntities();
+    }
+    
+    public void removeObject(EntityData entity)
+    {
+        for (EntityData listEntity : levelData)
+        {
+            if (listEntity.equals(entity))
+            {
+                levelData.remove(listEntity);
+            }
+        }
     }
 }

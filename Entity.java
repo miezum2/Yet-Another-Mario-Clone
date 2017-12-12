@@ -13,6 +13,7 @@ public abstract class Entity extends Actor
     private String id;
     private double posX;
     private double posY;
+    private String data;
     private double cameraX;
     private double cameraY;
     private String state;
@@ -113,6 +114,17 @@ public abstract class Entity extends Actor
     {
         this.posY = posY;
     }
+    
+    public String getData()
+    {    
+        return data;
+    }
+    
+    public void setData(String data)
+    {
+        this.data = data;
+    }
+        
     
     public double getCameraX()
     {

@@ -171,15 +171,17 @@ public class Tools
     
     public static void deleteFile(String path)
     {
-        Path file = Paths.get(path);
-        try
+        if (fileExists(path))
         {
-            Files.delete(file);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        
+            Path file = Paths.get(path);
+            try
+            {
+                Files.delete(file);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }        
     }
 }
