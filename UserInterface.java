@@ -429,7 +429,9 @@ public class UserInterface extends World
                     
                     if (object.equals(newLevel))
                     {
+                        level = new Level("levels", "Hier Name uebergeben", "Beschreibung");
                         System.out.println(newLevel.getName());
+                        // Liste aktualisieren
                     }
                     
                     //Buttonabfrage für die jeweiligen Editor Buttons
@@ -523,6 +525,7 @@ public class UserInterface extends World
                                 if (s.getName().contains("Delete"))
                                 {
                                     //Löschen
+                                    Tools.deleteFile("Pfad übergeben");
                                     
                                     //neu Initalisieren der Level auswahl
                                     removeLevelMaker();
