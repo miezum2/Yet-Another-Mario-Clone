@@ -160,7 +160,8 @@ public class UserInterface extends World
             // Kamera-Objekt anweisen, die Position der Entities in der Welt in Bildschirm-Koordinaten umzurechnen
             // nicht sichtbare Entities deaktivieren
             List<Entity> allEntities = level.getEntities();
-            camera.calculatePositions(allEntities);
+            camera.calculateCamera(allEntities);
+            camera.calculateEntities(allEntities);
             
             // Neuen Zustand aller Objekte ermitteln
             for (Entity entity : allEntities)
@@ -216,7 +217,8 @@ public class UserInterface extends World
             // Kamera-Objekt anweisen, die Position der Entities in der Welt in Bildschirm-Koordinaten umzurechnen
             // nicht sichtbare Entities deaktivieren
             List<Entity> allEntities = level.getEntities();
-            camera.calculatePositions(allEntities);
+            camera.calculateCamera(allEntities);
+            camera.calculateEntities(allEntities);
                 
             // Alle Objekte durchgehen
             for (Entity entity : allEntities)
@@ -278,17 +280,19 @@ public class UserInterface extends World
             {
                 if (isDragging)
                 {
-                    floatingEntity.setLocation(camera.alignXatGrid(Maus.getX()+(floatingEntity.getImage().getWidth()/2)),camera.alignYatGrid(Maus.getY()-(floatingEntity.getImage().getHeight()/2)));
+                    //floatingEntity.setLocation(camera.alignXatGrid(Maus.getX()+(floatingEntity.getImage().getWidth()/2)),camera.alignYatGrid(Maus.getY()-(floatingEntity.getImage().getHeight()/2)));
+                    System.out.println(floatingEntity.getName());
+                    EntityData newEntity = new EntityData(floatingEntity.getType(), floatingEntity.getName(), camera.mapToWorldX(Maus.getX())/16*16, camera.mapToWorldY(Maus.getY())/16*16, floatingEntity.getState(), "");
+                    level.addObject(newEntity);
                     isDragging= false;
                 }
                 if (!isDragging && stampActiv)
                 {
                     
                 }
-                //removeObject(floatingEntity);
+                removeObject(floatingEntity);
                 //floatingEntity.setLocation(camera.alignXatGrid(Maus.getX()+(floatingEntity.getImage().getWidth()/2)),camera.alignYatGrid(Maus.getY()));
                 floatingEntity = null;
-                System.out.println("geslöscht");
                 
             }
         }
@@ -329,7 +333,7 @@ public class UserInterface extends World
                     Actor object = Maus.getActor();
                     String name = object.toString();
                     name = name.intern();
-                    System.out.println(name);
+                    //System.out.println(name);
                    
                     //prüfen welcher Actor vorliegt
                     if(object instanceof Entity)
@@ -341,7 +345,6 @@ public class UserInterface extends World
                         else
                         {
                             ((Entity)object).remove();
-                            System.out.println("Hallo");
                         }
                     }
                     
@@ -349,8 +352,10 @@ public class UserInterface extends World
                     if (aenderung && floatingEntity == null)
                     {
                         isDragging=true;
-                        ((Entity)object).remove();
-                        floatingEntity = new FloatingEntity(object.getImage());
+                        //((Entity)object).remove();
+                        EntityData deleteEntity = new EntityData((Entity)object);
+                        level.removeObject(deleteEntity);
+                        floatingEntity = new FloatingEntity((Entity)object);
                         addObject(floatingEntity,Maus.getX(),Maus.getY());
                         aenderung = false;
                     }
@@ -359,55 +364,21 @@ public class UserInterface extends World
                     for(FloatingEntity f :placeableEntities)
                     {
                         if (object.equals(f))
+                        {
+                            floatingEntity = f;
+                            removeObject(blockChosing);
+                            //alle anderen neuen Blöcke löschen
+                            for(FloatingEntity m :placeableEntities)
                             {
-                            if (f.getName()=="grass")
-                            {
-                                floatingEntity = f;
-                                removeObject(blockChosing);
-                                //alle anderen neuen Blöcke löschen
-                                for(FloatingEntity m :placeableEntities)
+                                if (!object.equals(m))
                                 {
-                                    if (!object.equals(m))
-                                    {
-                                        removeObject(m);
-                                    }
+                                    removeObject(m);
                                 }
-                                blockChosing = null;
-                                isDragging=true;
                             }
-                            if (f.getName()=="mistery")
-                            {
-                                floatingEntity = f;
-                                removeObject(blockChosing);
-                                //alle anderen neuen Blöcke löschen
-                                for(FloatingEntity m :placeableEntities)
-                                {
-                                    if (!object.equals(m))
-                                    {
-                                        removeObject(m);
-                                    }
-                                }
-                                blockChosing = null;
-                                isDragging=true;
-                            }
-                            if (f.getName()=="koopa")
-                            {
-                                floatingEntity = f;
-                                removeObject(blockChosing);
-                                //alle anderen neuen Blöcke löschen
-                                for(FloatingEntity m :placeableEntities)
-                                {
-                                    if (!object.equals(m))
-                                    {
-                                        removeObject(m);
-                                    }
-                                }
-                                blockChosing = null;
-                                isDragging=true;
-                            }
+                            blockChosing = null;
+                            isDragging=true;                            
                         }
-                    }
-                                
+                    }                               
                     
                     //prüfen ob object Levelmaker Angesteuert wird
                     if (!levelMakerdraw)
@@ -427,7 +398,6 @@ public class UserInterface extends World
                     {
                         String levelName=JOptionPane.showInputDialog("Input integer number here: ");
                         level = new Level("levels", levelName, "Beschreibung");
-                        System.out.println(newLevel.getName());
                         levelButton.clear();
                         buttonLevel(levelSelector.getLevelList());
                         removeLevelMaker();
@@ -452,7 +422,6 @@ public class UserInterface extends World
                         {
                             if (s.getName() == "stamp")
                             {
-                                System.out.println(s.getName());
                                 if (!stampActiv)
                                 {
                                     stampActiv = true;
@@ -466,7 +435,6 @@ public class UserInterface extends World
                             }
                             if (s.getName() == "trashcan")
                             {
-                                System.out.println(s.getName());
                                 stampActiv = false;
                                 if (!trashcanActiv)
                                 {
@@ -479,11 +447,11 @@ public class UserInterface extends World
                             }
                             if (s.getName() == "worldleft")
                             {
-                                System.out.println(s.getName());
+                                
                             }
                             if (s.getName() == "worldright")
                             {
-                                System.out.println(s.getName());
+                                
                             }
                             if (s.getName() == "bloecke")
                             {
@@ -602,9 +570,9 @@ public class UserInterface extends World
     private void initializePlaceable ()
     {
         placeableEntities = new ArrayList<FloatingEntity>();
-        placeableEntities.add(new FloatingEntity("grass", Tools.loadImage("images\\Ground\\grass\\grass_single.png"),getHeight()/200));
-        placeableEntities.add(new FloatingEntity("mistery", Tools.loadImage("images\\Mystery_Block\\yellow\\spinning\\0.png"),getHeight()/200));
-        placeableEntities.add(new FloatingEntity("koopa", Tools.loadImage("images\\Koopa\\red\\walking\\0.png"),getHeight()/200));
+        placeableEntities.add(new FloatingEntity("block", "Ground", "grass", Tools.loadImage("images\\Ground\\grass\\grass_single.png"),getHeight()/200));
+        placeableEntities.add(new FloatingEntity("block", "Mystery_Block", "spinning", Tools.loadImage("images\\Mystery_Block\\yellow\\spinning\\0.png"),getHeight()/200));
+        placeableEntities.add(new FloatingEntity("koopa", "Koopa", "red", Tools.loadImage("images\\Koopa\\red\\walking\\0.png"),getHeight()/200));
     }
     
     /**

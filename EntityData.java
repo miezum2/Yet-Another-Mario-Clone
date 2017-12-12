@@ -29,8 +29,8 @@ public class EntityData
         }
         
         name = entity.getName();
-        x = entity.getX();
-        y = entity.getY();
+        x = (int)entity.getPosX();
+        y = (int)entity.getPosY();
         state = entity.getState();
         data = entity.getData();
     }
@@ -51,8 +51,8 @@ public class EntityData
             && entity.getName().equals(name)
             && entity.getX() == x
             && entity.getY() == y
-            && entity.getState().equals(state)
-            && entity.getData().equals(data);
+            && entity.getState().equals(state);
+            //&& entity.getData().equals(data);
     }
         
     public String getType() 

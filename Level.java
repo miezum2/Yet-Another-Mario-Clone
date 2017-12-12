@@ -212,12 +212,18 @@ public class Level
     
     public void removeObject(EntityData entity)
     {
-        for (EntityData listEntity : levelData)
-        {
+        int removalIndex = -1;
+        Iterator<EntityData> iter = levelData.iterator();
+        while (iter.hasNext()) {
+            EntityData listEntity = iter.next();
+        
             if (listEntity.equals(entity))
             {
-                levelData.remove(listEntity);
+                removalIndex = levelData.indexOf(listEntity);
             }
-        }
+        }   
+        levelData.remove(removalIndex);
+        save();
+        generateEntities();
     }
 }
