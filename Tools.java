@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.nio.file.*;
+import java.nio.charset.*;
 
 /**
  * Write a description of class Tools here.
@@ -123,5 +125,61 @@ public class Tools
         {
             System.out.println(content);
         }
-    }    
+    }   
+    
+    
+    /**
+     * entfernt alle Buchstaben und Sonderzeichen aus einem String und konvertiert die verbleibenden Ziffern zu einem Integer
+     *
+     * @param content zu durchsuchender String
+     * @return liefert positiven Integer oder 0. -1 wenn keine Ziffern enthalten
+     */
+    public static int parseToInt(String content)
+    {
+        String value = "";
+        for (int i = 0; i < content.length(); i++)
+        {
+            if (Character.isDigit(content.charAt(i)))
+            {
+                value = value + content.charAt(i);
+            }
+        }
+        
+        if (value.equals(""))
+        {
+            return -1;
+        }
+        else
+        {
+            return Integer.parseInt(value);
+        }
+        
+    }
+    
+    public static void writeFile(String path, String content)
+    {
+        // neue Datei erstellen
+        List<String> lines = Arrays.asList(content);
+        Path file = Paths.get(path);
+        try {
+            Files.write(file, lines, Charset.forName("UTF-8"));
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void deleteFile(String path)
+    {
+        Path file = Paths.get(path);
+        try
+        {
+            Files.delete(file);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        
+    }
 }

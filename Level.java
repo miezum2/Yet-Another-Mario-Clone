@@ -66,7 +66,7 @@ public class Level
     /**
      * Neues Level anlegen
      */
-    public Level(String name, String desc)
+    public Level(String path, String name, String desc)
     {
         levelInfo = new HashMap<String, String>();
         levelInfo.put("date", "Datum einfuegen");
@@ -74,32 +74,58 @@ public class Level
         levelInfo.put("desc", desc);
         
         levelData = new ArrayList<EntityData>();
-        EntityData mario = new EntityData("player", "Mario", 100, 100, "small", "");
+        EntityData mario = new EntityData("player", "Mario", 100, 32, "small", "");
+        EntityData block1 = new EntityData("block", "Ground", 100, 16, "grass", "");
+        EntityData block2 = new EntityData("block", "Ground", 100, 0, "grass", "");
         levelData.add(mario);
+        levelData.add(block1);
         
+        // nächsten freien Levelnamen suchen
+        File[] levels = Tools.getDirContent(path, "file");
+        int highestIndex = 0;
+        for (File level : levels)
+        {
+            int fileIndex = Tools.parseToInt(level.getName().replace("level", "").replace(".json", ""));
+            if (fileIndex > highestIndex)
+            {
+                highestIndex = fileIndex;
+            }
+        }
+        
+        this.path = path+"\\level"+(highestIndex+1)+".json";
+        save();
+    }
+    
+    private void save()
+    {
+        // Json-kompatibles Objekt für levelInfo erstellen
         Map<String, Map<String, String>> levelInfoMap = new HashMap<String, Map<String, String>>();
         levelInfoMap.put("levelInfo", levelInfo);
         
+        // Json-kompatibles Objekt für levelInfo erstellen
         Map<String, List<EntityData>> levelDataMap = new HashMap<String, List<EntityData>>();
         levelDataMap.put("levelData", levelData);
         
+        // gsonBuilder zum Export erstellen
         Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
         
-        String info = gsonBuilder.toJson(levelInfo);
-        info = info.substring(0, info.length() - 1).trim()+",";
-        System.out.println(info);
+        // Json-String für LevelInfo erstellen
+        String info = gsonBuilder.toJson(levelInfoMap);
+        info = info.trim().substring(0, info.length() - 1).trim()+",";
+        //System.out.println(info);
         
+        // Json-String für LevelData erstellen        
+        String data = gsonBuilder.toJson(levelDataMap);
+        data = data.substring(1, data.length());
+        //System.out.println(data);        
         
         //String test = gsonBuilder.toJson(testArray, EntityData[].class);
-        //System.out.println(test);
-        
-        
-        
-        
-        
-    
+        //System.out.println(info+data);
+        // Json in Datei schreiben
+        // und Datei anlegen, falls nicht existiert
+        Tools.writeFile(path, info+data);
     }
-    
+        
     private void generateEntities()
     {
         entities = new ArrayList<Entity>();
