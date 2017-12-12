@@ -2,6 +2,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.io.File;
 import com.google.gson.*;
 import java.util.*;
+import javax.swing.*;
 
 /**
  * Write a description of class MyWorld here.
@@ -42,7 +43,6 @@ public class UserInterface extends World
     private Select editorToIngame;
     //Object für das erstellen von neuen Leveln(Button)
     private Select newLevel;
-    
     //Scall in Px für die Buttons
     private int buttonScale;
     //gibt die Postion für die Buttons (obere Bildschrimrand) an
@@ -278,25 +278,18 @@ public class UserInterface extends World
             {
                 if (isDragging)
                 {
-                    floatingEntity.setLocation(camera.alignXatGrid(Maus.getX()+(floatingEntity.getImage().getWidth()/2)),camera.alignYatGrid(Maus.getY()));
+                    floatingEntity.setLocation(camera.alignXatGrid(Maus.getX()+(floatingEntity.getImage().getWidth()/2)),camera.alignYatGrid(Maus.getY()-(floatingEntity.getImage().getHeight()/2)));
                     isDragging= false;
                 }
                 if (!isDragging && stampActiv)
                 {
                     
                 }
-                if (!isDragging)
-                {
-                    //removeObject(floatingEntity);
-                    floatingEntity = null;
-                    System.out.println("geslöscht");
-                }
-                /*
-                removeObject(floatingEntity);
-                floatingEntity.setLocation(camera.alignXatGrid(Maus.getX()+(floatingEntity.getImage().getWidth()/2)),camera.alignYatGrid(Maus.getY()));
+                //removeObject(floatingEntity);
+                //floatingEntity.setLocation(camera.alignXatGrid(Maus.getX()+(floatingEntity.getImage().getWidth()/2)),camera.alignYatGrid(Maus.getY()));
                 floatingEntity = null;
                 System.out.println("geslöscht");
-                */
+                
             }
         }
       
@@ -380,6 +373,7 @@ public class UserInterface extends World
                                     }
                                 }
                                 blockChosing = null;
+                                isDragging=true;
                             }
                             if (f.getName()=="mistery")
                             {
@@ -394,6 +388,7 @@ public class UserInterface extends World
                                     }
                                 }
                                 blockChosing = null;
+                                isDragging=true;
                             }
                             if (f.getName()=="koopa")
                             {
@@ -408,6 +403,7 @@ public class UserInterface extends World
                                     }
                                 }
                                 blockChosing = null;
+                                isDragging=true;
                             }
                         }
                     }
@@ -429,9 +425,24 @@ public class UserInterface extends World
                     
                     if (object.equals(newLevel))
                     {
-                        level = new Level("levels", "Hier Name uebergeben", "Beschreibung");
+                        String levelName=JOptionPane.showInputDialog("Input integer number here: ");
+                        level = new Level("levels", levelName, "Beschreibung");
                         System.out.println(newLevel.getName());
-                        // Liste aktualisieren
+                        levelButton.clear();
+                        buttonLevel(levelSelector.getLevelList());
+                        removeLevelMaker();
+                        removeObjects(getObjects(Select.class));
+                        removeObjects(getObjects(LevelMaker.class));
+                        levelMaker=null;
+                        levelSelector = new LevelSelector(levelDir);
+                        levelMaker = new LevelMaker(levelDir, buttonScale);
+                        addObject(levelMaker,getWidth()/16*3,30);
+                        levelMakerhaendler();
+                        //Button neues Level erstellen und zeichenen
+                        newLevel = new Select("newLevel",0,"newLevel.png",buttonScale);
+                        addObject(newLevel,getWidth()/8*2+(newLevel.getImage().getWidth()/2),buttonYPos);
+                        mouseButtonLeft=false;
+                        
                     }
                     
                     //Buttonabfrage für die jeweiligen Editor Buttons
@@ -524,13 +535,29 @@ public class UserInterface extends World
                                 }
                                 if (s.getName().contains("Delete"))
                                 {
+                                    /*
                                     //Löschen
-                                    Tools.deleteFile("Pfad übergeben");
-                                    
-                                    //neu Initalisieren der Level auswahl
+                                    System.out.println("gelöscht");
+                                    levelButton.clear();
+                                    buttonLevel(levelSelector.getLevelList());
                                     removeLevelMaker();
+                                    Tools.deleteFile(levelSelector.getLevelList().get(s.getLevelNumber()));
+                                    //neu Initalisieren der Level auswahl
+                                    levelButton.clear();
+                                    buttonLevel(levelSelector.getLevelList());
+                                    removeLevelMaker();
+                                    removeObjects(getObjects(Select.class));
+                                    removeObjects(getObjects(LevelMaker.class));
+                                    levelMaker=null;
+                                    levelSelector = new LevelSelector(levelDir);
+                                    levelMaker = new LevelMaker(levelDir, buttonScale);
+                                    addObject(levelMaker,getWidth()/16*3,30);
                                     levelMakerhaendler();
+                                    //Button neues Level erstellen und zeichenen
+                                    newLevel = new Select("newLevel",0,"newLevel.png",buttonScale);
                                     addObject(newLevel,getWidth()/8*2+(newLevel.getImage().getWidth()/2),buttonYPos);
+                                    mouseButtonLeft=false;
+                                    */
                                 }
                             }
                         }
@@ -583,11 +610,15 @@ public class UserInterface extends World
     /**
      * Initalisirung der Levelauswahl Buttons in die Arrylist levelButton. Für jedes Level ein Play und Edit Button
      */
-    private void buttonLevel (String name, int i)
+    private void buttonLevel (List<String> name)
     {
-        levelButton.add(new Select(name+"Play",i,"play-button.png",28));
-        levelButton.add(new Select(name+"Edit",i,"wrench.png",28));
-        levelButton.add(new Select(name+"Delete",i,"missingImage.png",28));
+        int i = 0;
+        for (String n :name)
+        {
+            levelButton.add(new Select(name+"Play",i,"play-button.png",28));
+            levelButton.add(new Select(name+"Edit",i,"wrench.png",28));
+            levelButton.add(new Select(name+"Delete",i,"missingImage.png",28));
+        }
     }
     
     /**
@@ -597,13 +628,9 @@ public class UserInterface extends World
     {
         int width = getWidth()/4*3;
         int height = getHeight()/8;
-        int i = 0;
-        for (String n :name)
-        {
-            buttonLevel(n,i);
-            i++;
-        }
-        i=0;
+        buttonLevel (name);
+        
+        int i=0;
         for(Select s:levelButton)
         {
             if (i == 0) 
@@ -653,8 +680,9 @@ public class UserInterface extends World
         removeObject(newLevel);
         for (Select s:levelButton)
         {
-            removeObject(s);
+            
         }
+        removeObjects(levelButton);
         levelMaker = new LevelMaker(levelDir,buttonScale);
         addObject(levelMaker,buttonYPos,buttonYPos);
         levelMakerdraw=false;
