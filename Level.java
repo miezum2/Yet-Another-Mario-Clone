@@ -19,6 +19,9 @@ public class Level
     // Aktueller Zustand des Levels
     private List<Entity> entities; 
     
+    private String[] controlsP1 = {"w","a","s","d","space"};
+    private String[] controlsP2 = {"up", "left", "down", "right", "return"};
+    
     public Level(String path)
     {        
         this.path = path;
@@ -140,7 +143,15 @@ public class Level
             // Typ: player
             if (entity.getType().equals("player"))
             {
-                Entity newEntity = new Player(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState());
+                Entity newEntity;
+                if (entity.getName().equals("Mario"))
+                {
+                    newEntity = new Player(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), controlsP1);
+                }
+                else
+                {
+                    newEntity = new Player(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), controlsP2);
+                }
                 entities.add(newEntity);
             }
             

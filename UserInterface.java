@@ -396,7 +396,11 @@ public class UserInterface extends World
                     
                     if (object.equals(newLevel))
                     {
-                        String levelName=JOptionPane.showInputDialog("Input integer number here: ");
+                        String levelName=JOptionPane.showInputDialog("Benenne deine Welt: ");
+                        if (levelName.equals(""))
+                        {
+                        
+                        }
                         level = new Level("levels", levelName, "Beschreibung");
                         levelButton.clear();
                         buttonLevel(levelSelector.getLevelList());
@@ -585,7 +589,7 @@ public class UserInterface extends World
         {
             levelButton.add(new Select(name+"Play",i,"play-button.png",28));
             levelButton.add(new Select(name+"Edit",i,"wrench.png",28));
-            levelButton.add(new Select(name+"Delete",i,"missingImage.png",28));
+            levelButton.add(new Select(name+"Delete",i,"deleteLevel.png",28));
         }
     }
     
