@@ -278,14 +278,25 @@ public class UserInterface extends World
             {
                 if (isDragging)
                 {
+                    floatingEntity.setLocation(camera.alignXatGrid(Maus.getX()+(floatingEntity.getImage().getWidth()/2)),camera.alignYatGrid(Maus.getY()));
+                    isDragging= false;
                 }
                 if (!isDragging && stampActiv)
                 {
                     
                 }
+                if (!isDragging)
+                {
+                    //removeObject(floatingEntity);
+                    floatingEntity = null;
+                    System.out.println("geslöscht");
+                }
+                /*
                 removeObject(floatingEntity);
+                floatingEntity.setLocation(camera.alignXatGrid(Maus.getX()+(floatingEntity.getImage().getWidth()/2)),camera.alignYatGrid(Maus.getY()));
                 floatingEntity = null;
                 System.out.println("geslöscht");
+                */
             }
         }
       
