@@ -455,11 +455,13 @@ public class UserInterface extends World
                             }
                             if (s.getName() == "worldleft")
                             {
-                                
+                                camera.moveX(-64);
+                                System.out.println("left");
                             }
                             if (s.getName() == "worldright")
                             {
-                                
+                                camera.moveX(64);
+                                System.out.println("right");
                             }
                             if (s.getName() == "bloecke")
                             {

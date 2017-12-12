@@ -230,6 +230,7 @@ public class Camera
     public void moveX(double movement)
     {
         targetPosX += movement;
+        calculateCameraPos();
     }
     
 }
