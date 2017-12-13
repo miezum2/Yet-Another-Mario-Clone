@@ -4,17 +4,14 @@ import java.util.HashMap;
 import java.io.File;
 
 /**
- * Write a description of class AnimationSet here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Speichert alle Grafiken, die zum Zustand eines Entities gehören (Activities)
  */
 public class StateGraphics 
 {
     private Map<String, ActivityGraphics> activities;    
     
     /**
-     * Konstruktor. Sucht nach Bildern und lädt sie in Listen
+     * sucht nach Activities im übergebenen Pfad
      */
     public StateGraphics(String path)
     {
@@ -44,6 +41,9 @@ public class StateGraphics
         }        
     }   
         
+    /**
+     * liefert Grafik mit gewünschten Parametern zurück
+     */
     public GreenfootImage getImage(String activityName, String orientation, int index)
     {
         ActivityGraphics activity = activities.get(activityName);

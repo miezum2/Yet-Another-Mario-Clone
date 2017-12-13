@@ -2,10 +2,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.*;
 
 /**
- * Write a description of class Camera here.
+ * rechnet Entitypositionen im Spiel in Positionen auf dem Bildschirm um und umgekehrt
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Simon Kemmesies
  */
 public class Camera
 {
@@ -29,7 +28,7 @@ public class Camera
     double maxY;
     
     /**
-     * Constructor for objects of class Camera
+     * neue Kamera erstellen und Größe der Welt übergeben
      */
     public Camera(int width, int height)
     {
@@ -38,6 +37,9 @@ public class Camera
         this.heightPixels = height;  
     }  
     
+    /**
+     * Skalierungsfaktor der Welt so berechnen, dass Beide Spieler gleichzeitig dargestellt werden können
+     */
     private void calculateCameraZoom(List<Entity> entities)
     {
           // Alle Player heraussuchen
@@ -113,11 +115,17 @@ public class Camera
         }
     }
     
+    /**
+     * Ausdehung des Kamerarahmens um den zuvor bestimmten Mittelpunkt bestimmen
+     */    
     private void calculateCameraPos()
     {
         // Kameraposition berechnen
         currentPosX = targetPosX;
         currentPosY = targetPosY; 
+        
+        // Y-Position der Kamera wird bei 0 verankert, weil der Editor (noch) kein vertikales Scrolling erlaubt
+        currentPosY = 0;
         
         // Kameraausschnitt berechnen              
         minY = currentPosY - heightUnits/2;
@@ -142,26 +150,33 @@ public class Camera
         }
     }
         
+    /**
+     * Kamera Zoom und Position anhand der aktuellen Welt berechnen
+     */
     public void calculateCamera(List<Entity> entities)
     {
         calculateCameraZoom(entities);
         calculateCameraPos();        
     }   
     
+    /**
+     * Bildschirmposition aller Entities anhand des zuvor berechneten Kameraausschnittes berechnen
+     */
     public void calculateEntities(List<Entity> entities)
     {
         // Alle Objekte durchgehen und Position im Level in Position auf Welt umrechnen
         for (Entity entity : entities)
         {
-            double range = 16*scale;
+            double rangeX = 16*scale;
+            double rangeY = 64*scale;
             
             // Koordinaten in neuen Bereich mappen
             entity.setCameraX(mapX(entity.getPosX()));
             entity.setCameraY(mapY(entity.getPosY()));   
             
             // Objekt deaktivieren, wenn es sich außerhalb des Bildschirms befindet
-            if (entity.getCameraX() < - range || entity.getCameraX() > widthPixels + range
-                || entity.getCameraY() < - range || entity.getCameraY() > heightPixels + range)
+            if (entity.getCameraX() < - rangeX || entity.getCameraX() > widthPixels + rangeX
+                || entity.getCameraY() < - rangeY || entity.getCameraY() > heightPixels + rangeY)
             {
                 entity.disable();
             }
@@ -172,32 +187,50 @@ public class Camera
         }
     }
     
-    // An map() Funktion aus der Arduino Library angelehnt
+    /**
+     * Wert aus einem Zahlenbereich in einen anderen Zahlenbereich umrechnen
+     * (an map() Funktion aus der Arduino Library angelehnt)
+     */
     private double map(double value, double in_min, double in_max, double out_min, double out_max)
     {
         return ((value - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
     }    
     
+    /**
+     * X-Koordinate in Bildschirmposition umrechnen
+     */
     private double mapX(double value)
     {
         return map(value, minX, maxX, 0, widthPixels);
     }
     
+    /**
+     * Y-Koordinate in Bildschirmposition umrechnen
+     */
     private double mapY(double value)
     {
         return map(value, minY, maxY, heightPixels, 0);
     }
     
+    /**
+     * X-Position auf dem Bildschirm in Welt-X-Koordinate umrechnen
+     */
     public int mapToWorldX(int screenX)
     {
         return (int)Math.round(map(screenX, 0, widthPixels, minX, maxX));
     }
     
+    /**
+     * Y-Position auf dem Bildschirm in Welt-Y-Position umrechnen
+     */
     public int mapToWorldY(int screenY)
     {
         return (int)Math.round(map(screenY, 0, heightPixels, maxY, minY));
     }
     
+    /**
+     * liefert aktuellen Skalierungsfaktor der Welt
+     */
     public double getScale()
     {
         return scale;
@@ -213,20 +246,31 @@ public class Camera
         return minY;
     }
     
+    /**
+     * nimmt X-Bildschirmposition entgegen und gibt an Weltraster eingerastete X-Bildschirmposition zurück
+     */
     public int alignXatGrid(int screenX)
     {
-        // Mausposition in Weltposition umrechnen
+        // Bildschirmposition in Weltposition umrechnen
         // nur Vielfache von 16 zulassen
+        // Weltposition zurück in Bildschirmposition umrechnen
         return (int)mapX(mapToWorldX(screenX)/16 * 16);
     }
     
+    /**
+     * nimmt Y-Bildschirmposition entgegen und gibt an Weltraster eingerastete Y-Bildschirmposition zurück
+     */
     public int alignYatGrid(int screenY)
     {
-        // Mausposition in Weltposition umrechnen
+        // Bildschirmposition in Weltposition umrechnen
         // nur Vielfache von 16 zulassen
+        // Weltposition zurück in Bildschirmposition umrechnen
         return (int)mapY(mapToWorldY(screenY)/16 * 16);
     }
     
+    /**
+     * Kameraauschnitt um n Units auf der X-Achse verschieben
+     */
     public void moveX(double movement)
     {
         targetPosX += movement;

@@ -2,10 +2,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.*;
 
 /**
- * Write a description of class Entity here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Abstrakte Oberklasse für alle im Spiel verwendeten Objekte
  */
 public abstract class Entity extends Actor
 {
@@ -25,21 +22,21 @@ public abstract class Entity extends Actor
     private boolean enabled;
     private int heightUnits;
     private int widthUnits;
-    private boolean removed = false;
-    
-    public Entity()
-    {
-        this("0", null);
-    }
-    
-    public Entity(String id, GreenfootImage image)
+    private boolean removed;
+    private String currentCutscene;
+    private int cutsceneFrameCounter;
+        
+    /*public Entity(String id, GreenfootImage image)
     {
         this.id = id;        
         this.image = image;
         setImage(image);
-    }
+    } */
     
-    public Entity(String name, String id, double posX, double posY, GreenfootImage image, String state)
+    /**
+     * Erstellung eines neuen Entity mit den wichtigsten Eigenschaften
+     */
+    public Entity(String name, String id, double posX, double posY, GreenfootImage image, String state, String activity)
     {
         this.name = name;
         this.id = id;
@@ -47,38 +44,62 @@ public abstract class Entity extends Actor
         this.posY = posY;
         this.image = image;
         this.state = state;
+        this.activity = activity;
+        this.orientation = "right";
+        this.animationIndex = 0;
+        this.data = "";
         setImage(image);
+        removed = false;
+        currentCutscene = "";
+        cutsceneFrameCounter = 0;
     }
-    
-    public Entity(Entity entity)
-    {
-        this(entity.getName(), entity.getId(), entity.getPosX(), entity.getPosY(), entity.getImage(), entity.getState());
-    }
-    
+        
     /**
-     * Act - do whatever the Entity wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * ungenutzt
      */
     public void act() 
     {
         // Add your action code here.
     }    
     
-    public void update(List<Entity> entities)
+    /**
+     * ermittelt das aktuelle Aussehen des Entity anhand der Cutscene und der in der Welt vorhandenen Blöcke
+     * 
+     */
+    public void update(List<Entity> entities, String currentCutscene, int cutsceneFrameCounter)
     {
-        frameCounter++;        
+        frameCounter++;  
+        this.cutsceneFrameCounter++;
     }
     
+    public void update()
+    {
+    
+    }
+    
+    /**
+     * prüft Kollision mit anderen Entities
+     *
+     * @param entities Alle in der Welt enthaltenen Entities
+     */
     public void checkCollision(List<Entity> entities)
     {
     
     }
     
+    /**
+     * bewegt den Entity anhand der momentan wirkenden Kräfte
+     *
+     * @param entities Alle in der Welt enthaltenen Entities
+     */
     public void simulate(List<Entity> entities)
     {
         
     }
     
+    /**
+     * da der Nullpunkt eines Objektes normalerweise in der Mitte liegt, wird er hier nach unten links verschoben
+     */
     public void calculateExactPos()
     {
         setCameraX(getCameraX() + getImage().getWidth() / 2);
@@ -191,16 +212,25 @@ public abstract class Entity extends Actor
         this.animationIndex = animationIndex;
     }
     
+    /**
+     * Entity aktivieren (wird simuliert und eingezeichnet)
+     */
     public void enable()
     {
         enabled = true;
     }
     
+    /**
+     * Entity deaktivieren (wird weder simuliert noch eingezeichnet)
+     */
     public void disable()
     {
         enabled = false;
     }
     
+    /**
+     * prüft, ob der Entity momentan deaktiviert ist
+     */
     public boolean isEnabled()
     {
         return enabled;
@@ -226,13 +256,44 @@ public abstract class Entity extends Actor
         this.widthUnits = widthUnits;
     }
     
+    /**
+     * markiert Entity als gelöscht, wodurch er im nächsten Frame gelöscht wird
+     */
     public void remove()
     {
         removed = true;
     }
     
+    /**
+     * prüft, ob der Entity als gelöscht markiert ist
+     */
     public boolean isRemoved()
     {
         return removed;
+    }
+    
+    public String getCurrentCutscene()
+    {
+        return currentCutscene;
+    }
+    
+    public void setCurrentCutscene(String currentCutscene)
+    {
+        this.currentCutscene = currentCutscene;
+    }
+    
+    public int getCutsceneFrameCounter()
+    {
+        return cutsceneFrameCounter;
+    }
+    
+    public void setCutsceneFrameCounter(int cutsceneFrameCounter)
+    {
+        this.cutsceneFrameCounter = cutsceneFrameCounter;
+    }    
+        
+    public boolean isDead()
+    {
+        return currentCutscene.equals("dead");
     }
 }

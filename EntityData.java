@@ -1,5 +1,6 @@
 /**
  * Klasse zum speichern der Daten eines Entities
+ * selbe Struktur wie die Json-Objekte in den Leveldateien ermöglicht einfaches Laden und speichern
  * 
  * @author (your name) 
  * @version (a version number or a date)
@@ -13,6 +14,9 @@ public class EntityData
     private String state;
     private String data;
     
+    /**
+     * Eigenschaften aus Entity auslesen
+     */
     public EntityData(Entity entity)
     {
         if (entity.getClass() == Block.class)
@@ -27,6 +31,10 @@ public class EntityData
         {
             type = "koopa";
         }
+        else if (entity.getClass() == Special.class)
+        {
+            type = "special";
+        }
         
         name = entity.getName();
         x = (int)entity.getPosX();
@@ -35,6 +43,9 @@ public class EntityData
         data = entity.getData();
     }
     
+    /**
+     * wichtige Eigenschaften übergeben
+     */
     public EntityData(String type, String name, int x, int y, String state, String data)
     {
         this.type = type;
@@ -45,14 +56,17 @@ public class EntityData
         this.data = data;
     }
     
+    /**
+     * auf Gleichheit mit anderem Entity prüfen
+     */
     public boolean equals(EntityData entity)
     {
         return entity.getType().equals(type)
             && entity.getName().equals(name)
             && entity.getX() == x
             && entity.getY() == y
-            && entity.getState().equals(state);
-            //&& entity.getData().equals(data);
+            && entity.getState().equals(state)
+            && entity.getData().equals(data);
     }
         
     public String getType() 

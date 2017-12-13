@@ -2,8 +2,7 @@ import greenfoot.*;
 import java.util.*;
 
 /**
- * Write a description of class Player here.dd
- * @author (your name) @version (a version number or a date)
+ * verwaltet alle Spieler und verarbeitet Tastatureingaben
  */
 public class Player extends Entity
 {
@@ -12,68 +11,105 @@ public class Player extends Entity
     private boolean leftDown = false;
     private boolean rightDown = false;
     private boolean jumpabel = true;
-    private boolean directionChange=false;
+    private boolean directionChange=false;   
+       
     /**
-     * 
+     * erstellt neuen Player mit den wichtigsten Eigenschaften und nimmt zu prüfende Tasten entgegen
      */
-    public Player(String name, GreenfootImage image, String[] controls)
+    public Player(String name, String id, double x, double y, GreenfootImage image, String state, String activity, String[] controls)
     {
-        super(name, image);
-        this.controls=controls;
-        /* Konstruktor der Superklasse aufrufen*/
-    }
-    
-    public Player(String name, String id, double x, double y, GreenfootImage image, String state, String[] controls)
-    {
-        super(name, id, x, y, image, state);
+        super(name, id, x, y, image, state, activity);
         movement = new Movement(0, 0.1);
         setOrientation("right");
         setActivity("standing");
         this.controls=controls;
-    }
-    
-    /*
-    public Player(Entity entity)
-    {
-        this(entity.getName(), entity.getId(), entity.getPosX(), entity.getPosY(), entity.getImage(), entity.getState());
-    }
-    */
-   
-    public Player()
-    {
-        
-    }
+        setCurrentCutscene("");        
+        setCutsceneFrameCounter(0);
+    } 
 
-    /**
-     * Act - do whatever the Player wants to do. This method is called whenever the 'Act' or 'Run' button gets pressed in the environment.
-     */
     public void act()
     {
-        /*
-        if (jumpCount< 5)
-        {
-            jumpCount++;
-        }
-        */
-    }
-    
-    
-    
-    public void update(List<Entity> entities)
-    {
-        super.update(entities);
         
+    }   
+    
+    public void update(List<Entity> entities, String currentCutscene, int cutsceneFrameCounter)
+    {
+        super.update(entities, currentCutscene, cutsceneFrameCounter);
+        
+        if (!getCurrentCutscene().equals(""))
+        {
+            if (getCurrentCutscene().equals("dying"))
+            {
+                if (getCutsceneFrameCounter() > 30 && getCutsceneFrameCounter()/4 % 2 == 0)
+                {
+                    setOrientation("right");
+                }
+                else
+                {
+                    setOrientation("left");
+                }
+                
+                if (getCutsceneFrameCounter() > 30 && getCutsceneFrameCounter() < 50)
+                {
+                    setPosY(getPosY()+4);
+                }
+                
+                if (getCutsceneFrameCounter() >= 50)
+                {
+                    setPosY(getPosY()-4);
+                }
+                
+                if (getPosY() + getHeightUnits() < 0)
+                {
+                    setCurrentCutscene("wait");
+                    setCutsceneFrameCounter(0);
+                }                
+            }
+            
+            if (getCurrentCutscene().equals("edge"))
+            {
+                if (getCutsceneFrameCounter() > 200)
+                {
+                    setCurrentCutscene("dead");
+                }
+            }
+            
+            if (getCurrentCutscene().equals("wait"))
+            {
+                if (getCutsceneFrameCounter() > 50)
+                {
+                    setCurrentCutscene("dead");
+                }
+            }  
+           
+            if (getCurrentCutscene().equals("victory"))
+            {
+                if (getCutsceneFrameCounter() > 300)
+                {
+                    setActivity("victory");
+                }
+                else
+                {
+                    setPosX(getPosX()+1);
+                    setAnimationIndex(getFrameCounter()/5);
+                }
+            }
+        }    
+        else
+        {
+            if (currentCutscene.equals("victory"))
+            {
+                setCurrentCutscene("victory");
+                setCutsceneFrameCounter(0);                
+            }
+            
+        }
     }
     
     public void checkCollision(List<Entity> entities)
     {
         movement.setEntities(entities);
-        
-        // Spieler wird von Koopa verletzt
-        if (movement.isTouchedByObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class) && getName().equals("Mario"))
-        {
-            
-        }
+              
         
         //System.out.println("check Koopa");
         if (movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class))
@@ -82,12 +118,28 @@ public class Player extends Entity
             movement.setY(2.5);
             jumpabel=true;            
         }    
+        else
+        {
+            // Spieler wird von Koopa verletzt
+            if (movement.isTouchedByObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class))
+            {                    
+                setCurrentCutscene("dying");
+                setActivity("dying");
+                setCutsceneFrameCounter(0);
+            }
+        }
+        
+        if (getPosY() + getHeightUnits() <= 0) 
+        {
+            setCurrentCutscene("edge");            
+            setCutsceneFrameCounter(0);    
+            
+        }
+        
     }
     
     /**
-     * ...
-     *
-     * @param entities Ein Parameter
+     * Tasteneingaben auswerten und Spieler dementsprechend bewegen
      */
     public void simulate(List<Entity> entities)
     {
@@ -96,7 +148,18 @@ public class Player extends Entity
         //jumpabel = true fals er den Boden berührt
         jumpabel = movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class);
         
+        //sprinten
+        if (Greenfoot.isKeyDown("shift"))
+        {
+            movement.setMaxSpeed(2.5);
+        }
+        else
+        {
+            movement.setMaxSpeed(1.5);
+        }
+        
         //Bewegung nach links
+        
         if(Greenfoot.isKeyDown(controls[1]))
         {
             //nach rechts nicht gedückt
@@ -134,7 +197,10 @@ public class Player extends Entity
                             setPosX(movement.move(0, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
                             if ((movement.getSpeed()<1) && (movement.getSpeed()<0) && directionChange)
                             {
-                                setActivity("braking");
+                                if (movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
+                                {   
+                                    setActivity("braking");
+                                }
                                 setOrientation("right");
                             }
                         }
@@ -189,7 +255,10 @@ public class Player extends Entity
                         setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
                         if ((movement.getSpeed()<1) && (movement.getSpeed()>0) && directionChange)
                         {
-                            setActivity("braking");
+                            if (movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
+                            {   
+                                setActivity("braking");
+                            }
                             setOrientation("left");
                         }
                     }
@@ -226,16 +295,26 @@ public class Player extends Entity
             }
         }
         
-        if (movement.getYMove()==0 && movement.getSpeed()==0)
+        if (movement.getYMove()==0 && movement.getSpeed()==0 && movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
         {
             setActivity("standing");
             
         }
+        
         if (movement.getYMove()<0)
         {
             setActivity("falling");
         }
         setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
-        setAnimationIndex(getFrameCounter()/5);
+        if (Math.abs(movement.getSpeed()) <= 2)
+        {
+            setAnimationIndex(getFrameCounter()/5);
+        }
+        else
+        {
+            setAnimationIndex(getFrameCounter()/3);
+        }
+        
+        
     }
 }

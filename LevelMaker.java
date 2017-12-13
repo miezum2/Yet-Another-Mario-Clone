@@ -7,9 +7,9 @@ import java.util.ArrayList;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class LevelMaker extends Selector
+public class LevelMaker extends Actor
 {
-    private LevelSelector levelSelector;
+    private LevelLoader levelLoader;
     private String levelDir;
     private GreenfootImage image;
     /**
@@ -21,7 +21,7 @@ public class LevelMaker extends Selector
         image = this.getImage();
         image.scale(scale,scale);
         setImage(image);
-        levelSelector = new LevelSelector(levelDir);
+        levelLoader = new LevelLoader(levelDir);
         this.levelDir = levelDir;
     }
     
@@ -48,7 +48,7 @@ public class LevelMaker extends Selector
         for (String n :name)
         {
             //Name des Levels wird mit dem jeweiligen LevelDir erfragt
-            levelName = levelSelector.getLevelName(n);
+            levelName = levelLoader.getLevelName(n);
             image.drawString(levelName,10,i);
             i+=30;
         }

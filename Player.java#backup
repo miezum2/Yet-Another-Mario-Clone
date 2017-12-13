@@ -2,172 +2,297 @@ import greenfoot.*;
 import java.util.*;
 
 /**
- * Write a description of class Player here.dd
- * @author (your name) @version (a version number or a date)
+ * verwaltet alle Spieler und verarbeitet Tastatureingaben
  */
 public class Player extends Entity
 {
     private Movement movement;
-        
+    private String[] controls;  
+    private boolean leftDown = false;
+    private boolean rightDown = false;
+    private boolean jumpabel = true;
+    private boolean directionChange=false;   
+       
     /**
-     * 
+     * erstellt neuen Player mit den wichtigsten Eigenschaften und nimmt zu prüfende Tasten entgegen
      */
-    public Player(String name, GreenfootImage image, String[] controls)
+    public Player(String name, String id, double x, double y, GreenfootImage image, String state, String activity, String[] controls)
     {
-        super(name, image);
-        /* Konstruktor der Superklasse aufrufen*/
-    }
-    
-    public Player(String name, String id, double x, double y, GreenfootImage image, String state)
-    {
-        super(name, id, x, y, image, state);
+        super(name, id, x, y, image, state, activity);
         movement = new Movement(0, 0.1);
         setOrientation("right");
         setActivity("standing");
-    }
-    
-    public Player(Entity entity)
-    {
-        this(entity.getName(), entity.getId(), entity.getPosX(), entity.getPosY(), entity.getImage(), entity.getState());
-    }
-    
-    public Player()
-    {
-        
-    }
+        this.controls=controls;
+        setDamageMode("");
+        setDamageFrameCounter(0);
+    } 
 
-    /**
-     * Act - do whatever the Player wants to do. This method is called whenever the 'Act' or 'Run' button gets pressed in the environment.
-     */
     public void act()
     {
         
-    }
+    }   
     
-    private boolean pressda = false;
-    private boolean pressdd = false;
-    private int jumpcount = 0;
-    private boolean jumpanable = true;
-    private boolean jumpabel = true;
     public void update(List<Entity> entities)
     {
         super.update(entities);
         
-        int floor = 0;
-        int right = 1000000;
-        int left = 0;
-        
-        for (Entity entity : entities)
+        if (!getDamageMode().equals(""))
         {
-            if (entity.getPosY() + entity.getHeightUnits() <= getPosY() && entity.getPosX() + entity.getWidthUnits() > getPosX() && getPosX() + getWidthUnits() > entity.getPosX() && !(entity.getClass() == Player.class) && !(entity.getClass() == Koopa.class))
+            if (getDamageMode().equals("dying"))
             {
-                if (entity.getPosY()+entity.getHeightUnits() > floor)
+                if (getDamageFrameCounter() > 30 && getDamageFrameCounter()/4 % 2 == 0)
                 {
-                    floor = (int)entity.getPosY()+entity.getHeightUnits();
-                }
-            }
-            
-            if (entity.getPosY() + entity.getHeightUnits() > getPosY() && getPosY() + getHeightUnits() > entity.getPosY() && !(entity.getClass() == Player.class))
-            {
-                if (entity.getPosX()+entity.getWidthUnits() > left)
-                {
-                    left = (int)entity.getPosX()+entity.getWidthUnits();
-                }
-            }
-            
-        }
-        
-        //System.out.println(floor);
-        
-        // Mario steuer
-        if (getName().equals("Mario"))
-        {
-            if(Greenfoot.isKeyDown("w"))
-            {
-                if (jumpabel)
-                {
-                    if (jumpanable)
-                    {
-                        setPosY(getPosY() + movement.jump(1));
-                        jumpanable=false;
-                        jumpabel = false;
-                    }
-                    else
-                    {
-                        if (movement.getYMove() <= 0)
-                        {
-                            jumpanable = true; 
-                        }
-                    }
-                }
-                
-            }
-            if(Greenfoot.isKeyDown("a"))
-            {
-                if (!pressdd)
-                {
-                    setPosX(getPosX() + movement.move(180));
-                    pressda = true;
-                    setOrientation("left");
-                }
-            }
-            else
-            {
-                if (pressda)
-                {
-                    if (movement.move(0) < 0 )
-                    {
-                        setPosX(getPosX() + movement.move(0));
-                    }
-                    else
-                    {
-                        pressda = false;
-                    }
-                }
-            }
-            if(Greenfoot.isKeyDown("s"))
-            {
-                
-            }
-            if(Greenfoot.isKeyDown("d"))
-            {
-                if (!pressda)
-                {
-                    setPosX(getPosX() + movement.move(0));
-                    pressdd = true;
                     setOrientation("right");
                 }
-            }
-            else
-            {
-                if (pressdd)
+                else
                 {
-                    if (movement.move(180) > 0 )
-                    {
-                        setPosX(getPosX() + movement.move(180));
-                    }
-                    else
-                    {
-                        pressdd = false;
-                    }
+                    setOrientation("left");
                 }
+                
+                if (getDamageFrameCounter() > 30 && getDamageFrameCounter() < 50)
+                {
+                    setPosY(getPosY()+4);
+                }
+                
+                if (getDamageFrameCounter() >= 50)
+                {
+                    setPosY(getPosY()-4);
+                }
+                
+                if (getPosY() + getHeightUnits() < 0)
+                {
+                    setDamageMode("wait");
+                    setDamageFrameCounter(0);
+                }                
+            }
+            
+            if (getDamageMode().equals("edge"))
+            {
+                if (getDamageFrameCounter() > 200)
+                {
+                    setDamageMode("dead");
+                }
+            }
+            
+            if (getDamageMode().equals("wait"))
+            {
+                if (getDamageFrameCounter() > 50)
+                {
+                    setDamageMode("dead");
+                }
+            }
+            
+        }       
+    }
+    
+    public void checkCollision(List<Entity> entities)
+    {
+        movement.setEntities(entities);
+              
+        
+        //System.out.println("check Koopa");
+        if (movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class))
+        {
+            setActivity("jumping");
+            movement.setY(2.5);
+            jumpabel=true;            
+        }    
+        else
+        {
+            // Spieler wird von Koopa verletzt
+            if (movement.isTouchedByObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class) && getName().equals("Mario"))
+            {                    
+                setDamageMode("dying");
+                setActivity("dying");
+                setDamageFrameCounter(0);
             }
         }
         
-        
-        int newY = (int)getPosY() + (int)movement.gravity();
-        if (newY <= floor)
+        if (getPosY() + getHeightUnits() <= 0) 
         {
-            setPosY(floor);
-            jumpabel= true;
+            setDamageMode("edge");
+            setDamageFrameCounter(0);            
+        }
+        
+    }
+    
+    /**
+     * Tasteneingaben auswerten und Spieler dementsprechend bewegen
+     */
+    public void simulate(List<Entity> entities)
+    {
+        // Aktuelle Welt an Movement übergeben, um Kollisionsprüfung zu erlauben
+        movement.setEntities(entities);         
+        //jumpabel = true fals er den Boden berührt
+        jumpabel = movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class);
+        
+        //sprinten
+        if (Greenfoot.isKeyDown("shift"))
+        {
+            movement.setMaxSpeed(2.5);
         }
         else
         {
-            setPosY(newY);
+            movement.setMaxSpeed(1.5);
         }
-                        
-        setAnimationIndex(getFrameCounter()/5);
         
-        //System.out.println("Height: "+getHeightUnits()+" Width: "+getWidthUnits());
+        //Bewegung nach links
+        
+        if(Greenfoot.isKeyDown(controls[1]))
+        {
+            //nach rechts nicht gedückt
+            if (!rightDown)
+            {
+                //neue Position setzten 
+                setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+                leftDown = true;
+                setOrientation("left");
+                if ((getActivity()!="jumping"))
+                {
+                    setActivity("walking");
+                }
+            }
+            if (movement.getSpeed()>0)
+            {
+                directionChange=true;
+            }
+        }
+        else
+        {
+            //prüfen fals Spieler gegen die Wand läuft
+            if (movement.isTouchingLeftObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
+                {
+                    movement.setSpeed(0);
+                    leftDown = false;
+                }
+                else
+                {
+                    if (leftDown)
+                    {
+                        //Richtungsänderung wärenden des Laufen
+                        if (movement.getSpeed() < 0 )
+                        {
+                            setPosX(movement.move(0, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+                            if ((movement.getSpeed()<1) && (movement.getSpeed()<0) && directionChange)
+                            {
+                                if (movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
+                                {   
+                                    setActivity("braking");
+                                }
+                                setOrientation("right");
+                            }
+                        }
+                        else
+                        {
+                            movement.setSpeed(0);
+                            directionChange=false;
+                            leftDown = false;
+                        }
+                    }
+                }
+        }
+        if(Greenfoot.isKeyDown(controls[2]))
+        {
+            
+        }
+        //Bewegung nach rechts
+        if(Greenfoot.isKeyDown(controls[3]))
+        {
+            //nach links nicht gedückt
+            if (!leftDown)
+            {
+                //neue Position setzten 
+                setPosX(movement.move(0, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+                rightDown = true;
+                setOrientation("right");
+                if ((getActivity()!="jumping"))
+                {
+                    setActivity("walking");
+                }
+            }
+            if (movement.getSpeed()<0)
+            {
+                directionChange=true;
+            }
+        }
+        else
+        {
+            //prüfen fals Spieler gegen die Wand läuft
+            if (movement.isTouchingRightObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
+            {
+                movement.setSpeed(0);
+                rightDown = false;
+            }
+            else
+            {
+                if (rightDown)
+                {
+                    //Richtungsänderung wärenden des Laufen
+                    if (movement.getSpeed() > 0 )
+                    {
+                        setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+                        if ((movement.getSpeed()<1) && (movement.getSpeed()>0) && directionChange)
+                        {
+                            if (movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
+                            {   
+                                setActivity("braking");
+                            }
+                            setOrientation("left");
+                        }
+                    }
+                    else
+                    {
+                        movement.setSpeed(0);
+                        rightDown = false;
+                        directionChange=false;
+                    }
+                }
+            }
+        }
+        //Sprung
+        if(Greenfoot.isKeyDown(controls[4]))
+        {
+            //prüft ob Spiele Springen darf, also am Boden angekommen ist
+            if (jumpabel)
+            {
+                {
+                    /*
+                    if (jumpCount==5)
+                    {
+                       setPosY(getPosY() + movement.jump(3)); 
+                       jumpCount=0;
+                    }
+                    else
+                    */
+                    {
+                        setPosY(getPosY() + movement.jump(1));
+                        setActivity("jumping");
+                    }
+                    jumpabel = false;
+                }
+            }
+        }
+        
+        if (movement.getYMove()==0 && movement.getSpeed()==0 && movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class))
+        {
+            setActivity("standing");
+            
+        }
+        
+        if (movement.getYMove()<0)
+        {
+            setActivity("falling");
+        }
+        setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+        if (Math.abs(movement.getSpeed()) <= 2)
+        {
+            setAnimationIndex(getFrameCounter()/5);
+        }
+        else
+        {
+            setAnimationIndex(getFrameCounter()/3);
+        }
+        
+        
     }
 }

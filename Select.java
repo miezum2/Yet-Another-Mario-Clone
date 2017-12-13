@@ -1,16 +1,17 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Select here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Buttons auf der Benutzeroberfläche
  */
 public class Select extends Actor
 {
     private String name;
     private int levelNumber;
     private GreenfootImage image;
+    
+    /**
+     * erstellt neuen Button mit wichtigen Eigenschaften
+     */
     public Select (String name,int levelNumber, String imag, int scale)
     {
         this.name = name;

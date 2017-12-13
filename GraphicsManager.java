@@ -15,14 +15,9 @@ public class GraphicsManager
     private Map<String, EntityGraphics> entities;
     private double scale;
     private String mode;
-    
-    public GraphicsManager()
-    {
-        this("images");
-    }
-    
-    /*
-     * 
+        
+    /**
+     * GraphicsManager erstellen und Grafikverzeichnis übergeben
      */
     public GraphicsManager(String path)
     {
@@ -44,6 +39,9 @@ public class GraphicsManager
        
     }  
     
+    /**
+     * liefert Entity-Grafik anhand der übergebenen Parameter zurück
+     */
     public GreenfootImage getImage(String entityName, String stateName, String activityName, String orientation, int index)
     {
         EntityGraphics entity = entities.get(entityName);
@@ -65,6 +63,11 @@ public class GraphicsManager
         } 
     }
     
+    /**
+     * scaliert ein übergebenes Bild auf den gewünschten Faktor
+     * etwas größere Skalierung im Spiel, um Flimmern zu vermeiden
+     * etwas kleinere Skalierung im Editor, um Gitter hervorzuheben
+     */
     private GreenfootImage scaleImage(GreenfootImage image, double scale)
     {
         if (scale == 1)
@@ -79,7 +82,7 @@ public class GraphicsManager
             }
             else
             {
-                scale -= 0.07;
+                scale = scale*0.95;
             }
             
             GreenfootImage scaledImage = new GreenfootImage(image);
@@ -88,16 +91,25 @@ public class GraphicsManager
         }
     }
     
+    /**
+     * liefert grauen Fragezeichenblock als Platzhalter für andere Grafiken
+     */
     public GreenfootImage getImage()
     {
         return noImage;
     }
     
+    /**
+     * Skalierungsfaktor setzen
+     */
     public void setScale(double scale)
     {
         this.scale = scale;
     }
     
+    /**
+     * Spielmodus (ingame, editor) setzen
+     */
     public void setMode(String mode)
     {
         this.mode = mode;

@@ -4,10 +4,7 @@ import java.util.HashMap;
 import java.io.File;
 
 /**
- * Verwaltung aller Grafiken eines Entities
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Verwaltung aller Grafiken eines Entities (Zustände)
  */
 public class EntityGraphics
 {
@@ -17,7 +14,7 @@ public class EntityGraphics
     private Map<String, StateGraphics> states;
     
     /**
-     * Constructor for objects of class CharacterGraphics
+     * alle Status aus übergebenem Verzeichnis laden
      */
     public EntityGraphics(String path)
     {
@@ -36,6 +33,9 @@ public class EntityGraphics
         }       
     }
     
+    /**
+     * liefert Grafik eines Entity entsprechend der übergebenen Parameter
+     */
     public GreenfootImage getImage(String stateName, String activityName, String orientation, int index)
     {
         StateGraphics state = states.get(stateName);

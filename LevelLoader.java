@@ -8,17 +8,17 @@ import com.google.gson.*;
 //http://repo1.maven.org/maven2/com/google/code/gson/gson/2.8.0/
 
 /**
- * Write a description of class LevelSelector here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * stellt Informationen zu Leveldateien im angegebenen Verzeichnis zur Verfügung
  */
-public class LevelSelector extends Selector
+public class LevelLoader extends Actor
 {
     List<String> levels;
     Map<String, String> levelnames;
     
-    public LevelSelector(String levelDir)
+    /**
+     * LevelLoader erstellen mit Levelverzeichnis
+     */
+    public LevelLoader(String levelDir)
     {
         // Alle Level im übergebenen Ordner suchen
         File[] levelFiles = Tools.getDirContent(levelDir, "file");
@@ -53,11 +53,17 @@ public class LevelSelector extends Selector
         }
     }
     
+    /**
+     * liefert alle gefundenen Leveldateien
+     */
     public List<String> getLevelList()
     {
          return levels;        
     }
     
+    /**
+     * liefert Levelnamen zu übergebenen Dateipfaden
+     */
     public String getLevelName(String path)
     {
         String name = levelnames.get(path);

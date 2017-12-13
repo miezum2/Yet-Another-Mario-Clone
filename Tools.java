@@ -9,18 +9,17 @@ import java.nio.file.*;
 import java.nio.charset.*;
 
 /**
- * Write a description of class Tools here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Fasst einige nützliche Methoden zusammen
  */
 public class Tools  
 {
     private static final String missingImage = "images/missingImage.png";
     
+    /**
+     * alle Ordner und Dateien im aktuellen Verzeichnis auflisten
+     */
     public static File[] getDirContent(String path)
     {
-        // Alle Ordner und Dateien im aktuellen Verzeichnis auflisten
         File[] objects = new File(path).listFiles();
         if (objects == null)
         {
@@ -29,6 +28,10 @@ public class Tools
         return objects;                
     }
     
+    /**
+     * alle Ordner oder Dateien im aktuellen Verzeichnis auflisten
+     * @param type "dir" für Verzeichnisse, "file" für Dateien
+     */
     public static File[] getDirContent(String path, String type)
     {
         //Alle Objekte aus Ordner abrufen
@@ -66,9 +69,12 @@ public class Tools
         }
     }  
     
-    // Quelle: https://stackoverflow.com/questions/4716503/reading-a-plain-text-file-in-java
-    // Nutzer: Knubo
+    /**
+     * lädt Inhalt einer Datei und gibt ihn als String zurück
+     */
     public static String getFileContent(String path) {
+        // Quelle: https://stackoverflow.com/questions/4716503/reading-a-plain-text-file-in-java
+        // Nutzer: Knubo
         if (!fileExists(path))
         {
             return "";
@@ -93,7 +99,7 @@ public class Tools
         return "";
     }
     
-    /*
+    /**
      * Vereinfachte Methode zur Abfrage der Existenz einer Datei
      */
     public static boolean fileExists(String path)
@@ -101,7 +107,7 @@ public class Tools
         return new File(path).isFile();
     }
     
-    /*
+    /**
      * Liefert Bilddatei an gegebenem Speicherort als GreenfootImage.
      * Wenn Datei nicht existiert, wird missingImage.png geliefert.
      */
@@ -116,17 +122,6 @@ public class Tools
             return new GreenfootImage(missingImage);
         }
     }
-    
-    public static void log(String content, String type)
-    {
-        List <String> types = Arrays.asList("image_", "activity_", "state_", "entity_",
-                                            "level_");
-        if (types.contains(type))
-        {
-            System.out.println(content);
-        }
-    }   
-    
     
     /**
      * entfernt alle Buchstaben und Sonderzeichen aus einem String und konvertiert die verbleibenden Ziffern zu einem Integer
@@ -156,6 +151,9 @@ public class Tools
         
     }
     
+    /**
+     * schreibt Text in eine Datei und erstellt gegebenenfalls eine neue
+     */
     public static void writeFile(String path, String content)
     {
         // neue Datei erstellen
@@ -169,6 +167,9 @@ public class Tools
         }
     }
     
+    /**
+     * löscht Datei
+     */
     public static void deleteFile(String path)
     {
         if (fileExists(path))
@@ -184,4 +185,17 @@ public class Tools
             }
         }        
     }
+    
+    /**
+     * fügt eine neue Zeile zum Log hinzu, wenn übergebener type im Array enthalten
+     */
+    public static void log(String content, String type)
+    {
+        List <String> types = Arrays.asList("image_", "activity_", "state_", "entity_",
+                                            "level_");
+        if (types.contains(type))
+        {
+            System.out.println(content);
+        }
+    }   
 }

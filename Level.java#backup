@@ -6,21 +6,34 @@ import java.util.*;
 /**
  * Write a description of class Level here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Simon Kemmesies
  */
 public class Level  
 {
     private String path;
+    private String mode;
     private GraphicsManager graphics;
     private Map<String, String> levelInfo;
     // Start- und Speicherzustand des Levels
     private List<EntityData> levelData;
     // Aktueller Zustand des Levels
-    private List<EntityData> entities; 
+    private List<Entity> entities; 
     
-    public Level(String path)
+    private boolean levelMustReset = false;
+    private boolean simulationPaused = false;
+    
+    private String[] controlsP1 = {"w","a","s","d","space"};
+    private String[] controlsP2 = {"up", "left", "down", "right", "enter"};
+    
+    /**
+     * neu erstelltes Level lädt Json-Datei mit angegebenem Pfad in Objekte 
+     */
+    public Level(String path, String mode)
     {        
+        this.path = path;
+        this.mode = mode;
+        graphics = new GraphicsManager("images");
+        
         String fileContent = Tools.getFileContent(path);
                 
         //graphics = new GraphicsManager();        
@@ -44,12 +57,15 @@ public class Level
         // Leveldata extrahieren
         String levelDataString = parser.parse(fileContent)
             .getAsJsonObject().getAsJsonArray("levelData").toString();
-        //System.out.println(levelDataString);
+        //System.out.println(levelDataString.replace("},{", "\n"));
         
         // Quelle: https://stackoverflow.com/questions/5554217/google-gson-deserialize-listclass-object-generic-type
         // Nutzer: DevNG
         EntityData[] entityArray = gson.fromJson(levelDataString, EntityData[].class);
         levelData = new ArrayList<>(Arrays.asList(entityArray));         
+        
+        EntityData[] testArray = new EntityData[levelData.size()];
+        testArray = levelData.toArray(testArray);        
         
         generateEntities();
         
@@ -58,26 +74,141 @@ public class Level
         //System.out.println(levelData.equals(entities));
     }
     
+    /**
+     * Neues Level anlegen und einige Entities darin platzieren
+     */
+    public Level(String path, String name, String desc)
+    {
+        levelInfo = new HashMap<String, String>();
+        levelInfo.put("date", "Datum einfuegen");
+        levelInfo.put("name", name);
+        levelInfo.put("desc", desc);
+        
+        levelData = new ArrayList<EntityData>();
+        EntityData mario = new EntityData("player", "Mario", 96, 32, "small", "");
+        EntityData block1 = new EntityData("block", "Ground", 96, 16, "grass", "");
+        EntityData block2 = new EntityData("block", "Ground", 96, 0, "grass", "");
+        levelData.add(mario);
+        levelData.add(block1);
+        
+        // nächsten freien Levelnamen suchen
+        File[] levels = Tools.getDirContent(path, "file");
+        int highestIndex = 0;
+        for (File level : levels)
+        {
+            int fileIndex = Tools.parseToInt(level.getName().replace("level", "").replace(".json", ""));
+            if (fileIndex > highestIndex)
+            {
+                highestIndex = fileIndex;
+            }
+        }
+        
+        this.path = path+"\\level"+(highestIndex+1)+".json";
+        save();
+    }
+    
+    /**
+     * Level in Datei bei Pfad speichern
+     * Datei erstellen, wenn sie noch nicht existiert
+     */
+    private void save()
+    {
+        // Json-kompatibles Objekt für levelInfo erstellen
+        Map<String, Map<String, String>> levelInfoMap = new HashMap<String, Map<String, String>>();
+        levelInfoMap.put("levelInfo", levelInfo);
+        
+        // Json-kompatibles Objekt für levelInfo erstellen
+        Map<String, List<EntityData>> levelDataMap = new HashMap<String, List<EntityData>>();
+        levelDataMap.put("levelData", levelData);
+        
+        // gsonBuilder zum Export erstellen
+        Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
+        
+        // Json-String für LevelInfo erstellen
+        String info = gsonBuilder.toJson(levelInfoMap);
+        info = info.trim().substring(0, info.length() - 1).trim()+",";
+        //System.out.println(info);
+        
+        // Json-String für LevelData erstellen        
+        String data = gsonBuilder.toJson(levelDataMap);
+        data = data.substring(1, data.length());
+        //System.out.println(data);        
+        
+        //String test = gsonBuilder.toJson(testArray, EntityData[].class);
+        //System.out.println(info+data);
+        // Json in Datei schreiben
+        // und Datei anlegen, falls nicht existiert
+        Tools.writeFile(path, info+data);
+    }
+        
+    /**
+     * Entities aus geladenen Objekten erstellen
+     */
     private void generateEntities()
     {
-        entities = new ArrayList<EntityData>();
+        entities = new ArrayList<Entity>();
         // entities aus levelData erzeugen
         
         for (EntityData entity: levelData)
         {
-            // entity kopieren
-            EntityData newEntity = new EntityData(entity);
+            // neuen Entity erstellen           
+            //System.out.println(entity.getType()+" - "+entity.getName());
             
-            // Typ: spawnpoint VERALTET
-            if (entity.getType().equals("spawnpoint"))
+            // Typ: player
+            if (entity.getType().equals("player"))
             {
-                // Player an Spawnpunkt platzieren
-                newEntity.setType("player");
+                Entity newEntity;
+                if (entity.getName().equals("Mario"))
+                {
+                    newEntity = new Player(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "", controlsP1);
+                }
+                else
+                {
+                    newEntity = new Player(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "", controlsP2);
+                }
                 entities.add(newEntity);
             }
-            else
+            
+            // Typ: Koopa
+            if (entity.getType().equals("koopa"))
             {
+                Entity newEntity = new Koopa(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "");
                 entities.add(newEntity);
+            }
+            
+            // Typ: block
+            if (entity.getType().equals("block"))
+            {
+                Entity newEntity = new Block(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "");
+                entities.add(newEntity);
+                
+            }
+            
+            // Typ: special
+            if (entity.getType().equals("special"))
+            {
+                // Name: Flagpole
+                if (entity.getName().equals("Flagpole"))
+                {
+                    if (mode.equals("editor"))
+                    {
+                        Entity newEntity = new Special(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "top");
+                        entities.add(newEntity);
+                    }
+                    else
+                    {
+                        int i;
+                        for (i = 0; i < 6; i++)
+                        {
+                            Entity newEntity = new Special(entity.getName(), "0", entity.getX(), entity.getY()+i*16, graphics.getImage(), "wide", "middle");
+                            entities.add(newEntity);
+                        }
+                        Entity newEntity = new Special(entity.getName(), "0", entity.getX(), entity.getY()+i*16, graphics.getImage(), "wide", "top");
+                        entities.add(newEntity); 
+                        newEntity = new Special(entity.getName(), "0", entity.getX()+8, entity.getY(), graphics.getImage(), "wide", "bar");
+                        entities.add(newEntity);
+                    }
+                }
             }
         }        
         /*
@@ -86,63 +217,126 @@ public class Level
         System.out.println(levelData.get(0).equals(entities.get(0))); */
     }
     
-    public List<EntityData> getEntities()
+    /**
+     * aktuelle Entities der Welt zurückgeben
+     */
+    public List<Entity> getEntities()
     {
         return entities;
     }
     
+    /**
+     * Entities löschen, die im letzten Durchlauf entfernt wurden
+     */
     public void update()
     {
-        // in Entities nach Mario suchen
-        EntityData mario = new EntityData();
-        EntityData luigi = new EntityData();
-        for (EntityData entity : entities)
-        {
-            if (entity.getName().equals("Mario"))
+        // Quelle: https://stackoverflow.com/questions/18448671/how-to-avoid-concurrentmodificationexception-while-removing-elements-from-arr
+        // Nutzer: arshajii
+        Iterator<Entity> iter = entities.iterator();
+        while (iter.hasNext()) {
+            Entity entity = iter.next();
+        
+            if (entity.isRemoved())
             {
-                mario = entity;
-            }
-            if (entity.getName().equals("Luigi"))
+                iter.remove();
+            }          
+        }      
+    }
+    
+    /**
+     * prüfen, ob bei der letzten Kollisionsabfrage eine Cutscene ausgelöst oder das Level beendet wurde
+     */
+    public void checkEntities()
+    {
+        for (Entity listEntity : entities)
+        {
+            if (listEntity.isDying())
             {
-                luigi = entity;
+                playerDying = true;
+            }
+            
+            if (listEntity.isDead())
+            {
+                allPlayersDead = true;
             }
         }
+    }
+    
+    /**
+     * prüft, ob gerade ein Spieler stirbt
+     */
+    public boolean animationIsPlaying()
+    {
+        return playerDying;
+    }
+    
+    /**
+     * prüft, ob alle Spieler im Level tod sind
+     */
+    public boolean mustReset()
+    {
+        return allPlayersDead;
+    }
+    
+    /**
+     * neues Objekt in die Welt hinzufügen
+     */
+    public void addObject(EntityData entity)
+    {
+        // prüfen, ob bereits ein Entity an dieser Stelle ist
+        EntityData entityAtThisPlace = null;
+        for (EntityData listEntity : levelData)
+        {
+            if (listEntity.getX() == entity.getX() && listEntity.getY() == entity.getY())
+            {
+                entityAtThisPlace = listEntity;
+            }
+        }
+                
+        // Objekt löschen
+        if (entityAtThisPlace == null)
+        {
+            // neues Objekt hinzufügen
+            levelData.add(entity);
+            save();
+            generateEntities();   
+        }
+        else
+        {
+            if (!entityAtThisPlace.getType().equals("player"))
+            {
+                removeObject(entityAtThisPlace);
+                
+                // neues Objekt hinzufügen
+                levelData.add(entity);
+                save();
+                generateEntities();
+            }        
+        }       
         
-        int speed = 1;
         
-        if(Greenfoot.isKeyDown("w"))
-        {
-            mario.setY(mario.getY()+speed;
-        }
-        if(Greenfoot.isKeyDown("a"))
-        {
-            mario.setX(mario.getX()-speed);
-        }
-        if(Greenfoot.isKeyDown("s"))
-        {
-            mario.setY(mario.getY()-speed);
-        }
-        if(Greenfoot.isKeyDown("d"))
-        {
-            mario.setX(mario.getX()+speed);
-        }
+    }
+    
+    /**
+     * Objekt aus der Welt löschen
+     */
+    public void removeObject(EntityData entity)
+    {
+        int removalIndex = -1;
+        Iterator<EntityData> iter = levelData.iterator();
+        while (iter.hasNext()) {
+            EntityData listEntity = iter.next();
         
-        
-        if(Greenfoot.isKeyDown("up"))
+            if (listEntity.equals(entity))
+            {
+                removalIndex = levelData.indexOf(listEntity);
+            }
+        }   
+        if (removalIndex != -1)
         {
-            luigi.setY(luigi.getY()+speed);
-        }
-        if(Greenfoot.isKeyDown("left"))
-        {
-            luigi.setX(luigi.getX()-speed);
-        }
-        if(Greenfoot.isKeyDown("down"))
-        {
-            luigi.setY(luigi.getY()-speed);
-        }
-        if(Greenfoot.isKeyDown("right"))
-        {
-            luigi.setX(luigi.getX()+speed);
+            levelData.remove(removalIndex);
+            save();
+            generateEntities();
         }
     }
 }

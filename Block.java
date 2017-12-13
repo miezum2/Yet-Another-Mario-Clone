@@ -2,18 +2,18 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.*;
 
 /**
- * Write a description of class Block here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * verwaltet alle Blöcke im Spiel
  */
 public class Block extends Entity
 {
     private Movement movement;
     
-    public Block(String name, String id, double x, double y, GreenfootImage image, String state)
+    /**
+     * erstellt neuen Block mit den wichtigsten Eigenschaften
+     */
+    public Block(String name, String id, double x, double y, GreenfootImage image, String state, String activity)
     {
-        super(name, id, x, y, image, state);
+        super(name, id, x, y, image, state, activity);
         //movement = new Movement(0, 0);
         
         // Mystery_Block
@@ -25,18 +25,17 @@ public class Block extends Entity
         }
     }
     
-    /**
-     * Act - do whatever the Block wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
     public void act() 
     {
         
     }    
     
-    public void update(List<Entity> entities)
+    /**
+     * setzt Bodentextur anhand von umgebenden Blöcken
+     */
+    public void update(List<Entity> entities, String currentCutscene, int cutsceneFrameCounter)
     {
-        super.update(entities);
+        super.update(entities, currentCutscene, cutsceneFrameCounter);
         
         // Block je nach Typ setzen       
         

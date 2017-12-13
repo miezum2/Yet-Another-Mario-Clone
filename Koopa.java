@@ -2,36 +2,32 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.*;
 
 /**
- * Write a description of class Koopa here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Speichert alle Koopa-Typen
  */
 public class Koopa extends Entity
 {
     private Movement movement;
     private int turningCounter;
     
-    public Koopa(String name, String id, double x, double y, GreenfootImage image, String state)
+    /**
+     * neuen Koopa mit den wichtigsten Eigenschaften erstellen
+     */
+    public Koopa(String name, String id, double x, double y, GreenfootImage image, String state, String activity)
     {
-        super(name, id, x, y, image, state);
+        super(name, id, x, y, image, state, activity);
         movement = new Movement(-0.5, 0);
         setActivity("walking");
         setOrientation("left");
     }
     
-    /**
-     * Act - do whatever the Koopa wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
     public void act() 
     {
         // Add your action code here.
     }    
     
-    public void update(List<Entity> entities)
+    public void update(List<Entity> entities, String currentCutscene, int cutsceneFrameCounter)
     {
-        super.update(entities);                
+        super.update(entities, currentCutscene, cutsceneFrameCounter);                
         
         if (getActivity().equals("turning"))
         {

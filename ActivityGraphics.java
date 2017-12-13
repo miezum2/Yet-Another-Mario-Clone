@@ -5,10 +5,7 @@ import java.util.Arrays;
 import java.io.File;
 
 /**
- * Write a description of class SpriteSet here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Speichert rechte und linke Version aller Grafiken die zu einer Animation (Activity) gehören
  */
 public class ActivityGraphics 
 {
@@ -16,7 +13,8 @@ public class ActivityGraphics
     private List<GreenfootImage> facingLeft;
     
     /**
-     * Constructor for objects of class SpriteSet
+     * Grafiken aus übergebenem Verzeichnis laden
+     * oder einzelnes Bild laden
      */
     public ActivityGraphics(String path)
     {        
@@ -60,6 +58,9 @@ public class ActivityGraphics
         }
     }
         
+    /**
+     * Bild mit der gewünschten Ausrichtung und dem entsprechenden Index in der Animation zurückgeben
+     */
     public GreenfootImage getImage(String orientation, int index) 
     {
         //System.out.println(currentOrientation.equals("right"));

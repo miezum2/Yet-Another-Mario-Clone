@@ -1,6 +1,9 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.*;
 
+/**
+ * Berechnung der Bewegung von Objekten und Gravitation
+ */
 public class Movement
 {
     //Gibt die Bewegung in Y-Richtung an
@@ -9,17 +12,25 @@ public class Movement
     private double acceleration;
     //Sprung
     private double jumpcount;
-    //Lauf Vector
+    //Bewegung in X-Richtung
     private double speed;
+    
+    private double maxSpeed = 1.5;
     
     private List<Entity> entities;
         
+    /**
+     * neue Bewegung erstellen mit Initialgeschwindigkeit und Beschleunigung in X-Richtung
+     */
     public Movement(double speed, double accel)
     {    
         this.speed = speed;
         this.acceleration = accel;
     }   
     
+    /**
+     * Entities zur Kollisionsprüfung entgegennehmen
+     */
     public void setEntities(List<Entity> entities)
     {
         this.entities = entities;
@@ -41,16 +52,34 @@ public class Movement
     {
         
         //Bewegung nach rechst
-        //Beschleunigen bis zur Höchstgeschwindigkeit von 2.5
-        if (speed<2.5 && direction==0)
-        { 
-            speed = speed + acceleration;
-        }
-        //bewegung nach links
-        //Beschleunigen bis zur Höchstgeschwindigkeit von 2.5
-        if (speed>-2.5 && direction==180)
+        //Beschleunigen bis zur Höchstgeschwindigkeit
+        if (direction == 0)
         {
-            speed = speed - acceleration;
+            double newSpeed = speed + acceleration;
+            if (newSpeed<maxSpeed)
+            { 
+                speed = newSpeed;
+            }
+            else
+            {
+                speed = speed - acceleration;
+            }
+        }
+        
+        
+        //bewegung nach links
+        //Beschleunigen bis zur Höchstgeschwindigkeit
+        if (direction == 180)
+        {
+            double newSpeed = speed - acceleration;
+            if (newSpeed>-maxSpeed && direction==180)
+            {
+                speed = newSpeed;
+            }
+            else
+            {
+                speed = speed + acceleration;
+            } 
         }
         
         double newX = posX + speed;
@@ -130,9 +159,12 @@ public class Movement
         }
     }
     
+    /**
+     * liefert Position+Hoehe des Objektes, was sich unter dem Objekt an den gegebenen Koordinaten befindet, wenn es der übergebenen Klasse entspricht
+     */
     public double getObjectBelow(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
-        double floor = 0;        
+        double floor = -40;        
         int tolerance = 4;
         
         for (Entity entity : entities)
@@ -148,6 +180,9 @@ public class Movement
         return floor;        
     }
     
+    /**
+     * liefert Position des Objektes, was sich über dem Objekt an den gegebenen Koordinaten befindet, wenn es der übergebenen Klasse entspricht
+     */
     public double getObjectAbove(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
         double ceiling = 100000;
@@ -167,31 +202,51 @@ public class Movement
         return ceiling;  
     }
     
+    /**
+     * prüft, ob Objekt an den übergebenen Koordinaten ein Objekt von der übergebenen Klasse berührt
+     */
     public boolean isTouchingObjectBelow(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
         return posY <= getObjectBelow(posX, posY, widthUnits, heightUnits, cls);
     }
     
+    /**
+     * prüft, ob Objekt an den übergebenen Koordinaten ein Objekt von der übergebenen Klasse berührt
+     */
     public boolean isTouchingObjectAbove(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
         return posY >= getObjectAbove(posX, posY, widthUnits, heightUnits, cls);
     }
-    
+        
+    /**
+     * prüft, ob Objekt an den übergebenen Koordinaten ein Objekt von der übergebenen Klasse berührt
+     */
     public boolean isTouchingLeftObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
         return posX <= getLeftObject(posX, posY, widthUnits, heightUnits, cls);
     }
     
+    /**
+     * prüft, ob Objekt an den übergebenen Koordinaten ein Objekt von der übergebenen Klasse berührt
+     */
     public boolean isTouchingRightObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
         return posX >= getRightObject(posX, posY, widthUnits, heightUnits, cls);
     }
     
+    /**
+     * prüft, ob Objekt an den übergebenen Koordinaten von einem Objekt von der übergebenen Klasse berührt wird
+     */
     public boolean isTouchedByObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
-        return isTouchingObjectAbove(posX, posY, widthUnits, heightUnits, cls) || isTouchingLeftObject(posX, posY, widthUnits, heightUnits, cls) || isTouchingRightObject(posX, posY, widthUnits, heightUnits, cls);
+        return isTouchingObjectAbove(posX, posY, widthUnits, heightUnits, cls) 
+        || isTouchingLeftObject(posX, posY, widthUnits, heightUnits, cls) 
+        || isTouchingRightObject(posX, posY, widthUnits, heightUnits, cls);
     }
     
+    /**
+     * liefert Position+Breite des Objektes, was sich links vom Objekt an den gegebenen Koordinaten befindet, wenn es der übergebenen Klasse entspricht
+     */
     public double getLeftObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
         double left = 0;
@@ -213,6 +268,9 @@ public class Movement
         return left;
     }
     
+    /**
+     * liefert Position des Objektes, was sich rechts vom Objekt an den gegebenen Koordinaten befindet, wenn es der übergebenen Klasse entspricht
+     */
     public double getRightObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
         double right = 100000;
@@ -237,6 +295,11 @@ public class Movement
     public void setSpeed (double speed)
     {
         this.speed=speed;
+    }
+    
+    public void setMaxSpeed (double maxSpeed)
+    {
+        this.maxSpeed = maxSpeed;
     }
     
     public double getSpeed ()

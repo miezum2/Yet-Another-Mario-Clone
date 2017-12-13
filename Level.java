@@ -6,26 +6,32 @@ import java.util.*;
 /**
  * Write a description of class Level here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Simon Kemmesies
  */
 public class Level  
 {
     private String path;
+    private String mode;
     private GraphicsManager graphics;
     private Map<String, String> levelInfo;
     // Start- und Speicherzustand des Levels
     private List<EntityData> levelData;
     // Aktueller Zustand des Levels
-    private List<Entity> entities; 
+    private List<Entity> entities;     
+    private boolean levelMustReset = false;
+    private boolean simulationPaused = false;
     
     private String[] controlsP1 = {"w","a","s","d","space"};
     private String[] controlsP2 = {"up", "left", "down", "right", "enter"};
     
-    public Level(String path)
+    /**
+     * neu erstelltes Level lädt Json-Datei mit angegebenem Pfad in Objekte 
+     */
+    public Level(String path, String mode)
     {        
         this.path = path;
-        graphics = new GraphicsManager();
+        this.mode = mode;
+        graphics = new GraphicsManager("images");
         
         String fileContent = Tools.getFileContent(path);
                 
@@ -68,7 +74,7 @@ public class Level
     }
     
     /**
-     * Neues Level anlegen
+     * Neues Level anlegen und einige Entities darin platzieren
      */
     public Level(String path, String name, String desc)
     {
@@ -100,6 +106,10 @@ public class Level
         save();
     }
     
+    /**
+     * Level in Datei bei Pfad speichern
+     * Datei erstellen, wenn sie noch nicht existiert
+     */
     private void save()
     {
         // Json-kompatibles Objekt für levelInfo erstellen
@@ -130,6 +140,9 @@ public class Level
         Tools.writeFile(path, info+data);
     }
         
+    /**
+     * Entities aus geladenen Objekten erstellen
+     */
     private void generateEntities()
     {
         entities = new ArrayList<Entity>();
@@ -146,11 +159,11 @@ public class Level
                 Entity newEntity;
                 if (entity.getName().equals("Mario"))
                 {
-                    newEntity = new Player(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), controlsP1);
+                    newEntity = new Player(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "", controlsP1);
                 }
                 else
                 {
-                    newEntity = new Player(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), controlsP2);
+                    newEntity = new Player(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "", controlsP2);
                 }
                 entities.add(newEntity);
             }
@@ -158,31 +171,42 @@ public class Level
             // Typ: Koopa
             if (entity.getType().equals("koopa"))
             {
-                Entity newEntity = new Koopa(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState());
+                Entity newEntity = new Koopa(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "");
                 entities.add(newEntity);
             }
             
             // Typ: block
             if (entity.getType().equals("block"))
             {
-                // Spezialfälle bearbeiten
-                // Name: Ground
-                if (entity.getName().equals("Ground"))
+                Entity newEntity = new Block(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "");
+                entities.add(newEntity);
+                
+            }
+            
+            // Typ: special
+            if (entity.getType().equals("special"))
+            {
+                // Name: Flagpole
+                if (entity.getName().equals("Flagpole"))
                 {
-                    Entity newEntity = new Block(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState());
-                    entities.add(newEntity);
-                    // Wenn ein Ground-Block gefunden, dann Welt bis zum Boden mit Ground-Blöcken füllen
-                    for (double i = entity.getY(); i >= 0; i -= 16)
+                    if (mode.equals("editor"))
                     {
-                        //Entity newEntity = new Block(entity.getName(), "0", entity.getX(), i, graphics.getImage(), entity.getState());
-                        //entities.add(newEntity);
+                        Entity newEntity = new Special(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "top");
+                        entities.add(newEntity);
                     }
-                }
-                else
-                {
-                    // Standardprozedur für Blöcke
-                    Entity newEntity = new Block(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState());
-                    entities.add(newEntity);
+                    else
+                    {
+                        int i;
+                        for (i = 0; i < 6; i++)
+                        {
+                            Entity newEntity = new Special(entity.getName(), "0", entity.getX(), entity.getY()+i*16, graphics.getImage(), "wide", "middle");
+                            entities.add(newEntity);
+                        }
+                        Entity newEntity = new Special(entity.getName(), "0", entity.getX(), entity.getY()+i*16, graphics.getImage(), "wide", "top");
+                        entities.add(newEntity); 
+                        newEntity = new Special(entity.getName(), "0", entity.getX()+8, entity.getY(), graphics.getImage(), "wide", "bar");
+                        entities.add(newEntity);
+                    }
                 }
             }
         }        
@@ -192,14 +216,19 @@ public class Level
         System.out.println(levelData.get(0).equals(entities.get(0))); */
     }
     
+    /**
+     * aktuelle Entities der Welt zurückgeben
+     */
     public List<Entity> getEntities()
     {
         return entities;
     }
     
+    /**
+     * Entities löschen, die im letzten Durchlauf entfernt wurden
+     */
     public void update()
     {
-        // Objekte löschen, die im letzten Durchlauf entfernt wurden
         // Quelle: https://stackoverflow.com/questions/18448671/how-to-avoid-concurrentmodificationexception-while-removing-elements-from-arr
         // Nutzer: arshajii
         Iterator<Entity> iter = entities.iterator();
@@ -209,18 +238,118 @@ public class Level
             if (entity.isRemoved())
             {
                 iter.remove();
-            }
+            }          
         }      
     }
     
-    public void addObject(EntityData entity)
+    /**
+     * prüfen, ob bei der letzten Kollisionsabfrage eine Cutscene ausgelöst oder das Level beendet wurde
+     */
+    public void checkEntities()
     {
-        levelData.add(entity);
-        System.out.println(path);
-        save();
-        generateEntities();
+        for (Entity listEntity : entities)
+        {
+            if (!listEntity.getCurrentCutscene().equals(""))
+            {
+                simulationPaused = true;
+            }
+            
+            if (listEntity.isDead())
+            {
+                levelMustReset = true;
+            }
+        }
     }
     
+    /**
+     * gibt aktuelle Cutscene zurück
+     */
+    private int counter;
+    public String getCurrentCutscene()
+    {
+        counter = 0;
+        for (Entity listEntity : entities)
+        {
+            if (!listEntity.getCurrentCutscene().equals(""))
+            {
+                counter = listEntity.getCutsceneFrameCounter();
+                return listEntity.getCurrentCutscene();
+            }
+        }
+        return "";
+    }
+    
+    public int getCutsceneFrameCounter()
+    {
+        /*for (Entity listEntity : entities)
+        {
+            if (listEntity.getCutsceneFrameCounter() != 0)
+            {
+                return listEntity.getCutsceneFrameCounter();
+            }
+        }*/
+        return counter;
+        //return 0;
+    }
+    
+    /**
+     * prüft, ob gerade ein Spieler stirbt
+     */
+    public boolean isSimulationPaused()
+    {
+        return simulationPaused;
+    }
+    
+    /**
+     * prüft, ob alle Spieler im Level tod sind
+     */
+    public boolean mustReset()
+    {
+        return levelMustReset;
+    }
+    
+    /**
+     * neues Objekt in die Welt hinzufügen
+     */
+    public void addObject(EntityData entity)
+    {
+        // prüfen, ob bereits ein Entity an dieser Stelle ist
+        EntityData entityAtThisPlace = null;
+        for (EntityData listEntity : levelData)
+        {
+            if (listEntity.getX() == entity.getX() && listEntity.getY() == entity.getY())
+            {
+                entityAtThisPlace = listEntity;
+            }
+        }
+                
+        // Objekt löschen
+        if (entityAtThisPlace == null)
+        {
+            // neues Objekt hinzufügen
+            levelData.add(entity);
+            save();
+            generateEntities();   
+        }
+        else
+        {
+            if (!entityAtThisPlace.getType().equals("player"))
+            {
+                removeObject(entityAtThisPlace);
+                
+                // neues Objekt hinzufügen
+                levelData.add(entity);
+                save();
+                generateEntities();
+            }        
+        }       
+        
+        
+    }
+    
+    /**
+     * Objekt aus der Welt löschen
+     */
     public void removeObject(EntityData entity)
     {
         int removalIndex = -1;

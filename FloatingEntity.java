@@ -1,10 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class FloatingEntity here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * stellt Entities dar, die mit der Maus über den Bildschirm gezogen werden 
  */
 public class FloatingEntity extends Actor
 {
@@ -12,11 +9,17 @@ public class FloatingEntity extends Actor
     private String name;
     private String state;
     
+    /**
+     * erstellt FloatingEntity mit einem Bild
+     */
     public FloatingEntity (GreenfootImage image)
     {
         setImage(image);
     }
     
+    /**
+     * erstellt FloatingEntity mit wichtigen Eigenschaften, die einen Entity widerspiegeln
+     */
     public FloatingEntity (String type, String name, String state, GreenfootImage image, double scale)
     {
         GreenfootImage scaledImage = new GreenfootImage(image);
@@ -27,6 +30,9 @@ public class FloatingEntity extends Actor
         this.state = state;
     }
     
+    /**
+     * erstellt FloatingEntity anhand eines Entities
+     */
     public FloatingEntity(Entity entity)
     {
         setImage(entity.getImage());
@@ -41,6 +47,10 @@ public class FloatingEntity extends Actor
         else if (entity.getClass() == Koopa.class)
         {
             type = "koopa";
+        } 
+        else if (entity.getClass() == Special.class)
+        {
+            type = "special";
         }
         
         name = entity.getName();
