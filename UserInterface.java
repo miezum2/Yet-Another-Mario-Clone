@@ -16,7 +16,7 @@ public class UserInterface extends World
     private static final int height = 900;
     private static final String imageDir = "images";
     private static final String levelDir = "levels";
-
+    
     private String mode;
     private GraphicsManager graphics;
     private LevelLoader levelLoader;
@@ -71,6 +71,8 @@ public class UserInterface extends World
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(width, height, 1, false); 
+        
+        setPaintOrder(Text.class, LevelLoader.class, Select.class, FloatingEntity.class, LevelMaker.class, Player.class, Koopa.class, Special.class, Block.class);
 
         // Log "ausleeren"
         for (int i = 0; i < 50; i++)
@@ -470,11 +472,11 @@ public class UserInterface extends World
                             }
                             if (s.getName() == "worldleft")
                             {
-                                camera.moveX(-64);
+                                camera.moveX(-96);
                             }
                             if (s.getName() == "worldright")
                             {
-                                camera.moveX(64);
+                                camera.moveX(96);
                             }
                             if (s.getName() == "bloecke")
                             {

@@ -35,6 +35,7 @@ public class Player extends Entity
     public void update(List<Entity> entities, String currentCutscene, int cutsceneFrameCounter)
     {
         super.update(entities, currentCutscene, cutsceneFrameCounter);
+        movement.setEntities(entities);
         
         if (!getCurrentCutscene().equals(""))
         {
@@ -92,6 +93,7 @@ public class Player extends Entity
                 {
                     setPosX(getPosX()+1);
                     setAnimationIndex(getFrameCounter()/5);
+                    //setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
                 }
             }
         }    

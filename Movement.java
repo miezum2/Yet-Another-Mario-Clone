@@ -83,6 +83,10 @@ public class Movement
         }
         
         double newX = posX + speed;
+        if (newX < 0)
+        {
+            newX = 0;
+        }
         double leftWall = getLeftObject(posX, posY, widthUnits, heightUnits, Block.class);
         double rightWall = getRightObject(posX, posY, widthUnits, heightUnits, Block.class);
         if (newX <= leftWall)
@@ -118,7 +122,7 @@ public class Movement
            {
                if (i==1)
                {
-                  Y= 6; 
+                  Y= 5; 
                }    
             }
        }
@@ -249,7 +253,7 @@ public class Movement
      */
     public double getLeftObject(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
-        double left = 0;
+        double left = -100;
         int tolerance = 4;
         
         for (Entity entity : entities)

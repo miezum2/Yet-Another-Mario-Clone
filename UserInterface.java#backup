@@ -154,7 +154,7 @@ public class UserInterface extends World
             removeObjects(currentEntities);
 
             level.update();        
-            if (level.checkLevelReset())
+            if (level.mustReset())
             {
                 Greenfoot.setWorld(new UserInterface());
             }
@@ -170,7 +170,7 @@ public class UserInterface extends World
             {
                 if (entity.isEnabled())
                 {
-                    entity.update(allEntities);
+                    entity.update(allEntities, level.);
                     graphics.setScale(1);
                     GreenfootImage image = graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex());
                     entity.setHeightUnits(image.getHeight());
@@ -181,19 +181,19 @@ public class UserInterface extends World
             // Kollisionsabfrage aller Objekte
             for (Entity entity : allEntities)
             {
-                if (entity.isEnabled() && !level.animationIsPlaying())
+                if (entity.isEnabled() && !level.isSimulationPaused())
                 {
                     entity.checkCollision(allEntities);                  
                 }
             }
             
-            level.checkPlayers();
+            level.checkEntities();
 
             // Objekte simulieren
             for (Entity entity : allEntities)
             {
                 // Objekt aktualisieren und zeichnen, wenn es nicht deaktiviert ist
-                if (entity.isEnabled() && !level.animationIsPlaying())
+                if (entity.isEnabled() && !level.isSimulationPaused())
                 {
                     entity.simulate(allEntities);                    
                 }
@@ -238,7 +238,7 @@ public class UserInterface extends World
                 // Objekt aktualisieren und zeichnen, wenn es nicht deaktiviert ist
                 if (entity.isEnabled())
                 {
-                    entity.update(allEntities);
+                    entity.update(allEntities, "", 0);
                     graphics.setScale(1);
                     GreenfootImage image = graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex());
                     entity.setHeightUnits(image.getHeight());
