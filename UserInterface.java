@@ -396,6 +396,7 @@ public class UserInterface extends World
                                 }
                             }
                             blockChosing = null;
+                            isDragging=true;
                             //System.out.println("Test");
                         }
                     }                               
