@@ -112,22 +112,6 @@
     {
       "type": "block",
       "name": "Ground",
-      "x": 128,
-      "y": 16,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 144,
-      "y": 16,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
       "x": 112,
       "y": 16,
       "state": "grass",
@@ -1250,6 +1234,86 @@
       "name": "Ground",
       "x": 720,
       "y": 96,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 176,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 160,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 128,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 144,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 192,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 208,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 224,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 240,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 272,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 256,
+      "y": 16,
       "state": "grass",
       "data": ""
     }
