@@ -118,7 +118,7 @@ public class Movement
            {
                if (i==1)
                {
-                  Y= 5; 
+                  Y= 6; 
                }    
             }
        }

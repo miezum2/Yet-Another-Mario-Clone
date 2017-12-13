@@ -364,7 +364,7 @@ public class UserInterface extends World
                     }
 
                     //ändern der Postition je nach Actor
-                    if (aenderung && floatingEntity == null)
+                    if (aenderung && floatingEntity == null && edit)
                     {
                         isDragging=true;
                         //((Entity)object).remove();
@@ -499,6 +499,7 @@ public class UserInterface extends World
                                         //Blockauswahl schließen
                                         removeObject(blockChosing);
                                         blockChosing = null;
+                                        removeObjects(placeableEntities);
                                     }
                                     //dient als cooldown für den Wechsel
                                     switchClock=0;
@@ -528,29 +529,6 @@ public class UserInterface extends World
                                 {
                                     Tools.deleteFile(levelLoader.getLevelList().get(s.getLevelNumber()));
                                     Greenfoot.setWorld(new UserInterface());
-                                    /*
-                                    //Löschen
-                                    System.out.println("gelöscht");
-                                    levelButton.clear();
-                                    buttonLevel(levelSelector.getLevelList());
-                                    removeLevelMaker();
-                                    Tools.deleteFile(levelSelector.getLevelList().get(s.getLevelNumber()));
-                                    //neu Initalisieren der Level auswahl
-                                    levelButton.clear();
-                                    buttonLevel(levelSelector.getLevelList());
-                                    removeLevelMaker();
-                                    removeObjects(getObjects(Select.class));
-                                    removeObjects(getObjects(LevelMaker.class));
-                                    levelMaker=null;
-                                    levelSelector = new LevelSelector(levelDir);
-                                    levelMaker = new LevelMaker(levelDir, buttonScale);
-                                    addObject(levelMaker,getWidth()/16*3,30);
-                                    levelMakerhaendler();
-                                    //Button neues Level erstellen und zeichenen
-                                    newLevel = new Select("newLevel",0,"newLevel.png",buttonScale);
-                                    addObject(newLevel,getWidth()/8*2+(newLevel.getImage().getWidth()/2),buttonYPos);
-                                    mouseButtonLeft=false;
-                                     */
                                 }
                             }
                         }
@@ -680,7 +658,6 @@ public class UserInterface extends World
         levelMaker = new LevelMaker(levelDir,buttonScale);
         addObject(levelMaker,buttonYPos,buttonYPos);
         levelMakerdraw=false;
-        edit=false;
         levelButton = new ArrayList<Select>(); 
     }
 
