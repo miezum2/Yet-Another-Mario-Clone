@@ -72,7 +72,7 @@ public class UserInterface extends World
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(width, height, 1, false); 
         
-        setPaintOrder(Text.class, LevelLoader.class, Select.class, FloatingEntity.class, LevelMaker.class, Player.class, Koopa.class, Special.class, Block.class);
+        setPaintOrder(Text.class, LevelLoader.class,FloatingEntity.class, Select.class, LevelMaker.class,  Player.class, Koopa.class, Special.class, Block.class);
 
         // Log "ausleeren"
         for (int i = 0; i < 50; i++)
@@ -396,7 +396,7 @@ public class UserInterface extends World
                                 }
                             }
                             blockChosing = null;
-                            isDragging=true;                            
+                            //System.out.println("Test");
                         }
                     }                               
 
@@ -732,6 +732,7 @@ public class UserInterface extends World
         removeEditor();
         //Löscht die Levelauswahl
         removeLevelMaker();
+        trashcanActiv=false;
         //erstellt den Editorbutton im Ingame modus
         ingameToEditor = new Select(s.getName()+"Edit",s.getLevelNumber(),"wrench.png",buttonScale);
         addObject(ingameToEditor,getWidth()-buttonYPos,buttonYPos);
