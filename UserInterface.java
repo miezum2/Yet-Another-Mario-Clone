@@ -553,13 +553,13 @@ public class UserInterface extends World
                                     s.setImage(s.scaleImage(Tools.loadImage("images\\delete.png")));
                                 }
                             }
-                            if (s.getName() == "worldleft")
+                            if (s.getName() == "zoomin")
                             {
-                                camera.moveX(-96);
+                                //camera.moveX(-96);
                             }
-                            if (s.getName() == "worldright")
+                            if (s.getName() == "zoomout")
                             {
-                                camera.moveX(96);
+                                //camera.moveX(96);
                             }
                             if (s.getName() == "bloecke")
                             {
@@ -657,8 +657,8 @@ public class UserInterface extends World
         editor.add(new Select("bloecke",0,"newBlock.png",buttonScale));
         editor.add(new Select("stamp",0,"stamp.png",buttonScale));
         editor.add(new Select("trashcan",0,"delete.png",buttonScale));
-        editor.add(new Select("worldleft",0,"arrowleft.png",buttonScale));
-        editor.add(new Select("worldright",0,"arrowright.png",buttonScale));
+        editor.add(new Select("zoomin",0,"newLevel.png",buttonScale));
+        editor.add(new Select("zoomout",0,"deleteLevel.png",buttonScale));
     }
 
     /**
