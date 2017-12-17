@@ -11,7 +11,8 @@ public class Player extends Entity
     private boolean leftDown = false;
     private boolean rightDown = false;
     private boolean jumpabel = true;
-    private boolean directionChange=false;   
+    private boolean directionChange=false;  
+    private int jumpCount;
        
     /**
      * erstellt neuen Player mit den wichtigsten Eigenschaften und nimmt zu prüfende Tasten entgegen
@@ -29,6 +30,10 @@ public class Player extends Entity
 
     public void act()
     {
+        if (jumpCount<=8)
+        {
+            jumpCount++;
+        }
         
     }   
     
@@ -277,22 +282,17 @@ public class Player extends Entity
         if(Greenfoot.isKeyDown(controls[4]))
         {
             //prüft ob Spiele Springen darf, also am Boden angekommen ist
+            if (jumpCount==8)
+            {
+               setPosY(getPosY() + movement.jump(3)); 
+            }
             if (jumpabel)
             {
                 {
-                    /*
-                    if (jumpCount==5)
-                    {
-                       setPosY(getPosY() + movement.jump(3)); 
-                       jumpCount=0;
-                    }
-                    else
-                    */
-                    {
-                        setPosY(getPosY() + movement.jump(1));
-                        setActivity("jumping");
-                    }
+                    setPosY(getPosY() + movement.jump(1));
+                    setActivity("jumping");
                     jumpabel = false;
+                    jumpCount=0;
                 }
             }
         }

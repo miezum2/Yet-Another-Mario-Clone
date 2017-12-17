@@ -10,8 +10,6 @@ public class Movement
     private double Y;
     //Gibt die Beschleunigung der Entity an
     private double acceleration;
-    //Sprung
-    private double jumpcount;
     //Bewegung in X-Richtung
     private double speed;
     
@@ -110,7 +108,7 @@ public class Movement
     {
        if (i==3)
        {
-           Y=10;
+           Y+=1.5;
        }
        else
        {
@@ -122,7 +120,7 @@ public class Movement
            {
                if (i==1)
                {
-                  Y= 5; 
+                  Y= 4.5; 
                }    
             }
        }

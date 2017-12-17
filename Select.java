@@ -8,7 +8,7 @@ public class Select extends Actor
     private String name;
     private int levelNumber;
     private GreenfootImage image;
-    
+    private int scale;
     /**
      * erstellt neuen Button mit wichtigen Eigenschaften
      */
@@ -16,6 +16,7 @@ public class Select extends Actor
     {
         this.name = name;
         this.setImage(imag);
+        this.scale=scale;
         image = this.getImage();
         image.scale(scale,scale);
         setImage(image);
@@ -29,5 +30,11 @@ public class Select extends Actor
     public int getLevelNumber()
     {
         return levelNumber;
+    }
+    
+    public GreenfootImage scaleImage(GreenfootImage images)
+    {
+        images.scale(scale,scale);
+        return images;
     }
 }
