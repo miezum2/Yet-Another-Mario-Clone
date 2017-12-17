@@ -109,7 +109,7 @@ public class Movement
     {
        if (i==3)
        {
-           Y=10;
+           Y+=1.5;
        }
        else
        {
@@ -121,7 +121,7 @@ public class Movement
            {
                if (i==1)
                {
-                  Y= 6; 
+                  Y= 4.5; 
                }    
             }
        }

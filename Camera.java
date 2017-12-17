@@ -8,7 +8,7 @@ import java.util.*;
  */
 public class Camera
 {
-    private static final int defaultHeightUnits = 20;
+    private static final int defaultHeightUnits = 200;
     
     GraphicsManager graphics;
     
@@ -106,8 +106,8 @@ public class Camera
             double distanceX = playersMaxX - playersMinX;
             double distanceY = playersMaxY - playersMinY;   
             
-            int borderX = 10; //150;
-            int borderY = 10; //50;
+            int borderX = 150;
+            int borderY = 50;
             
             if (distanceX + borderX > minWidthUnits)
             {

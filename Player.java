@@ -14,7 +14,8 @@ public class Player extends Entity
     private boolean directionChange=false;  
     private boolean invincible = false;
     private int recoveryTimer = -1;
-          
+    private int jumpCount;
+    
     /**
      * erstellt neuen Player mit den wichtigsten Eigenschaften und nimmt zu prüfende Tasten entgegen
      */
@@ -31,7 +32,10 @@ public class Player extends Entity
 
     public void act()
     {
-        
+        if (jumpCount<=8)
+        {
+            jumpCount++;
+        }
     }   
     
     public void update(List<Entity> entities)
@@ -391,38 +395,31 @@ public class Player extends Entity
             //Sprung
             if(Greenfoot.isKeyDown(controls[4]) || Greenfoot.isKeyDown(controls[5]))
             {
-                //prüft ob Spiele Springen darf, also am Boden angekommen ist
+                //prüft ob Spiele Springen darf, also am Boden angekommen ist,
+                if (jumpCount==8)
+                {
+                    setPosY(getPosY() + movement.jump(3)); 
+                }
                 if (jumpabel)
                 {
-                    
-                    /*
-                    if (jumpCount==5)
+                    setPosY(getPosY() + movement.jump(1));
+                    if (Greenfoot.isKeyDown(controls[5]))
                     {
-                       setPosY(getPosY() + movement.jump(3)); 
-                       jumpCount=0;
+                        if (!getActivity().equals("spinning")) {
+                            setFrameCounter(0);
+                        }
+                        {
+                            setActivity("spinning");
+                            Greenfoot.playSound("sounds/smw_spin_jump.wav");                               
+                        }
                     }
                     else
-                    */
-                    {
-                        setPosY(getPosY() + movement.jump(1));
-                        if (Greenfoot.isKeyDown(controls[5]))
-                        {
-                            if (!getActivity().equals("spinning")) {
-                                setFrameCounter(0);
-                            }
-                            {
-                                setActivity("spinning");
-                                Greenfoot.playSound("sounds/smw_spin_jump.wav");                               
-                            }
-                        }
-                        else
-                        {                            
-                            setActivity("jumping");
-                            Greenfoot.playSound("sounds/smw_jump.wav");
-                        }
+                    {                            
+                        setActivity("jumping");
+                        Greenfoot.playSound("sounds/smw_jump.wav");
                     }
                     jumpabel = false;
-                    
+                    jumpCount=0;
                 }
             }
             
