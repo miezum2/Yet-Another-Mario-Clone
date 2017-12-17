@@ -252,6 +252,43 @@ public class Level
      */
     public void update()
     {
+        // Nutzereingaben prüfen
+        if (Greenfoot.isKeyDown(controlsP1[0]) ||
+            Greenfoot.isKeyDown(controlsP1[1]) ||
+            Greenfoot.isKeyDown(controlsP1[2]) ||
+            Greenfoot.isKeyDown(controlsP1[3]) ||
+            Greenfoot.isKeyDown(controlsP1[4]) ||
+            Greenfoot.isKeyDown(controlsP1[5]) ||
+            Greenfoot.isKeyDown(controlsP1[6]))
+            
+        {
+            
+        }
+        else 
+        if (Greenfoot.isKeyDown(controlsP2[0]) ||
+            Greenfoot.isKeyDown(controlsP2[1]) ||
+            Greenfoot.isKeyDown(controlsP2[2]) ||
+            Greenfoot.isKeyDown(controlsP2[3]) ||
+            Greenfoot.isKeyDown(controlsP2[4]) ||
+            Greenfoot.isKeyDown(controlsP2[5]) ||
+            Greenfoot.isKeyDown(controlsP2[6]))
+            
+        {
+            boolean luigiExists = false;
+            for (Entity listEntity : entities)
+            {
+                if (listEntity.getName().equals("Luigi"))
+                {
+                    luigiExists = true;
+                }
+            }
+            
+            if (!luigiExists)
+            {
+                entities.add(new Player());
+            }
+        }
+        
         // Quelle: https://stackoverflow.com/questions/18448671/how-to-avoid-concurrentmodificationexception-while-removing-elements-from-arr
         // Nutzer: arshajii
         Iterator<Entity> iter = entities.iterator();
