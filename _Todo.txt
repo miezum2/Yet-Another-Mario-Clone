@@ -10,7 +10,7 @@ unteren linken Punkt platzieren, nicht Mitte
 _Kamerazentrierung von Durchschnitt auf Mittelpunkt ändern
 _Keine Sounds gleichzeitig
 _Bei spielstart kurz warten
-Gitter zeichnen
+
 scrollender Hintergrund
 _allgemein höherer Sprung
 mehr Grastexturen
@@ -22,7 +22,7 @@ dynamische Fenstergröße
 _letze go sound
 block platzier sound
 _Sounds neu machen weil lauter werden
-
+draw Reihenfolge Special vor Block
 
 verworfen:
 Rote Koopas Clifferkennung
@@ -32,14 +32,15 @@ spinjump auf Koopas
 Koopas zu shells umwandeln
 Skalierung überarbeiten
 Beschleunigung bei Tod
+Gitter zeichnen
 
 Phil:
-Bewegungsknöpfe durch zoom ersetzen
+_Bewegungsknöpfe durch zoom ersetzen
 Blöcke in Mülltonne/oberen Bereich ziehen
-Mülltonne deaktivieren bei Editorverlassen
-Stempel in Pinsel umfunktionieren
-Rahmen um aktive Buttons zeichnen
-Mario muss langsamer springen und fallen
+_Mülltonne deaktivieren bei Editorverlassen
+_Stempel in Pinsel umfunktionieren
+_Rahmen um aktive Buttons zeichnen
+_Mario muss langsamer springen und fallen
 Höherer Sprung:
 Ist Mario gesprungen?
 Ist die Leertaste gedrückt?

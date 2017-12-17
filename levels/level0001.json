@@ -2110,18 +2110,10 @@
       "data": ""
     },
     {
-      "type": "player",
-      "name": "Mario",
-      "x": 176,
-      "y": 64,
-      "state": "small",
-      "data": ""
-    },
-    {
       "type": "block",
       "name": "Ground",
       "x": 176,
-      "y": 48,
+      "y": 16,
       "state": "grass",
       "data": ""
     },
@@ -2129,16 +2121,32 @@
       "type": "player",
       "name": "Luigi",
       "x": 160,
-      "y": 64,
+      "y": 32,
+      "state": "small",
+      "data": ""
+    },
+    {
+      "type": "player",
+      "name": "Mario",
+      "x": 176,
+      "y": 32,
       "state": "small",
       "data": ""
     },
     {
       "type": "block",
-      "name": "Ground",
+      "name": "Mystery_Block",
+      "x": 176,
+      "y": 64,
+      "state": "yellow",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Mystery_Block",
       "x": 160,
-      "y": 48,
-      "state": "grass",
+      "y": 64,
+      "state": "yellow",
       "data": ""
     }
   ]

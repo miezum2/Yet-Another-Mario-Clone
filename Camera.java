@@ -27,6 +27,8 @@ public class Camera
     double minY;
     double maxY;
     
+    double editorHeightUnits;
+    
     /**
      * neue Kamera erstellen und Größe der Welt übergeben
      */
@@ -127,7 +129,7 @@ public class Camera
                     heightUnits = widthUnits*heightPixels/widthPixels;
                 }
             }    
-            
+            editorHeightUnits = heightUnits;
         }
     }
     
@@ -149,8 +151,11 @@ public class Camera
     /**
      * Ausdehung des Kamerarahmens um den zuvor bestimmten Mittelpunkt bestimmen
      */    
-    private void calculateCameraPos(String zoomMode)
+    public void calculateCameraPos(String zoomMode)
     {
+        heightUnits = smoothMove(heightUnits, editorHeightUnits, 5);
+        widthUnits = heightUnits*widthPixels/heightPixels;    
+                
         // Kameraposition berechnen
         if (zoomMode.equals("slow"))
         {
@@ -333,7 +338,7 @@ public class Camera
     public void moveX(double movement)
     {
         currentPosX += movement;
-        calculateCameraPos("instant");
+        //calculateCameraPos("instant");
     }
     
     /**
@@ -342,7 +347,21 @@ public class Camera
     public void moveY(double movement)
     {
         currentPosY += movement;
-        calculateCameraPos("instant");
+        //calculateCameraPos("instant");
     }
     
+    public void zoom(double amount)
+    {
+        editorHeightUnits += -amount;      
+        if (editorHeightUnits < 100)
+        {
+            editorHeightUnits = 100;
+        }
+        if (editorHeightUnits > 500)
+        {
+            editorHeightUnits = 1000;
+            
+        }
+        //calculateCameraPos("instant");
+    }
 }

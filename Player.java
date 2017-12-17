@@ -155,7 +155,34 @@ public class Player extends Entity
                     recoveryTimer = 127;                    
                     invincible = true;
                 }
-            }            
+            }    
+            
+            if (getCurrentCutscene().equals("spawning"))
+            {
+                if (getCutsceneFrameCounter() < 120)
+                {
+                    Player otherPlayer = null;
+                    for (Entity listEntity : entities)
+                    {
+                        if (getName().equals("Mario") && listEntity.getName().equals("Luigi"))
+                        {
+                            otherPlayer = (Player)listEntity;
+                        }
+                        if (getName().equals("Luigi") && listEntity.getName().equals("Mario"))
+                        {
+                            otherPlayer = (Player)listEntity;
+                        }
+                    }
+                    setPosX(otherPlayer.getPosX());
+                    setPosY(otherPlayer.getPosY()+64);
+                    setVisibility(getFrameCounter()/14 % 2 == 0);
+                }
+                else
+                {
+                    setVisibility(true);
+                    setCurrentCutscene("");
+                }
+            }
         }    
         else
         {

@@ -14,7 +14,7 @@ public class Block extends Entity
     public Block(String name, String id, double x, double y, GreenfootImage image, String state, String activity)
     {
         super(name, id, x, y, image, state, activity);
-        //movement = new Movement(0, 0);
+        movement = new Movement(0, 0);
         
         // Mystery_Block
         if (getName().equals("Mystery_Block"))
@@ -150,7 +150,21 @@ public class Block extends Entity
     
     public void checkCollision(List<Entity> entities)
     {
-        //movement.setEntities(entities);
+        movement.setEntities(entities);
+        
+        if (movement.isTouchingObjectBelow(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Player.class))
+        {
+            if (getState().equals("yellow"))
+            {
+                setState("brown");
+                setActivity("default");
+                Tools.playSound("smw_power-up_appears.wav", 95);
+                Entity mushroom = new Special("Mushroom", "0", getPosX(), getPosY(), getImage(), "default", "default");
+                mushroom.setCurrentCutscene("spawning");
+                mushroom.setCutsceneFrameCounter(0);
+                Level.addEntity(mushroom); 
+            }
+        }
     }
     
     public void simulate(List<Entity> entities)

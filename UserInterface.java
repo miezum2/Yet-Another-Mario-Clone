@@ -74,7 +74,7 @@ public class UserInterface extends World
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(width, height, 1, false); 
         
-        setPaintOrder(Text.class, LevelLoader.class,FloatingEntity.class, Select.class, LevelMaker.class,  Player.class, Koopa.class, Special.class, Block.class);
+        setPaintOrder(Text.class, LevelLoader.class,FloatingEntity.class, Select.class, LevelMaker.class,  Player.class, Koopa.class, Block.class, Special.class );
 
         // Log "ausleeren"
         for (int i = 0; i < 50; i++)
@@ -293,6 +293,7 @@ public class UserInterface extends World
             // Kamera-Objekt anweisen, die Position der Entities in der Welt in Bildschirm-Koordinaten umzurechnen
             // nicht sichtbare Entities deaktivieren
             List<Entity> allEntities = level.getEntities();
+            camera.calculateCameraPos("instant");
             camera.calculateEntities(allEntities);
 
             // Alle Objekte durchgehen
@@ -555,11 +556,11 @@ public class UserInterface extends World
                             }
                             if (s.getName() == "zoomin")
                             {
-                                //camera.moveX(-96);
+                                camera.zoom(80);
                             }
                             if (s.getName() == "zoomout")
                             {
-                                //camera.moveX(96);
+                                camera.zoom(-80);
                             }
                             if (s.getName() == "bloecke")
                             {

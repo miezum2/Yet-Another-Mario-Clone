@@ -46,72 +46,86 @@ public class Special extends Entity
         {
             disable();
         }
+        
+        if (getCurrentCutscene().equals("spawning"))
+        {
+            setPosY(getPosY()+0.5);
+            if (getCutsceneFrameCounter() >= 32)
+            {
+                setCurrentCutscene("");                
+            }
+        }
     }
     
     public void checkCollision(List<Entity> entities)
     {
         movement.setEntities(entities);
         
-        if (getName().equals("Flagpole"))
+        if (getCurrentCutscene().equals(""))
         {
-            // Spieler löst Zielflagge aus
-            if (movement.isIntersecting(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), this, Player.class) && !getGlobalCutscene().equals("victory"))
-            {                 
-                Tools.playInterrupt("smw_course_clear.wav", 95);
-                setGlobalCutscene("victory");
-                setCutsceneFrameCounter(0);
+            if (getName().equals("Flagpole"))
+            {
+                // Spieler löst Zielflagge aus
+                if (movement.isIntersecting(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), this, Player.class) && !getGlobalCutscene().equals("victory"))
+                {                 
+                    Tools.playInterrupt("smw_course_clear.wav", 95);
+                    setGlobalCutscene("victory");
+                    setCutsceneFrameCounter(0);
+                }
             }
-        }
-        
-        if (getName().equals("Mushroom"))
-        {
-            // Spieler sammelt Pilz ein
-            if (movement.isIntersecting(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), this, Player.class))
-            {                 
-                remove();
+            
+            if (getName().equals("Mushroom"))
+            {
+                // Spieler sammelt Pilz ein
+                if (movement.isIntersecting(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), this, Player.class))
+                {                 
+                    remove();
+                }
             }
-        }
-        
-        if (getName().equals("Coin"))
-        {
-            // Spieler sammelt Coin ein
-            if (movement.isIntersecting(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), this, Player.class))
-            {   
-                Greenfoot.playSound("sounds/smw_coin.wav");
-                remove();
+            
+            if (getName().equals("Coin"))
+            {
+                // Spieler sammelt Coin ein
+                if (movement.isIntersecting(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), this, Player.class))
+                {   
+                    Greenfoot.playSound("sounds/smw_coin.wav");
+                    remove();
+                }
             }
         }
     }
     
     public void simulate(List<Entity> entities)
     {
-        if (getActivity().equals("bar"))
+        if (getCurrentCutscene().equals(""))
         {
-            if (movingUpwards)
+            if (getActivity().equals("bar"))
             {
-                setPosY(getPosY()+1);
-                if (getPosY() > initPosY+6*16)
+                if (movingUpwards)
                 {
-                    movingUpwards = false;
+                    setPosY(getPosY()+1);
+                    if (getPosY() > initPosY+6*16)
+                    {
+                        movingUpwards = false;
+                    }
                 }
+                else
+                {
+                    setPosY(getPosY()-1);
+                    if (getPosY() < initPosY)
+                    {
+                        movingUpwards = true;
+                    }
+                }            
             }
-            else
+            
+            if (getName().equals("Mushroom"))
             {
-                setPosY(getPosY()-1);
-                if (getPosY() < initPosY)
-                {
-                    movingUpwards = true;
-                }
-            }            
+                setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+                setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+            }
+            
+            setAnimationIndex(globalFrameCounter/8);
         }
-        
-        if (getName().equals("Mushroom"))
-        {
-            setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
-            setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
-        }
-        
-        setAnimationIndex(globalFrameCounter/8);
-        
     }
 }

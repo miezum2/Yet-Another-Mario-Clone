@@ -21,6 +21,7 @@ public class Level
     private boolean levelCleared = false;
     private boolean levelLost = false;
     private boolean simulationPaused = false;
+    private static Entity newEntity;
     
     private String[] controlsP1 = {"w","a","s","d","w","c","shift"};
     private String[] controlsP2 = {"up", "left", "down", "right", "up", "1", "0"};
@@ -252,40 +253,61 @@ public class Level
      */
     public void update()
     {
-        // Nutzereingaben prüfen
-        if (Greenfoot.isKeyDown(controlsP1[0]) ||
-            Greenfoot.isKeyDown(controlsP1[1]) ||
-            Greenfoot.isKeyDown(controlsP1[2]) ||
-            Greenfoot.isKeyDown(controlsP1[3]) ||
-            Greenfoot.isKeyDown(controlsP1[4]) ||
-            Greenfoot.isKeyDown(controlsP1[5]) ||
-            Greenfoot.isKeyDown(controlsP1[6]))
-            
+        if (mode.equals("ingame"))
         {
-            
-        }
-        else 
-        if (Greenfoot.isKeyDown(controlsP2[0]) ||
-            Greenfoot.isKeyDown(controlsP2[1]) ||
-            Greenfoot.isKeyDown(controlsP2[2]) ||
-            Greenfoot.isKeyDown(controlsP2[3]) ||
-            Greenfoot.isKeyDown(controlsP2[4]) ||
-            Greenfoot.isKeyDown(controlsP2[5]) ||
-            Greenfoot.isKeyDown(controlsP2[6]))
-            
-        {
-            boolean luigiExists = false;
+            // Nutzereingaben prüfen  
+            Player mario = null;
+            Player luigi = null;
             for (Entity listEntity : entities)
             {
                 if (listEntity.getName().equals("Luigi"))
                 {
-                    luigiExists = true;
+                    luigi = (Player)listEntity;
+                }
+                if (listEntity.getName().equals("Mario"))
+                {
+                    mario = (Player)listEntity;
                 }
             }
-            
-            if (!luigiExists)
+        
+            if (Greenfoot.isKeyDown(controlsP1[0]) ||
+                Greenfoot.isKeyDown(controlsP1[1]) ||
+                Greenfoot.isKeyDown(controlsP1[2]) ||
+                Greenfoot.isKeyDown(controlsP1[3]) ||
+                Greenfoot.isKeyDown(controlsP1[4]) ||
+                Greenfoot.isKeyDown(controlsP1[5]) ||
+                Greenfoot.isKeyDown(controlsP1[6]))
+                
             {
-                entities.add(new Player());
+                if (mario == null && luigi != null && luigi.getCurrentCutscene().equals(""))
+                {
+                    //String name, String id, double x, double y, GreenfootImage image, String state, String activity, String[] controls
+                    Player newMario = new Player("Mario", "0", luigi.getPosX(), luigi.getPosY()+64, graphics.getImage(), "small", "standing", controlsP1);
+                    newMario.setCurrentCutscene("spawning");
+                    newMario.setCutsceneFrameCounter(0);
+                    entities.add(newMario);
+                    Tools.playSound("smw_reserve_item_release.wav", 100);
+                }                
+            }
+            
+            if (Greenfoot.isKeyDown(controlsP2[0]) ||
+                Greenfoot.isKeyDown(controlsP2[1]) ||
+                Greenfoot.isKeyDown(controlsP2[2]) ||
+                Greenfoot.isKeyDown(controlsP2[3]) ||
+                Greenfoot.isKeyDown(controlsP2[4]) ||
+                Greenfoot.isKeyDown(controlsP2[5]) ||
+                Greenfoot.isKeyDown(controlsP2[6]))
+                
+            {
+                if (luigi == null && mario != null && mario.getCurrentCutscene().equals(""))
+                {
+                    //String name, String id, double x, double y, GreenfootImage image, String state, String activity, String[] controls
+                    Player newLuigi = new Player("Luigi", "0", mario.getPosX(), mario.getPosY()+64, graphics.getImage(), "small", "standing", controlsP2);
+                    newLuigi.setCurrentCutscene("spawning");
+                    newLuigi.setCutsceneFrameCounter(0);
+                    entities.add(newLuigi);
+                    Tools.playSound("smw_reserve_item_release.wav", 100);
+                }
             }
         }
         
@@ -300,6 +322,18 @@ public class Level
                 iter.remove();
             }          
         }      
+        
+        // neues Item einfügen
+        if (newEntity != null)
+        {
+            entities.add(newEntity);
+            newEntity = null;
+        }
+    }
+    
+    public static void addEntity(Entity entity)
+    {
+        newEntity = entity;
     }
     
     /**
