@@ -14,6 +14,9 @@ import java.nio.charset.*;
 public class Tools  
 {
     private static final String missingImage = "images/missingImage.png";
+    private static GreenfootSound bgm;
+    private static GreenfootSound interrupt;
+    private static int bgmVolume;
     
     /**
      * alle Ordner und Dateien im aktuellen Verzeichnis auflisten
@@ -198,4 +201,50 @@ public class Tools
             System.out.println(content);
         }
     }   
+    
+    public static void playBgm(String path, int volume)
+    {
+        if (bgm != null)
+        {
+            bgm.stop();
+        }        
+        bgm = new GreenfootSound("sounds/"+path);
+        bgm.setVolume(volume);
+        bgm.playLoop();
+        bgmVolume = volume;
+        if (interrupt != null)
+        {
+            interrupt.stop();       
+        }
+    }
+    
+    public static void playSound(String path, int volume)
+    {
+        GreenfootSound sound = new GreenfootSound("sounds/"+path);
+        sound.setVolume(volume);
+        sound.play();    
+    }
+    
+    public static void playInterrupt(String path, int volume)
+    {
+        bgm.setVolume(0);
+        if (interrupt != null)
+        {
+            interrupt.stop();       
+        }
+        interrupt = new GreenfootSound("sounds/"+path);
+        interrupt.setVolume(volume);
+        interrupt.play();  
+    }
+    
+    public static void checkSound()
+    {
+        if (bgm != null && interrupt != null)
+        {
+            if (!interrupt.isPlaying())
+            {
+                bgm.setVolume(bgmVolume);
+            }
+        }
+    }
 }

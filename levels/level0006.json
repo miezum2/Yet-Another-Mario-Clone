@@ -1,0 +1,161 @@
+{
+  "levelInfo": {
+    "date": "Datum einfuegen",
+    "name": "weit entfernt",
+    "desc": "Beschreibung"
+  },
+  "levelData": [
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 96,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 112,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 128,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 144,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 160,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 176,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 192,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 224,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 208,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "player",
+      "name": "Mario",
+      "x": 112,
+      "y": 32,
+      "state": "small",
+      "data": ""
+    },
+    {
+      "type": "player",
+      "name": "Luigi",
+      "x": 608,
+      "y": 32,
+      "state": "small",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 608,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Mushroom",
+      "x": 128,
+      "y": 32,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "koopa",
+      "name": "Koopa",
+      "x": 160,
+      "y": 32,
+      "state": "red",
+      "data": ""
+    },
+    {
+      "type": "koopa",
+      "name": "Koopa",
+      "x": 288,
+      "y": 64,
+      "state": "red",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 240,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 256,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 272,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 288,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    }
+  ]
+}

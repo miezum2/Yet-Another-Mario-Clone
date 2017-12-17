@@ -19,7 +19,18 @@ public class Special extends Entity
         //movement = new Movement(0, 0);
         initPosY = (int)getPosY();
         movingUpwards = true;
-        movement = new Movement(0, 0);
+        if (name.equals("Mushroom"))
+        {
+            movement = new Movement(-0.8, 0);
+        }
+        else
+        {
+            movement = new Movement(0, 0);
+            if (name.equals("Coin"))
+            {
+                setActivity("spinning");
+            }
+        }
     }   
     
     public void act() 
@@ -27,11 +38,11 @@ public class Special extends Entity
         // Add your action code here.
     }  
     
-    public void update(List<Entity> entities, String currentCutscene, int cutsceneFrameCounter)
+    public void update(List<Entity> entities)
     {
-        super.update(entities, currentCutscene, cutsceneFrameCounter);
+        super.update(entities);
         
-        if (currentCutscene.equals("victory") && getActivity().equals("bar"))
+        if (getGlobalCutscene().equals("victory") && getActivity().equals("bar"))
         {
             disable();
         }
@@ -41,11 +52,34 @@ public class Special extends Entity
     {
         movement.setEntities(entities);
         
-        // Spieler löst Zielflagge aus
-        if (movement.isTouchedByObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Player.class))
-        {                    
-            setCurrentCutscene("victory");
-            setCutsceneFrameCounter(0);
+        if (getName().equals("Flagpole"))
+        {
+            // Spieler löst Zielflagge aus
+            if (movement.isIntersecting(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), this, Player.class) && !getGlobalCutscene().equals("victory"))
+            {                 
+                Tools.playInterrupt("smw_course_clear.wav", 95);
+                setGlobalCutscene("victory");
+                setCutsceneFrameCounter(0);
+            }
+        }
+        
+        if (getName().equals("Mushroom"))
+        {
+            // Spieler sammelt Pilz ein
+            if (movement.isIntersecting(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), this, Player.class))
+            {                 
+                remove();
+            }
+        }
+        
+        if (getName().equals("Coin"))
+        {
+            // Spieler sammelt Coin ein
+            if (movement.isIntersecting(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), this, Player.class))
+            {   
+                Greenfoot.playSound("sounds/smw_coin.wav");
+                remove();
+            }
         }
     }
     
@@ -70,5 +104,14 @@ public class Special extends Entity
                 }
             }            
         }
+        
+        if (getName().equals("Mushroom"))
+        {
+            setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+            setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
+        }
+        
+        setAnimationIndex(globalFrameCounter/8);
+        
     }
 }

@@ -18,11 +18,12 @@ public class Level
     private List<EntityData> levelData;
     // Aktueller Zustand des Levels
     private List<Entity> entities;     
-    private boolean levelMustReset = false;
+    private boolean levelCleared = false;
+    private boolean levelLost = false;
     private boolean simulationPaused = false;
     
-    private String[] controlsP1 = {"w","a","s","d","space"};
-    private String[] controlsP2 = {"up", "left", "down", "right", "enter"};
+    private String[] controlsP1 = {"w","a","s","d","w","c","shift"};
+    private String[] controlsP2 = {"up", "left", "down", "right", "up", "1", "0"};
     
     /**
      * neu erstelltes Level lädt Json-Datei mit angegebenem Pfad in Objekte 
@@ -84,11 +85,17 @@ public class Level
         levelInfo.put("desc", desc);
         
         levelData = new ArrayList<EntityData>();
-        EntityData mario = new EntityData("player", "Mario", 96, 32, "small", "");
-        EntityData block1 = new EntityData("block", "Ground", 96, 16, "grass", "");
-        EntityData block2 = new EntityData("block", "Ground", 96, 0, "grass", "");
+        EntityData mario = new EntityData("player", "Mario", 80, 32, "small", "");
         levelData.add(mario);
-        levelData.add(block1);
+        
+        // Gras generieren
+        for (int i = 0; i < 16*18; i += 16)
+        {
+            EntityData block1 = new EntityData("block", "Ground", i, 0, "grass", "");
+            EntityData block2 = new EntityData("block", "Ground", i, 16, "grass", "");
+            levelData.add(block1);
+            levelData.add(block2);
+        } 
         
         // nächsten freien Levelnamen suchen
         File[] levels = Tools.getDirContent(path, "file");
@@ -102,7 +109,7 @@ public class Level
             }
         }
         
-        this.path = path+"\\level"+(highestIndex+1)+".json";
+        this.path = path+"\\level"+String.format("%04d", (highestIndex+1))+".json";
         save();
     }
     
@@ -178,9 +185,8 @@ public class Level
             // Typ: block
             if (entity.getType().equals("block"))
             {
-                Entity newEntity = new Block(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "");
-                entities.add(newEntity);
-                
+                Entity newEntity = new Block(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "default");
+                entities.add(newEntity);                
             }
             
             // Typ: special
@@ -196,6 +202,7 @@ public class Level
                     }
                     else
                     {
+                        // komplette Zielflagge generieren
                         int i;
                         for (i = 0; i < 6; i++)
                         {
@@ -206,7 +213,23 @@ public class Level
                         entities.add(newEntity); 
                         newEntity = new Special(entity.getName(), "0", entity.getX()+8, entity.getY(), graphics.getImage(), "wide", "bar");
                         entities.add(newEntity);
+                        
+                        // Gras unter der Zielflagge
+                        for (i = 0; i < 18; i++)
+                        {
+                            for (int j = entity.getY()-16; j >= 0; j -= 16)
+                            {
+                                newEntity = new Block("Ground", "0", entity.getX()+16*i, j, graphics.getImage(), "grass", "");
+                                entities.add(newEntity);
+                            }
+                        }
                     }
+                }
+                else
+                {
+                    // alle anderen Specials
+                    Entity newEntity = new Special(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "default");
+                    entities.add(newEntity);
                 }
             }
         }        
@@ -247,23 +270,48 @@ public class Level
      */
     public void checkEntities()
     {
+        simulationPaused = false;
+        if (!Entity.getGlobalCutscene().equals(""))
+        {
+            simulationPaused = true;
+        }       
+        
+        // Anzahl der Spieler zählen
+        int playerCount = 0;
         for (Entity listEntity : entities)
         {
-            if (!listEntity.getCurrentCutscene().equals(""))
+            if (listEntity.getClass() == Player.class)
+            {
+                playerCount ++;
+            }
+        }
+        
+        for (Entity listEntity : entities)
+        {    
+            if (playerCount == 1 && listEntity.isDead())
+            {
+                levelLost = true;
+            }
+            if (listEntity.getCurrentCutscene().equals("victoryDone"))
+            {
+                levelCleared = true;
+            }
+            if(playerCount == 1 && (listEntity.getCurrentCutscene().equals("edge") || listEntity.getCurrentCutscene().equals("dying") || listEntity.getCurrentCutscene().equals("deadWait")))
             {
                 simulationPaused = true;
             }
-            
-            if (listEntity.isDead())
+            if (listEntity.getCurrentCutscene().equals("growing"))
             {
-                levelMustReset = true;
+                simulationPaused = true;
             }
         }
     }
     
+    
     /**
      * gibt aktuelle Cutscene zurück
      */
+    /*
     private int counter;
     public String getCurrentCutscene()
     {
@@ -287,13 +335,13 @@ public class Level
             {
                 return listEntity.getCutsceneFrameCounter();
             }
-        }*/
+        }
         return counter;
         //return 0;
     }
-    
+    */
     /**
-     * prüft, ob gerade ein Spieler stirbt
+     * prüft, ob gerade eine Cutscene läuft
      */
     public boolean isSimulationPaused()
     {
@@ -301,12 +349,20 @@ public class Level
     }
     
     /**
-     * prüft, ob alle Spieler im Level tod sind
+     * prüft, ob Level geschafft wurde
      */
-    public boolean mustReset()
+    public boolean isLevelCleared()
     {
-        return levelMustReset;
+        return levelCleared;
     }
+    
+    /**
+     * prüft, ob das Level verloren wurde
+     */
+    public boolean isLevelLost()
+    {
+        return levelLost;
+    }    
     
     /**
      * neues Objekt in die Welt hinzufügen

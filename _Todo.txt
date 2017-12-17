@@ -1,0 +1,54 @@
+Simon:
+_Gras generieren bei Zielflagge
+_Gras generieren bei neuem Level
+_Intersection-Kollisionsabfrage
+_weiche Kamerabewegung
+_Drehsprung einfügen
+_Powerups
+_Münzen
+unteren linken Punkt platzieren, nicht Mitte
+_Kamerazentrierung von Durchschnitt auf Mittelpunkt ändern
+_Keine Sounds gleichzeitig
+_Bei spielstart kurz warten
+Gitter zeichnen
+scrollender Hintergrund
+_allgemein höherer Sprung
+mehr Grastexturen
+Zielflagge im Editor vergrößern
+_Globaler Framecounter für Fragezeichen
+Powerups in Blöcken platieren
+Spinblöcke einfügen
+dynamische Fenstergröße
+_letze go sound
+block platzier sound
+_Sounds neu machen weil lauter werden
+
+
+verworfen:
+Rote Koopas Clifferkennung
+Neu-Button nach unten verlagern
+Yet another Mario Clone Titel
+spinjump auf Koopas
+Koopas zu shells umwandeln
+Skalierung überarbeiten
+Beschleunigung bei Tod
+
+Phil:
+Bewegungsknöpfe durch zoom ersetzen
+Blöcke in Mülltonne/oberen Bereich ziehen
+Mülltonne deaktivieren bei Editorverlassen
+Stempel in Pinsel umfunktionieren
+Rahmen um aktive Buttons zeichnen
+Mario muss langsamer springen und fallen
+Höherer Sprung:
+Ist Mario gesprungen?
+Ist die Leertaste gedrückt?
+-> Gravitation verringern
+
+Ist Mario gefallen?
+Wurde die Leertaste zwischenzeitlich losgelassen?
+-> Gravitation auf Standard setzen
+-> Gravitation nicht verringern
+
+Hat Mario den Boden oder Gegner berührt?
+-> Gravitation auf Standard setzen

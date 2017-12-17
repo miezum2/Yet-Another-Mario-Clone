@@ -8,7 +8,7 @@ import java.util.*;
  */
 public class Camera
 {
-    private static final int defaultHeightUnits = 200;
+    private static final int defaultHeightUnits = 20;
     
     GraphicsManager graphics;
     
@@ -35,6 +35,9 @@ public class Camera
         // Größe der Greenfoot-Welt speichern
         this.widthPixels = width;
         this.heightPixels = height;  
+        
+        heightUnits = defaultHeightUnits;
+        widthUnits = widthPixels*heightUnits/heightPixels; 
     }  
     
     /**
@@ -52,80 +55,120 @@ public class Camera
             }
         }
         
-        // kleinsten erlaubten Kamerausschnitt berechnen
-        heightUnits = defaultHeightUnits;
-        widthUnits = widthPixels*heightUnits/heightPixels; 
-        
-        // Position der Kamera an den Spielern ausrichten
-        // Berechnungen gelten auch für Einzelspieler      
-        
-        // Mittelpunkt zwischen den Spielern und deren maximale Position ermitteln
-        double sumX = 0;
-        double sumY = 0;
-        
-        double playersMinX = players.get(0).getPosX();
-        double playersMaxX = playersMinX;
-        double playersMinY = players.get(0).getPosY();
-        double playersMaxY = playersMinY;
-        for (Entity player : players)
+        if (players.size() > 0)
         {
-            // X und Y Positionen der Spieler addieren
-            sumX += player.getPosX();
-            sumY += player.getPosY();
+        
+            // kleinsten erlaubten Kamerausschnitt berechnen
+            double minHeightUnits = defaultHeightUnits;
+            double minWidthUnits = widthPixels*minHeightUnits/heightPixels; 
             
-            // minimale und maximale x und y position aller Spieler ermitteln
-            if (player.getPosX() < playersMinX) 
-            { 
-                playersMinX = player.getPosX(); 
+            // Position der Kamera an den Spielern ausrichten
+            // Berechnungen gelten auch für Einzelspieler      
+            
+            // Mittelpunkt zwischen den Spielern und deren maximale Position ermitteln
+            double sumX = 0;
+            double sumY = 0;
+            
+            double playersMinX = players.get(0).getPosX();
+            double playersMaxX = playersMinX;
+            double playersMinY = players.get(0).getPosY();
+            double playersMaxY = playersMinY;
+            for (Entity player : players)
+            {
+                // X und Y Positionen der Spieler addieren
+                sumX += player.getPosX();
+                sumY += player.getPosY();
+                
+                // minimale und maximale x und y position aller Spieler ermitteln
+                if (player.getPosX() < playersMinX) 
+                { 
+                    playersMinX = player.getPosX(); 
+                }
+                if (player.getPosX() > playersMaxX) 
+                { 
+                    playersMaxX = player.getPosX(); 
+                }
+                if (player.getPosY() < playersMinY) 
+                { 
+                    playersMinY = player.getPosY(); 
+                }
+                if (player.getPosY() > playersMaxY) 
+                { 
+                    playersMaxY = player.getPosY(); 
+                }
             }
-            if (player.getPosX() > playersMaxX) 
-            { 
-                playersMaxX = player.getPosX(); 
+                        
+            // Mittelpunkt berechnen
+            targetPosX = (playersMinX + playersMaxX) / 2 + 48;
+            targetPosY = (playersMinY + playersMaxY) / 2 - 32;
+            
+            // Abstand der Spieler in X - und Y-Richtung berechnen
+            double distanceX = playersMaxX - playersMinX;
+            double distanceY = playersMaxY - playersMinY;   
+            
+            int borderX = 10; //150;
+            int borderY = 10; //50;
+            
+            if (distanceX + borderX > minWidthUnits)
+            {
+                widthUnits = smoothMove(widthUnits, distanceX + borderX, 30);                 
+                heightUnits = widthUnits*heightPixels/widthPixels;
             }
-            if (player.getPosY() < playersMinY) 
-            { 
-                playersMinY = player.getPosY(); 
-            }
-            if (player.getPosY() > playersMaxY) 
-            { 
-                playersMaxY = player.getPosY(); 
-            }
+            else
+            {
+                if (distanceY + borderY > minHeightUnits)
+                {
+                    heightUnits = smoothMove(heightUnits, distanceY + borderY, 30);
+                    widthUnits = heightUnits*widthPixels/heightPixels;
+                }
+                else
+                {       
+                    widthUnits = smoothMove(widthUnits, minWidthUnits, 30);
+                    heightUnits = widthUnits*heightPixels/widthPixels;
+                }
+            }    
+            
         }
+    }
+    
+    private double smoothMove(double currentValue, double targetValue, double fraction)
+    {
+        //System.out.println("current: " + currentValue);
+        //System.out.println("target : " + targetValue);
         
-        // Mittelpunkt berechnen
-        targetPosX = sumX / players.size();
-        targetPosY = sumY / players.size();
-        
-        // Abstand der Spieler in X - und Y-Richtung berechnen
-        double distanceX = playersMaxX - playersMinX;
-        double distanceY = playersMaxY - playersMinY;
-        
-        // wenn horizontaler Abstand größer als n -> Kameraauschnitt vergrößern
-        if (distanceX > widthUnits-50)
+        if (fraction < 1)
         {
-            widthUnits = distanceX+50;
-            heightUnits = heightPixels*widthUnits/widthPixels;
+            fraction = 1;
         }
         
-        // wenn vertikaler Abstand größer als n -> Kameraauschnitt vergrößern
-        if (distanceY > heightUnits-50)
-        {
-            heightUnits = distanceY+50;
-            widthUnits = widthPixels*heightUnits/heightPixels; 
-        }
+        double delta = targetValue - currentValue;
+        return currentValue + delta / fraction; 
+        
     }
     
     /**
      * Ausdehung des Kamerarahmens um den zuvor bestimmten Mittelpunkt bestimmen
      */    
-    private void calculateCameraPos()
+    private void calculateCameraPos(String zoomMode)
     {
         // Kameraposition berechnen
-        currentPosX = targetPosX;
-        currentPosY = targetPosY; 
+        if (zoomMode.equals("slow"))
+        {
+            currentPosX = smoothMove(currentPosX, targetPosX, 30);
+            currentPosY = smoothMove(currentPosY, targetPosY, 30);
+        }
+        else if (zoomMode.equals("instant"))
+        {
+        
+        }
+        else
+        {
+            currentPosX = targetPosX;
+            currentPosY = targetPosY;
+        }
         
         // Y-Position der Kamera wird bei 0 verankert, weil der Editor (noch) kein vertikales Scrolling erlaubt
-        currentPosY = 0;
+        //currentPosY = 0;
         
         // Kameraausschnitt berechnen              
         minY = currentPosY - heightUnits/2;
@@ -138,25 +181,26 @@ public class Camera
         if (minX < 0)
         {
             maxX += Math.abs(minX);
-            targetPosX += Math.abs(minX);
+            currentPosX += Math.abs(minX);
             minX = 0;
         }
         
         if (minY < 0)
         {
             maxY += Math.abs(minY);
-            targetPosY += Math.abs(minY);
+            currentPosY += Math.abs(minY);
             minY = 0;
-        }
+        }        
+        
     }
         
     /**
      * Kamera Zoom und Position anhand der aktuellen Welt berechnen
      */
-    public void calculateCamera(List<Entity> entities)
+    public void calculateCamera(List<Entity> entities, String refreshMode)
     {
         calculateCameraZoom(entities);
-        calculateCameraPos();        
+        calculateCameraPos(refreshMode);        
     }   
     
     /**
@@ -167,7 +211,7 @@ public class Camera
         // Alle Objekte durchgehen und Position im Level in Position auf Welt umrechnen
         for (Entity entity : entities)
         {
-            double rangeX = 16*scale;
+            double rangeX = 64*scale;
             double rangeY = 64*scale;
             
             // Koordinaten in neuen Bereich mappen
@@ -236,9 +280,24 @@ public class Camera
         return scale;
     }
     
-    public double getMinX()
+    public double getPixelOffsetXEnd()
     {
-        return minX;
+        return ((16 - (minX % 16))*scale);
+    }
+    
+    public double getPixelOffsetXBeginning()
+    {
+        return ((16 - (minX % 16))*scale - (16*scale - 16*scale*0.95));
+    }
+    
+    public double getPixelOffsetYEnd()
+    {
+        return ((16 - (minY % 16))*scale);
+    }
+    
+    public double getPixelOffsetYBeginning()
+    {
+        return ((16 - (minY % 16))*scale - (16*scale - 16*scale*0.95) - 1);
     }
     
     public double getMinY()
@@ -273,8 +332,17 @@ public class Camera
      */
     public void moveX(double movement)
     {
-        targetPosX += movement;
-        calculateCameraPos();
+        currentPosX += movement;
+        calculateCameraPos("instant");
+    }
+    
+    /**
+     * Kameraauschnitt um n Units auf der Y-Achse verschieben
+     */
+    public void moveY(double movement)
+    {
+        currentPosY += movement;
+        calculateCameraPos("instant");
     }
     
 }

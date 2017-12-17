@@ -12,8 +12,8 @@ import javax.swing.*;
  */
 public class UserInterface extends World
 {
-    private static final int width = 1500;
-    private static final int height = 900;
+    private static final int width = 1024;
+    private static final int height = 768;
     private static final String imageDir = "images";
     private static final String levelDir = "levels";
     
@@ -22,6 +22,7 @@ public class UserInterface extends World
     private LevelLoader levelLoader;
     private Level level;
     private Camera camera;
+    private GreenfootImage background;
 
     private Text fpsCounter;
     private Text entityCounter;
@@ -55,6 +56,7 @@ public class UserInterface extends World
     private boolean isDragging;
     //Zählvariable die für Cooldown verwendet wird
     private int switchClock =0;
+    private int delayTime;
 
     // Quelle: https://www.greenfoot.org/doc/native_loader
     static {
@@ -94,6 +96,8 @@ public class UserInterface extends World
         camera = new Camera(width, height);
         //addObject(camera, 0,0);
 
+        setBackground(background); 
+        
         // Debug Informationen
         fpsCounter = new Text();
         addObject(fpsCounter, 20, 66);
@@ -119,7 +123,7 @@ public class UserInterface extends World
         newLevel = new Select("newLevel",0,"newLevel.png",buttonScale);
         addObject(newLevel,getWidth()/8*2+(newLevel.getImage().getWidth()/2),buttonYPos);
 
-        mode="levelSelector";
+        mode="init";
         initializeSelect();
         initializePlaceable();
     }
@@ -138,41 +142,53 @@ public class UserInterface extends World
         fpsCounter.setText(fps);
         fpsCounter.setLocation(fpsCounter.getImage().getWidth()/2, 66);
  
-        if (mode.equals("levelSelector"))
+        if (mode.equals("init"))
         {
             GreenfootImage background = Tools.loadImage("images/levelselection20.png");
             background.scale(width, height);
             setBackground(background);  
-
-        } else if (mode.equals("ingame"))
+            mode = "levelSelector";
+            Tools.playBgm("Map_1.wav", 40);
+        }
+        else if (mode.equals("levelSelector"))
+        {
+            
+        } 
+        else if (mode.equals("ingame"))
         {
             if (level == null)
             {
                 level = new Level(levelLoader.getLevelList().get(0), "ingame");
             }
 
+            Tools.checkSound();
+            delayTime--;
+            
             // Alle Entities vom Bildschirm löschen
             List<Entity> currentEntities = getObjects(Entity.class);
             removeObjects(currentEntities);
 
             level.update();        
-            if (level.mustReset())
+            if (level.isLevelCleared() || level.isLevelLost())
             {
+                Entity.resetGlobalCutscene();
                 Greenfoot.setWorld(new UserInterface());
             }
 
             // Kamera-Objekt anweisen, die Position der Entities in der Welt in Bildschirm-Koordinaten umzurechnen
             // nicht sichtbare Entities deaktivieren
             List<Entity> allEntities = level.getEntities();
-            camera.calculateCamera(allEntities);
+            camera.calculateCamera(allEntities, "slow");
             camera.calculateEntities(allEntities);
+                        
+            Entity.globalFrameCounter ++;
 
             // Neuen Zustand aller Objekte ermitteln
             for (Entity entity : allEntities)
             {
                 if (entity.isEnabled())
                 {
-                    entity.update(allEntities, level.getCurrentCutscene(), level.getCutsceneFrameCounter());
+                    entity.update(allEntities);
                     graphics.setScale(1);
                     GreenfootImage image = graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex());
                     entity.setHeightUnits(image.getHeight());
@@ -183,7 +199,7 @@ public class UserInterface extends World
             // Kollisionsabfrage aller Objekte
             for (Entity entity : allEntities)
             {
-                if (entity.isEnabled() && !level.isSimulationPaused())
+                if (entity.isEnabled() && !level.isSimulationPaused() && delayTime<=0)
                 {
                     entity.checkCollision(allEntities);                  
                 }
@@ -195,27 +211,39 @@ public class UserInterface extends World
             for (Entity entity : allEntities)
             {
                 // Objekt aktualisieren und zeichnen, wenn es nicht deaktiviert ist
-                if (entity.isEnabled() && !level.isSimulationPaused())
+                if (entity.isEnabled() && !level.isSimulationPaused() && delayTime<=0)
                 {
                     entity.simulate(allEntities);                    
                 }
             } 
             
             // Objekte einzeichnen
+            int numberOfEntities = 0;
             for (Entity entity : allEntities)
             {
                 if (entity.isEnabled())
                 {
+                    numberOfEntities++;
                     graphics.setScale(camera.getScale());
                     graphics.setMode("ingame");
-                    entity.setImage(graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex()));
-                    entity.calculateExactPos();            
+                    GreenfootImage image = graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex());
+                    if (entity.isVisible())
+                    {
+                        image.setTransparency(255);
+                    }
+                    else
+                    {
+                        image.setTransparency(0);
+                    }
+                    entity.setImage(image);
+                    entity.calculateExactPos();                       
                     addObject(entity, (int)entity.getCameraX(), (int)entity.getCameraY());                
                 }
             }
             
-
-            entityCounter.setText(currentEntities.size()+" Entities");
+            entityCounter.setText(numberOfEntities+" Entities");    
+            entityCounter.setLocation(entityCounter.getImage().getWidth()/2, 80);    
+            
         } else if (mode.equals("editor"))   
         {
             if (level == null)
@@ -226,6 +254,39 @@ public class UserInterface extends World
             // Alle Entities vom Bildschirm löschen
             List<Entity> currentEntities = getObjects(Entity.class);
             removeObjects(currentEntities);
+            
+            if (Greenfoot.isKeyDown("w"))
+            {
+                camera.moveY(4);
+            }
+            if (Greenfoot.isKeyDown("a"))
+            {
+                camera.moveX(-4);
+            }
+            if (Greenfoot.isKeyDown("s"))
+            {
+                camera.moveY(-4);
+            }
+            if (Greenfoot.isKeyDown("d"))
+            {
+                camera.moveX(4);
+            }
+            
+            background = new GreenfootImage(getWidth(),getHeight());
+            background.setColor(new Color(156,227,231));
+            background.fill();
+            background.setColor(new Color(255, 255, 255));
+            //background.drawLine(camera.getPixelOffsetXBeginning(), 0, camera.getPixelOffsetXBeginning(), getHeight());
+            //background.drawLine(camera.getPixelOffsetXEnd(), 0, camera.getPixelOffsetXEnd(), getHeight());
+            //background.drawRect(camera.getPixelOffsetXBeginning(), 0, camera.getPixelOffsetXEnd() - camera.getPixelOffsetXBeginning(), getHeight());
+            for (int i = 0; i < 100; i++)
+            {
+                //background.fillRect((int)(camera.getPixelOffsetXBeginning()+16*i*camera.getScale()), 0, (int)(camera.getPixelOffsetXEnd()+16*i*camera.getScale()) - (int)(camera.getPixelOffsetXBeginning()+16*i*camera.getScale()), getHeight());
+            }
+            
+            //background.fillRect(0, getHeight() - camera.getPixelOffsetYEnd(), getWidth(), camera.getPixelOffsetYEnd() - camera.getPixelOffsetYBeginning());
+            
+            setBackground(background); 
 
             level.update();        
 
@@ -240,7 +301,7 @@ public class UserInterface extends World
                 // Objekt aktualisieren und zeichnen, wenn es nicht deaktiviert ist
                 if (entity.isEnabled())
                 {
-                    entity.update(allEntities, "", 0);
+                    entity.update(allEntities);
                     graphics.setScale(1);
                     GreenfootImage image = graphics.getImage(entity.getName(), entity.getState(), entity.getActivity(), entity.getOrientation(), entity.getAnimationIndex());
                     entity.setHeightUnits(image.getHeight());
@@ -253,8 +314,7 @@ public class UserInterface extends World
                 }
             }    
         }
-
-        entityCounter.setLocation(entityCounter.getImage().getWidth()/2, 80);
+        
 
         //System.out.println("UserInterface Act")
         if (switchClock<10)
@@ -521,7 +581,10 @@ public class UserInterface extends World
                             {
                                 if (s.getName().contains("Play"))
                                 {
+                                    Tools.playBgm("Overworld.wav", 40);
+                                    delayTime = 20;
                                     onPlayButtonClicked(s);
+                                    
                                 }
                                 if (s.getName().contains("Edit"))
                                 {
@@ -546,10 +609,13 @@ public class UserInterface extends World
                             ingameToEditor=null;
                             removeObject(blockChosing);
                         }
-                        //Play
+                        //Play aus dem Editor heraus
                         if (object.equals(editorToIngame))
                         {
+                            Tools.playSound("lets_go.wav", 75);
+                            Tools.playBgm("Overworld_delay.wav", 40);
                             onPlayButtonClicked(editorToIngame);
+                            delayTime = 40;
                             removeObject(editorToIngame);
                             editorToIngame=null;
                             removeObject(blockChosing);
@@ -580,9 +646,13 @@ public class UserInterface extends World
     {
         placeableEntities = new ArrayList<FloatingEntity>();
         placeableEntities.add(new FloatingEntity("block", "Ground", "grass", Tools.loadImage("images\\Ground\\grass\\grass_single.png"),getHeight()/200));
+        placeableEntities.add(new FloatingEntity("block", "Cloud", "default", Tools.loadImage("images\\Cloud\\default\\default.png"),getHeight()/200));
         placeableEntities.add(new FloatingEntity("block", "Mystery_Block", "yellow", Tools.loadImage("images\\Mystery_Block\\yellow\\spinning\\0.png"),getHeight()/200));
         placeableEntities.add(new FloatingEntity("koopa", "Koopa", "red", Tools.loadImage("images\\Koopa\\red\\walking\\0.png"),getHeight()/200));
+        placeableEntities.add(new FloatingEntity("special", "Mushroom", "default", Tools.loadImage("images\\Mushroom\\default\\default.png"),getHeight()/200));
+        placeableEntities.add(new FloatingEntity("special", "Coin", "default", Tools.loadImage("images\\Coin\\default\\default.png"),getHeight()/200));
         placeableEntities.add(new FloatingEntity("special", "Flagpole", "slim", Tools.loadImage("images\\Flagpole\\slim\\top.png"),getHeight()/200));
+        
     }
 
     /**
@@ -695,7 +765,7 @@ public class UserInterface extends World
         //Buttons für jedes Level erstellen (Play und Edit
         createLevelButtons(levelLoader.getLevelList());
         //setzt den Modus auf LevelSelector
-        mode="levelSelector";
+        mode="init";
         //Löscht das aktuelle Level
         List<Entity> currentEntities = getObjects(Entity.class);
         removeObjects(currentEntities);
@@ -726,6 +796,7 @@ public class UserInterface extends World
     private void onPlayButtonClicked(Select s)
     {
         //Level neu Initalisieren
+        Entity.resetGlobalCutscene();
         level = new Level(levelLoader.getLevelList().get(s.getLevelNumber()), "ingame");
         //setzt den Modus auf Ingame
         mode = "ingame";
@@ -748,15 +819,17 @@ public class UserInterface extends World
     {
         removeEditor();
         //Level neu Initalisieren
+        Entity.resetGlobalCutscene();
         level = new Level(levelLoader.getLevelList().get(s.getLevelNumber()), "editor");
         //Erstellt die Button für Editor
         editMode();
-        camera.calculateCamera(level.getEntities());
+        camera.calculateCamera(level.getEntities(), "once");
         //Hintergrundbild des Editors
-        GreenfootImage image = new GreenfootImage(getWidth(),getHeight());
-        image.setColor(new Color(156,227,231));
-        image.fill();
-        setBackground(image);
+        background = new GreenfootImage(getWidth(),getHeight());
+        background.setColor(new Color(156,227,231));
+        background.fill();
+        setBackground(background); 
+        Tools.playBgm("Donut_Plains.wav", 40);
         //Setzt den Editirmodus
         edit = true;
         //Löscht die Levelauswahl

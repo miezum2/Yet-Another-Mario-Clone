@@ -36,7 +36,6 @@ public class Movement
         this.entities = entities;
     }
 
-
     /**
      * Bewegt sich in die aktuelle Bewegungsrichtung.
      * Direction gibt die laufrichtung an, dabei ist 0 nach rechts und 180 nach links.
@@ -122,7 +121,7 @@ public class Movement
            {
                if (i==1)
                {
-                  Y= 5; 
+                  Y= 6; 
                }    
             }
        }
@@ -169,13 +168,31 @@ public class Movement
     public double getObjectBelow(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
         double floor = -40;        
-        int tolerance = 4;
+        int tolerance = 6;
         
         for (Entity entity : entities)
         {
             if (entity.getPosY() + entity.getHeightUnits() - tolerance <= posY && entity.getPosX() + entity.getWidthUnits() > posX && posX + widthUnits > entity.getPosX()  && (entity.getClass() == cls))
             {
-                if (entity.getPosY()+entity.getHeightUnits() > floor)
+                if (entity.getPosY()+entity.getHeightUnits() > floor && entity.isCollisionEnabled())
+                {
+                    floor = entity.getPosY()+entity.getHeightUnits();
+                }
+            }            
+        }
+        return floor;        
+    }
+    
+    public double getObjectBelow(double posX, double posY, double widthUnits, double heightUnits, String name)
+    {
+        double floor = -40;        
+        int tolerance = 6;
+        
+        for (Entity entity : entities)
+        {
+            if (entity.getPosY() + entity.getHeightUnits() - tolerance <= posY && entity.getPosX() + entity.getWidthUnits() > posX && posX + widthUnits > entity.getPosX()  && entity.getName().equals(name))
+            {
+                if (entity.getPosY()+entity.getHeightUnits() > floor && entity.isCollisionEnabled())
                 {
                     floor = entity.getPosY()+entity.getHeightUnits();
                 }
@@ -190,13 +207,32 @@ public class Movement
     public double getObjectAbove(double posX, double posY, double widthUnits, double heightUnits, Class<?> cls)
     {
         double ceiling = 100000;
-        int tolerance = 4;
+        int tolerance = 6;
         
         for (Entity entity : entities)
         {
             if (entity.getPosY() >= posY + heightUnits - tolerance && entity.getPosX() + entity.getWidthUnits() > posX && posX + widthUnits > entity.getPosX()  && (entity.getClass() == cls))
             {
-                if (entity.getPosY() - heightUnits < ceiling)
+                if (entity.getPosY() - heightUnits < ceiling && entity.isCollisionEnabled())
+                {
+                    ceiling = entity.getPosY() - heightUnits;
+                }
+            }            
+        }
+        
+        return ceiling;  
+    }
+    
+    public double getObjectAbove(double posX, double posY, double widthUnits, double heightUnits, String name)
+    {
+        double ceiling = 100000;
+        int tolerance = 6;
+        
+        for (Entity entity : entities)
+        {
+            if (entity.getPosY() >= posY + heightUnits - tolerance && entity.getPosX() + entity.getWidthUnits() > posX && posX + widthUnits > entity.getPosX()  && entity.getName().equals(name))
+            {
+                if (entity.getPosY() - heightUnits < ceiling && entity.isCollisionEnabled())
                 {
                     ceiling = entity.getPosY() - heightUnits;
                 }
@@ -261,7 +297,28 @@ public class Movement
                         
             if (entity.getPosX() + entity.getWidthUnits() <= posX + tolerance  && entity.getPosY() + entity.getHeightUnits() > posY && posY + heightUnits > entity.getPosY() && (entity.getClass() == cls))
             {
-                if (entity.getPosX()+entity.getWidthUnits() > left)
+                if (entity.getPosX()+entity.getWidthUnits() > left && entity.isCollisionEnabled())
+                {
+                    left = entity.getPosX()+entity.getWidthUnits();
+                }
+            }
+            
+        }
+        
+        return left;
+    }
+    
+    public double getLeftObject(double posX, double posY, double widthUnits, double heightUnits, String name)
+    {
+        double left = -100;
+        int tolerance = 4;
+        
+        for (Entity entity : entities)
+        {
+                        
+            if (entity.getPosX() + entity.getWidthUnits() <= posX + tolerance  && entity.getPosY() + entity.getHeightUnits() > posY && posY + heightUnits > entity.getPosY() && entity.getName().equals(name))
+            {
+                if (entity.getPosX()+entity.getWidthUnits() > left && entity.isCollisionEnabled())
                 {
                     left = entity.getPosX()+entity.getWidthUnits();
                 }
@@ -285,7 +342,7 @@ public class Movement
                         
             if (entity.getPosX() >= posX + widthUnits - tolerance && entity.getPosY() + entity.getHeightUnits() > posY && posY + heightUnits > entity.getPosY() && (entity.getClass() == cls))
             {
-                if (entity.getPosX() - widthUnits < right)
+                if (entity.getPosX() - widthUnits < right && entity.isCollisionEnabled())
                 {
                     right = entity.getPosX() - widthUnits;
                 }
@@ -294,6 +351,90 @@ public class Movement
         }
         
         return right;
+    }
+    
+    public double getRightObject(double posX, double posY, double widthUnits, double heightUnits, String name)
+    {
+        double right = 100000;
+        int tolerance = 4;
+        
+        for (Entity entity : entities)
+        {
+                        
+            if (entity.getPosX() >= posX + widthUnits - tolerance && entity.getPosY() + entity.getHeightUnits() > posY && posY + heightUnits > entity.getPosY() && entity.getName().equals(name))
+            {
+                if (entity.getPosX() - widthUnits < right && entity.isCollisionEnabled())
+                {
+                    right = entity.getPosX() - widthUnits;
+                }
+            }
+            
+        }
+        
+        return right;
+    }
+    
+    public boolean isIntersecting(double posX, double posY, double widthUnits, double heightUnits, Object thisObject, Class<?> cls)
+    {
+        for (Entity entity : entities)
+        {
+            if (entity.getPosX() < posX + widthUnits && entity.getPosX() + entity.getWidthUnits() > posX && entity.getPosY() < posY + heightUnits && entity.getPosY() + entity.getHeightUnits() > posY) 
+            {
+                if (!(entity == thisObject) && entity.getClass() == cls && entity.isCollisionEnabled())
+                {
+                    return true;
+                }
+            }       
+        }
+        return false;
+    }
+    
+    public boolean isIntersecting(double posX, double posY, double widthUnits, double heightUnits, Object thisObject, String name, String state)
+    {
+        for (Entity entity : entities)
+        {
+            if (entity.getPosX() < posX + widthUnits && entity.getPosX() + entity.getWidthUnits() > posX && entity.getPosY() < posY + heightUnits && entity.getPosY() + entity.getHeightUnits() > posY) 
+            {
+                if (!(entity == thisObject) && entity.getName().equals(name) && entity.isCollisionEnabled() && entity.getState().equals(state))
+                {
+                    return true;
+                }
+            }          
+        }
+        
+        return false;
+    }
+    
+    public boolean isIntersecting(double posX, double posY, double widthUnits, double heightUnits, Object thisObject, String name, String state, String activity)
+    {
+        for (Entity entity : entities)
+        {
+            if (entity.getPosX() < posX + widthUnits && entity.getPosX() + entity.getWidthUnits() > posX && entity.getPosY() < posY + heightUnits && entity.getPosY() + entity.getHeightUnits() > posY) 
+            {
+                if (!(entity == thisObject) && entity.getName().equals(name) && entity.isCollisionEnabled() && entity.getState().equals(state) && entity.getActivity().equals(activity))
+                {
+                    return true;
+                }
+            }          
+        }
+        
+        return false;
+    }
+    
+    public boolean isIntersecting(double posX, double posY, double widthUnits, double heightUnits, Object thisObject, String name)
+    {
+        for (Entity entity : entities)
+        {
+            if (entity.getPosX() < posX + widthUnits && entity.getPosX() + entity.getWidthUnits() > posX && entity.getPosY() < posY + heightUnits && entity.getPosY() + entity.getHeightUnits() > posY) 
+            {
+                if (!(entity == thisObject) && entity.getName().equals(name) && entity.isCollisionEnabled())
+                {
+                    return true;
+                }
+            }          
+        }
+        
+        return false;
     }
 
     public void setSpeed (double speed)

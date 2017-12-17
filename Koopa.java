@@ -25,9 +25,9 @@ public class Koopa extends Entity
         // Add your action code here.
     }    
     
-    public void update(List<Entity> entities, String currentCutscene, int cutsceneFrameCounter)
+    public void update(List<Entity> entities)
     {
-        super.update(entities, currentCutscene, cutsceneFrameCounter);                
+        super.update(entities);                
         
         if (getActivity().equals("turning"))
         {
@@ -59,7 +59,8 @@ public class Koopa extends Entity
         if (movement.isTouchingLeftObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class)
             || movement.isTouchingLeftObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class))
         {
-            setActivity("turning");
+            
+           setActivity("turning");
             setOrientation("left");
             turningCounter = 0;
             movement.setSpeed(0.5);
@@ -77,7 +78,9 @@ public class Koopa extends Entity
         // Spieler springt auf Koopa
         if (movement.isTouchingObjectAbove(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Player.class))
         {
-            remove();  
+            
+                Greenfoot.playSound("sounds/smw_stomp.wav");              
+                remove();
         }
     }
     
@@ -88,9 +91,14 @@ public class Koopa extends Entity
         setPosX(movement.move(180, getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
         setPosY(movement.gravity(getPosX(), getPosY(), getWidthUnits(), getHeightUnits()));
         
-                
-        setAnimationIndex(getFrameCounter()/8);
-        
+        if (getState().equals("red"))
+        {
+            setAnimationIndex(getFrameCounter()/8);
+        }
+        else
+        {
+            setAnimationIndex(getFrameCounter()/4);
+        }
         
         
         

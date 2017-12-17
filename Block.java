@@ -33,9 +33,9 @@ public class Block extends Entity
     /**
      * setzt Bodentextur anhand von umgebenden Blöcken
      */
-    public void update(List<Entity> entities, String currentCutscene, int cutsceneFrameCounter)
+    public void update(List<Entity> entities)
     {
-        super.update(entities, currentCutscene, cutsceneFrameCounter);
+        super.update(entities);
         
         // Block je nach Typ setzen       
         
@@ -158,7 +158,7 @@ public class Block extends Entity
         // Mystery_Block
         if (getName().equals("Mystery_Block"))
         {
-            setAnimationIndex(getFrameCounter()/8);
+            setAnimationIndex(globalFrameCounter/8);
         }
     }
 }

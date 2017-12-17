@@ -17,14 +17,18 @@ public abstract class Entity extends Actor
     private String activity;
     private String orientation;
     private int frameCounter;
+    public static int globalFrameCounter;
     private int animationIndex;
     private GreenfootImage image;
     private boolean enabled;
+    private boolean collisionEnabled;
     private int heightUnits;
     private int widthUnits;
     private boolean removed;
+    private static String globalCutscene;
     private String currentCutscene;
     private int cutsceneFrameCounter;
+    private boolean visible;
         
     /*public Entity(String id, GreenfootImage image)
     {
@@ -49,9 +53,15 @@ public abstract class Entity extends Actor
         this.animationIndex = 0;
         this.data = "";
         setImage(image);
+        collisionEnabled = true;
         removed = false;
         currentCutscene = "";
         cutsceneFrameCounter = 0;
+        visible = true;
+        if (globalCutscene == null)
+        {
+            globalCutscene = "";
+        }        
     }
         
     /**
@@ -66,7 +76,7 @@ public abstract class Entity extends Actor
      * ermittelt das aktuelle Aussehen des Entity anhand der Cutscene und der in der Welt vorhandenen Blöcke
      * 
      */
-    public void update(List<Entity> entities, String currentCutscene, int cutsceneFrameCounter)
+    public void update(List<Entity> entities)
     {
         frameCounter++;  
         this.cutsceneFrameCounter++;
@@ -202,6 +212,11 @@ public abstract class Entity extends Actor
         return frameCounter;
     }
     
+    public void setFrameCounter(int frameCounter)
+    {
+        this.frameCounter = frameCounter;
+    }
+    
     public int getAnimationIndex()
     {
         return animationIndex;
@@ -272,6 +287,31 @@ public abstract class Entity extends Actor
         return removed;
     }
     
+    public boolean isCollisionEnabled()
+    {
+        return collisionEnabled;
+    }
+    
+    public void setCollisionEnabled(boolean collisionEnabled)
+    {
+        this.collisionEnabled = collisionEnabled;
+    }
+    
+    public static String getGlobalCutscene()
+    {
+        return globalCutscene;        
+    }
+    
+    public static void setGlobalCutscene(String cutscene)
+    {
+        globalCutscene = cutscene;
+    }
+    
+    public static void resetGlobalCutscene()
+    {
+        globalCutscene = "";
+    }
+    
     public String getCurrentCutscene()
     {
         return currentCutscene;
@@ -295,5 +335,15 @@ public abstract class Entity extends Actor
     public boolean isDead()
     {
         return currentCutscene.equals("dead");
+    }
+    
+    public boolean isVisible()
+    {
+        return visible;
+    }
+    
+    public void setVisibility(boolean visibility)
+    {
+        visible = visibility;
     }
 }

@@ -1,0 +1,33 @@
+{
+  "levelInfo": {
+    "date": "Datum einfuegen",
+    "name": "Flagpole dirt test",
+    "desc": "Beschreibung"
+  },
+  "levelData": [
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 96,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "player",
+      "name": "Mario",
+      "x": 96,
+      "y": 32,
+      "state": "small",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Flagpole",
+      "x": 112,
+      "y": 32,
+      "state": "slim",
+      "data": ""
+    }
+  ]
+}
