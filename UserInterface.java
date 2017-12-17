@@ -333,14 +333,7 @@ public class UserInterface extends World
         //Maus auf Links los gelassen prüfen
         if (Greenfoot.mouseClicked(null))
         {
-            if (stampActiv)
-            {
-                mouseButtonLeft=true; 
-            }
-            else
-            {
-                mouseButtonLeft=false;
-            }
+            mouseButtonLeft=false;
         }
         //Maus aubfrage
         if (mouseButtonLeft)
@@ -360,18 +353,34 @@ public class UserInterface extends World
                     level.addObject(newEntity);
                     isDragging= false;
                 }
-                if (!isDragging && stampActiv)
+                if (!stampActiv)
                 {
-
+                    removeObject(floatingEntity);
+                    //floatingEntity.setLocation(camera.alignXatGrid(Maus.getX()+(floatingEntity.getImage().getWidth()/2)),camera.alignYatGrid(Maus.getY()));
+                    floatingEntity = null;
                 }
-                removeObject(floatingEntity);
-                //floatingEntity.setLocation(camera.alignXatGrid(Maus.getX()+(floatingEntity.getImage().getWidth()/2)),camera.alignYatGrid(Maus.getY()));
-                floatingEntity = null;
+                
 
             }
         }
-
+        //Stempel um mehrer Objekte setzet zu können
+        if (stampActiv)
+        {
+            
+            if (floatingEntity !=null)
+            {
+                floatingEntity.setLocation(Maus.getX()+35,Maus.getY()+35);
+                if (mouseButtonLeft)
+                {
+                    EntityData newEntity = new EntityData(floatingEntity.getType(), floatingEntity.getName(), camera.mapToWorldX(Maus.getX())/16*16, camera.mapToWorldY(Maus.getY())/16*16, floatingEntity.getState(), "");
+                    level.addObject(newEntity);
+                }
+            }
+        }
     }
+    
+    
+    
     /**
      * Eine Mausabfrage welche das händling mit den Actorn ermöglicht.
      */
@@ -397,7 +406,14 @@ public class UserInterface extends World
                 if (floatingEntity != null)
                 {
                     //System.out.println(Maus.getX());
-                    floatingEntity.setLocation(Maus.getX(),Maus.getY());
+                    if (!stampActiv)
+                    {
+                        floatingEntity.setLocation(Maus.getX(),Maus.getY());
+                    }
+                    else 
+                    {
+                        //floatingEntity.setLocation(Maus.getX()+35,Maus.getY()+35);
+                    }
                 }
                 if (Maus.getActor() != null)
                 {
@@ -511,10 +527,14 @@ public class UserInterface extends World
                                 if (!stampActiv)
                                 {
                                     stampActiv = true;
+                                    s.setImage(s.scaleImage(Tools.loadImage("images\\stamp_down.png")));;
                                 }
                                 else
                                 {
                                     stampActiv= false;
+                                    removeObject(floatingEntity);
+                                    s.setImage(s.scaleImage(Tools.loadImage("images\\stamp.png")));
+                                    floatingEntity = null;
                                 }
 
                                 trashcanActiv =false;
@@ -525,10 +545,12 @@ public class UserInterface extends World
                                 if (!trashcanActiv)
                                 {
                                     trashcanActiv = true;
+                                    s.setImage(s.scaleImage(Tools.loadImage("images\\delete_down.png")));;
                                 }
                                 else
                                 {
                                     trashcanActiv =false;
+                                    s.setImage(s.scaleImage(Tools.loadImage("images\\delete.png")));
                                 }
                             }
                             if (s.getName() == "worldleft")
