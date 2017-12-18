@@ -11,9 +11,10 @@ import javax.swing.*;
  * 
  */
 public class UserInterface extends World
+
 {
-    private static final int width = 1024;
-    private static final int height = 768;
+    private static int defaultWidth = 1024;
+    private static int defaultHeight = 786;
     private static final String imageDir = "images";
     private static final String levelDir = "levels";
     
@@ -64,6 +65,7 @@ public class UserInterface extends World
         loader.addClasspath("./+libs/gson-2.8.0.jar"); 
         loader.loadClass("com.google.gson.Gson");
     }
+    
 
     /**
      * Wird bei Programmstart aufgerufen und initialisiert wichtige Variablen und Objekte
@@ -72,7 +74,7 @@ public class UserInterface extends World
     public UserInterface()
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
-        super(width, height, 1, false); 
+        super(defaultWidth, defaultHeight, 1, false); 
         
         setPaintOrder(Text.class, LevelLoader.class,FloatingEntity.class, Select.class, LevelMaker.class,  Player.class, Koopa.class, Block.class, Special.class );
 
@@ -93,16 +95,16 @@ public class UserInterface extends World
         //level = new Level(levelSelector.getLevelList().get(0));
 
         // Kamera erstellen
-        camera = new Camera(width, height);
+        camera = new Camera(getWidth(), getHeight());
         //addObject(camera, 0,0);
 
         setBackground(background); 
         
         // Debug Informationen
         fpsCounter = new Text();
-        addObject(fpsCounter, 20, 66);
+        //addObject(fpsCounter, 20, 66);
         entityCounter = new Text();
-        addObject(entityCounter, 20, 80);
+        //addObject(entityCounter, 20, 80);
         //addObject(new CameraZones(width, height, 50, 100, 50), width/2, height/2);
 
         //addObject(new Player(nameP1, graphics.getImage(nameP1, "small", "walking", "right", 0), controlsP1), 100, 100);
@@ -134,6 +136,44 @@ public class UserInterface extends World
      */
     public void act()
     {
+        //Fenster rescalieren
+        if (Greenfoot.isKeyDown("+"))
+        {
+            if (getWidth() == 1024 && getHeight() == 786)
+            {
+                defaultWidth = 500;
+                defaultHeight = 350;
+            }
+            else
+            {
+                defaultWidth = 1024;
+                defaultHeight = 786;
+            }
+            Greenfoot.setWorld(new UserInterface());
+        }
+        if (Greenfoot.isKeyDown("4"))
+        {            
+            defaultWidth -= 100;
+            Greenfoot.setWorld(new UserInterface());
+        }
+        if (Greenfoot.isKeyDown("6"))
+        {            
+            defaultWidth += 100;
+            Greenfoot.setWorld(new UserInterface());
+        }
+        if (Greenfoot.isKeyDown("2"))
+        {            
+            defaultHeight -= 100;
+            Greenfoot.setWorld(new UserInterface());
+        }
+        if (Greenfoot.isKeyDown("8"))
+        {            
+            defaultHeight += 100;
+            
+            Greenfoot.setWorld(new UserInterface());
+        }
+        
+        
         long newNanoTime = System.nanoTime();
         long diff = newNanoTime - lastNanoTime;
         String fps = (int)Math.floor(1/(diff/1000000000.0))+" FPS";
@@ -145,7 +185,7 @@ public class UserInterface extends World
         if (mode.equals("init"))
         {
             GreenfootImage background = Tools.loadImage("images/levelselection20.png");
-            background.scale(width, height);
+            background.scale(getWidth(), getHeight());
             setBackground(background);  
             mode = "levelSelector";
             Tools.playBgm("Map_1.wav", 40);
@@ -257,19 +297,19 @@ public class UserInterface extends World
             
             if (Greenfoot.isKeyDown("w"))
             {
-                camera.moveY(4);
+                camera.moveY(6);
             }
             if (Greenfoot.isKeyDown("a"))
             {
-                camera.moveX(-4);
+                camera.moveX(-6);
             }
             if (Greenfoot.isKeyDown("s"))
             {
-                camera.moveY(-4);
+                camera.moveY(-6);
             }
             if (Greenfoot.isKeyDown("d"))
             {
-                camera.moveX(4);
+                camera.moveX(6);
             }
             
             background = new GreenfootImage(getWidth(),getHeight());
@@ -370,11 +410,14 @@ public class UserInterface extends World
             
             if (floatingEntity !=null)
             {
-                floatingEntity.setLocation(Maus.getX()+35,Maus.getY()+35);
-                if (mouseButtonLeft)
+                if (Maus !=null)
                 {
-                    EntityData newEntity = new EntityData(floatingEntity.getType(), floatingEntity.getName(), camera.mapToWorldX(Maus.getX())/16*16, camera.mapToWorldY(Maus.getY())/16*16, floatingEntity.getState(), "");
-                    level.addObject(newEntity);
+                    floatingEntity.setLocation(Maus.getX()+35,Maus.getY()+35);
+                    if (mouseButtonLeft)
+                    {
+                        EntityData newEntity = new EntityData(floatingEntity.getType(), floatingEntity.getName(), camera.mapToWorldX(Maus.getX())/16*16, camera.mapToWorldY(Maus.getY())/16*16, floatingEntity.getState(), "");
+                        level.addObject(newEntity);
+                    }
                 }
             }
         }
@@ -556,11 +599,11 @@ public class UserInterface extends World
                             }
                             if (s.getName() == "zoomin")
                             {
-                                camera.zoom(80);
+                                camera.zoom(100);
                             }
                             if (s.getName() == "zoomout")
                             {
-                                camera.zoom(-80);
+                                camera.zoom(-100);
                             }
                             if (s.getName() == "bloecke")
                             {
@@ -571,7 +614,7 @@ public class UserInterface extends World
                                         //erstellen von Blockauswahl
                                         blockChosing = new Select("bloeckes",0,"missingImage.png",buttonScale);
                                         blockChosing.setImage(onBlockChoisClick());
-                                        addObject(blockChosing,width/2,height/16*3);
+                                        addObject(blockChosing,getWidth()/2,getHeight()/16*3);
                                         //erstellen der neuen Blöcke
                                         int i=0;
                                         for(FloatingEntity f :placeableEntities)
@@ -669,10 +712,11 @@ public class UserInterface extends World
     {
         placeableEntities = new ArrayList<FloatingEntity>();
         placeableEntities.add(new FloatingEntity("block", "Ground", "grass", Tools.loadImage("images\\Ground\\grass\\grass_single.png"),getHeight()/200));
+        placeableEntities.add(new FloatingEntity("block", "Spinblock", "default", Tools.loadImage("images\\Spinblock\\default\\default.png"),getHeight()/200));
         placeableEntities.add(new FloatingEntity("block", "Cloud", "default", Tools.loadImage("images\\Cloud\\default\\default.png"),getHeight()/200));
         placeableEntities.add(new FloatingEntity("block", "Mystery_Block", "yellow", Tools.loadImage("images\\Mystery_Block\\yellow\\spinning\\0.png"),getHeight()/200));
         placeableEntities.add(new FloatingEntity("koopa", "Koopa", "red", Tools.loadImage("images\\Koopa\\red\\walking\\0.png"),getHeight()/200));
-        placeableEntities.add(new FloatingEntity("special", "Mushroom", "default", Tools.loadImage("images\\Mushroom\\default\\default.png"),getHeight()/200));
+        //placeableEntities.add(new FloatingEntity("special", "Mushroom", "default", Tools.loadImage("images\\Mushroom\\default\\default.png"),getHeight()/200));
         placeableEntities.add(new FloatingEntity("special", "Coin", "default", Tools.loadImage("images\\Coin\\default\\default.png"),getHeight()/200));
         placeableEntities.add(new FloatingEntity("special", "Flagpole", "slim", Tools.loadImage("images\\Flagpole\\slim\\top.png"),getHeight()/200));
         
@@ -828,6 +872,10 @@ public class UserInterface extends World
         //Löscht die Levelauswahl
         removeLevelMaker();
         trashcanActiv=false;
+        GreenfootImage image = Tools.loadImage("images/background.png");
+        image.scale(getWidth(), getHeight());
+        setBackground(image);
+        
         //erstellt den Editorbutton im Ingame modus
         ingameToEditor = new Select(s.getName()+"Edit",s.getLevelNumber(),"wrench.png",buttonScale);
         addObject(ingameToEditor,getWidth()-buttonYPos,buttonYPos);

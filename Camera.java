@@ -40,6 +40,7 @@ public class Camera
         
         heightUnits = defaultHeightUnits;
         widthUnits = widthPixels*heightUnits/heightPixels; 
+        
     }  
     
     /**
@@ -357,7 +358,7 @@ public class Camera
         {
             editorHeightUnits = 100;
         }
-        if (editorHeightUnits > 500)
+        if (editorHeightUnits > 1000)
         {
             editorHeightUnits = 1000;
             

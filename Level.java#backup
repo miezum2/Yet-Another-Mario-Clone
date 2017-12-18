@@ -17,13 +17,15 @@ public class Level
     // Start- und Speicherzustand des Levels
     private List<EntityData> levelData;
     // Aktueller Zustand des Levels
-    private List<Entity> entities; 
-    
-    private boolean levelMustReset = false;
+    private List<Entity> entities;     
+    private boolean levelCleared = false;
+    private boolean levelLost = false;
     private boolean simulationPaused = false;
+    private static Entity newEntity;
     
-    private String[] controlsP1 = {"w","a","s","d","space"};
-    private String[] controlsP2 = {"up", "left", "down", "right", "enter"};
+    private String[] controlsP1 = {"w","a","s","d","space","c","shift"};
+    
+    private String[] controlsP2 = {"up", "left", "down", "right", "1", "v", "0"};
     
     /**
      * neu erstelltes Level lädt Json-Datei mit angegebenem Pfad in Objekte 
@@ -85,11 +87,17 @@ public class Level
         levelInfo.put("desc", desc);
         
         levelData = new ArrayList<EntityData>();
-        EntityData mario = new EntityData("player", "Mario", 96, 32, "small", "");
-        EntityData block1 = new EntityData("block", "Ground", 96, 16, "grass", "");
-        EntityData block2 = new EntityData("block", "Ground", 96, 0, "grass", "");
+        EntityData mario = new EntityData("player", "Mario", 80, 32, "small", "");
         levelData.add(mario);
-        levelData.add(block1);
+        
+        // Gras generieren
+        for (int i = 0; i < 16*18; i += 16)
+        {
+            EntityData block1 = new EntityData("block", "Ground", i, 0, "grass", "");
+            EntityData block2 = new EntityData("block", "Ground", i, 16, "grass", "");
+            levelData.add(block1);
+            levelData.add(block2);
+        } 
         
         // nächsten freien Levelnamen suchen
         File[] levels = Tools.getDirContent(path, "file");
@@ -103,7 +111,7 @@ public class Level
             }
         }
         
-        this.path = path+"\\level"+(highestIndex+1)+".json";
+        this.path = path+"\\level"+String.format("%04d", (highestIndex+1))+".json";
         save();
     }
     
@@ -179,9 +187,8 @@ public class Level
             // Typ: block
             if (entity.getType().equals("block"))
             {
-                Entity newEntity = new Block(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "");
-                entities.add(newEntity);
-                
+                Entity newEntity = new Block(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "default");
+                entities.add(newEntity);                
             }
             
             // Typ: special
@@ -197,6 +204,7 @@ public class Level
                     }
                     else
                     {
+                        // komplette Zielflagge generieren
                         int i;
                         for (i = 0; i < 6; i++)
                         {
@@ -207,7 +215,23 @@ public class Level
                         entities.add(newEntity); 
                         newEntity = new Special(entity.getName(), "0", entity.getX()+8, entity.getY(), graphics.getImage(), "wide", "bar");
                         entities.add(newEntity);
+                        
+                        // Gras unter der Zielflagge
+                        for (i = 0; i < 18; i++)
+                        {
+                            for (int j = entity.getY()-16; j >= 0; j -= 16)
+                            {
+                                newEntity = new Block("Ground", "0", entity.getX()+16*i, j, graphics.getImage(), "grass", "");
+                                entities.add(newEntity);
+                            }
+                        }
                     }
+                }
+                else
+                {
+                    // alle anderen Specials
+                    Entity newEntity = new Special(entity.getName(), "0", entity.getX(), entity.getY(), graphics.getImage(), entity.getState(), "default");
+                    entities.add(newEntity);
                 }
             }
         }        
@@ -230,6 +254,64 @@ public class Level
      */
     public void update()
     {
+        if (mode.equals("ingame"))
+        {
+            // Nutzereingaben prüfen  
+            Player mario = null;
+            Player luigi = null;
+            for (Entity listEntity : entities)
+            {
+                if (listEntity.getName().equals("Luigi"))
+                {
+                    luigi = (Player)listEntity;
+                }
+                if (listEntity.getName().equals("Mario"))
+                {
+                    mario = (Player)listEntity;
+                }
+            }
+        
+            if (Greenfoot.isKeyDown(controlsP1[0]) ||
+                Greenfoot.isKeyDown(controlsP1[1]) ||
+                Greenfoot.isKeyDown(controlsP1[2]) ||
+                Greenfoot.isKeyDown(controlsP1[3]) ||
+                Greenfoot.isKeyDown(controlsP1[4]) ||
+                Greenfoot.isKeyDown(controlsP1[5]) ||
+                Greenfoot.isKeyDown(controlsP1[6]))
+                
+            {
+                if (mario == null && luigi != null && luigi.getCurrentCutscene().equals(""))
+                {
+                    //String name, String id, double x, double y, GreenfootImage image, String state, String activity, String[] controls
+                    Player newMario = new Player("Mario", "0", luigi.getPosX(), luigi.getPosY()+64, graphics.getImage(), "small", "standing", controlsP1);
+                    newMario.setCurrentCutscene("spawning");
+                    newMario.setCutsceneFrameCounter(0);
+                    entities.add(newMario);
+                    Tools.playSound("smw_reserve_item_release.wav", 100);
+                }                
+            }
+            
+            if (Greenfoot.isKeyDown(controlsP2[0]) ||
+                Greenfoot.isKeyDown(controlsP2[1]) ||
+                Greenfoot.isKeyDown(controlsP2[2]) ||
+                Greenfoot.isKeyDown(controlsP2[3]) ||
+                Greenfoot.isKeyDown(controlsP2[4]) ||
+                Greenfoot.isKeyDown(controlsP2[5]) ||
+                Greenfoot.isKeyDown(controlsP2[6]))
+                
+            {
+                if (luigi == null && mario != null && mario.getCurrentCutscene().equals(""))
+                {
+                    //String name, String id, double x, double y, GreenfootImage image, String state, String activity, String[] controls
+                    Player newLuigi = new Player("Luigi", "0", mario.getPosX(), mario.getPosY()+64, graphics.getImage(), "small", "standing", controlsP2);
+                    newLuigi.setCurrentCutscene("spawning");
+                    newLuigi.setCutsceneFrameCounter(0);
+                    entities.add(newLuigi);
+                    Tools.playSound("smw_reserve_item_release.wav", 100);
+                }
+            }
+        }
+        
         // Quelle: https://stackoverflow.com/questions/18448671/how-to-avoid-concurrentmodificationexception-while-removing-elements-from-arr
         // Nutzer: arshajii
         Iterator<Entity> iter = entities.iterator();
@@ -241,6 +323,18 @@ public class Level
                 iter.remove();
             }          
         }      
+        
+        // neues Item einfügen
+        if (newEntity != null)
+        {
+            entities.add(newEntity);
+            newEntity = null;
+        }
+    }
+    
+    public static void addEntity(Entity entity)
+    {
+        newEntity = entity;
     }
     
     /**
@@ -248,35 +342,99 @@ public class Level
      */
     public void checkEntities()
     {
+        simulationPaused = false;
+        if (!Entity.getGlobalCutscene().equals(""))
+        {
+            simulationPaused = true;
+        }       
+        
+        // Anzahl der Spieler zählen
+        int playerCount = 0;
         for (Entity listEntity : entities)
         {
-            if (listEntity.isDying())
+            if (listEntity.getClass() == Player.class)
             {
-                playerDying = true;
+                playerCount ++;
             }
-            
-            if (listEntity.isDead())
+        }
+        
+        for (Entity listEntity : entities)
+        {    
+            if (playerCount == 1 && listEntity.isDead())
             {
-                allPlayersDead = true;
+                levelLost = true;
+            }
+            if (listEntity.getCurrentCutscene().equals("victoryDone"))
+            {
+                levelCleared = true;
+            }
+            if(playerCount == 1 && (listEntity.getCurrentCutscene().equals("edge") || listEntity.getCurrentCutscene().equals("dying") || listEntity.getCurrentCutscene().equals("deadWait")))
+            {
+                simulationPaused = true;
+            }
+            if (listEntity.getCurrentCutscene().equals("growing"))
+            {
+                simulationPaused = true;
             }
         }
     }
     
+    
     /**
-     * prüft, ob gerade ein Spieler stirbt
+     * gibt aktuelle Cutscene zurück
      */
-    public boolean animationIsPlaying()
+    /*
+    private int counter;
+    public String getCurrentCutscene()
     {
-        return playerDying;
+        counter = 0;
+        for (Entity listEntity : entities)
+        {
+            if (!listEntity.getCurrentCutscene().equals(""))
+            {
+                counter = listEntity.getCutsceneFrameCounter();
+                return listEntity.getCurrentCutscene();
+            }
+        }
+        return "";
+    }
+    
+    public int getCutsceneFrameCounter()
+    {
+        /*for (Entity listEntity : entities)
+        {
+            if (listEntity.getCutsceneFrameCounter() != 0)
+            {
+                return listEntity.getCutsceneFrameCounter();
+            }
+        }
+        return counter;
+        //return 0;
+    }
+    */
+    /**
+     * prüft, ob gerade eine Cutscene läuft
+     */
+    public boolean isSimulationPaused()
+    {
+        return simulationPaused;
     }
     
     /**
-     * prüft, ob alle Spieler im Level tod sind
+     * prüft, ob Level geschafft wurde
      */
-    public boolean mustReset()
+    public boolean isLevelCleared()
     {
-        return allPlayersDead;
+        return levelCleared;
     }
+    
+    /**
+     * prüft, ob das Level verloren wurde
+     */
+    public boolean isLevelLost()
+    {
+        return levelLost;
+    }    
     
     /**
      * neues Objekt in die Welt hinzufügen

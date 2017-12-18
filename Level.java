@@ -23,8 +23,10 @@ public class Level
     private boolean simulationPaused = false;
     private static Entity newEntity;
     
-    private String[] controlsP1 = {"w","a","s","d","w","c","shift"};
-    private String[] controlsP2 = {"up", "left", "down", "right", "up", "1", "0"};
+    private String[] controlsP1 = {"w","a","s","d","space","c","q"};
+    
+    private String[] controlsP2 = {"up", "left", "down", "right", "1", "v", "0"};
+    
     
     /**
      * neu erstelltes Level lädt Json-Datei mit angegebenem Pfad in Objekte 

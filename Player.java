@@ -159,7 +159,7 @@ public class Player extends Entity
             
             if (getCurrentCutscene().equals("spawning"))
             {
-                if (getCutsceneFrameCounter() < 120)
+                if (getCutsceneFrameCounter() < 40)
                 {
                     Player otherPlayer = null;
                     for (Entity listEntity : entities)

@@ -47,6 +47,9 @@ public class Block extends Entity
             boolean rightIsGround = false;
             boolean upperLeftIsGround = false;
             boolean upperRightIsGround = false;
+            boolean belowIsGround = false;
+            boolean lowerLeftIsGround = false;
+            boolean lowerRightIsGround = false;
             
             // nach Ground-Blöcken in der Umgebung suchen
             for (Entity entity : entities)
@@ -74,6 +77,27 @@ public class Block extends Entity
                         }
                     }
                     
+                    // nach unten prüfen
+                    if (getPosY() == entity.getPosY() + 16)
+                    {
+                        if (getPosX() == entity.getPosX())
+                        {
+                            belowIsGround = true;
+                        }
+                        
+                        // nach oben links prüfen
+                        if (getPosX() == entity.getPosX() + 16 || getPosX() <= 16)
+                        {
+                            lowerLeftIsGround = true;
+                        }
+                        
+                        // nach oben rechts prüfen
+                        if (getPosX() == entity.getPosX() - 16)
+                        {
+                            lowerRightIsGround = true;
+                        }
+                    }
+                    
                     // nach links prüfen
                     if ((getPosX() == entity.getPosX() + 16 && getPosY() == entity.getPosY()) || getPosX() <= 16)
                     {
@@ -84,16 +108,41 @@ public class Block extends Entity
                     if (getPosX() == entity.getPosX() - 16 && getPosY() == entity.getPosY())
                     {
                         rightIsGround = true;
-                    }                         
+                    }    
+                    
+                    
                 }
             }  
+            
+            if (getPosY() == 0)
+            {
+                belowIsGround = true;
+                lowerLeftIsGround = true;
+                lowerRightIsGround = true;
+                
+            }
             
             // Aussehen anhand von umgebenden Blöcken festlegen
             if (aboveIsGround)
             {
-                if (!leftIsGround && !rightIsGround)
+                if (!belowIsGround)
                 {
-                    setActivity("dirt_single");
+                    if (!leftIsGround)
+                    {
+                        setActivity("grass_lower_left_corner");
+                    }
+                    else if (!rightIsGround)
+                    {
+                        setActivity("grass_lower_right_corner");
+                    }
+                    
+                    else
+                    {
+                        setActivity("grass_lower_edge");
+                    }
+                } else if (!leftIsGround && !rightIsGround)
+                {
+                    setActivity("grass_single_edge");
                 }
                 else if (!leftIsGround)
                 {
@@ -115,6 +164,15 @@ public class Block extends Entity
                 {
                     setActivity("dirt_right_corner");
                 }
+                else if (!lowerLeftIsGround)
+                {
+                    setActivity("dirt_lower_left_corner");
+                }
+                else if (!lowerRightIsGround)
+                
+                {
+                    setActivity("dirt_lower_right_corner");
+                }
                 else
                 {
                     setActivity("dirt");
@@ -122,7 +180,12 @@ public class Block extends Entity
             }
             else
             {
-                if (!leftIsGround && !rightIsGround)
+                if (!leftIsGround && !rightIsGround && !belowIsGround)
+                
+                {
+                    setActivity("grass_spot");
+                }
+                else if (!leftIsGround && !rightIsGround)
                 {
                     setActivity("grass_single_corner");
                 }
@@ -164,6 +227,12 @@ public class Block extends Entity
                 mushroom.setCutsceneFrameCounter(0);
                 Level.addEntity(mushroom); 
             }
+            if (getName().equals("Spinblock"))
+            {
+                setActivity("spinning");
+                setCollisionEnabled(false);
+                setFrameCounter(0);
+            }
         }
     }
     
@@ -173,6 +242,16 @@ public class Block extends Entity
         if (getName().equals("Mystery_Block"))
         {
             setAnimationIndex(globalFrameCounter/8);
+        }
+        
+        if (getName().equals("Spinblock"))
+        {
+            setAnimationIndex(globalFrameCounter/8);
+            if (getFrameCounter() > 120)
+            {
+                setActivity("default");
+                setCollisionEnabled(true);
+            }
         }
     }
 }

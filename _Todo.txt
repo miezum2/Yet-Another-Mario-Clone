@@ -6,23 +6,21 @@ _weiche Kamerabewegung
 _Drehsprung einfügen
 _Powerups
 _Münzen
-unteren linken Punkt platzieren, nicht Mitte
 _Kamerazentrierung von Durchschnitt auf Mittelpunkt ändern
 _Keine Sounds gleichzeitig
 _Bei spielstart kurz warten
-
-scrollender Hintergrund
+_Rescalierung
 _allgemein höherer Sprung
-mehr Grastexturen
-Zielflagge im Editor vergrößern
+_mehr Grastexturen
 _Globaler Framecounter für Fragezeichen
-Powerups in Blöcken platieren
-Spinblöcke einfügen
-dynamische Fenstergröße
+_Powerups in Blöcken platieren
+_Spinblöcke einfügen
+_dynamische Fenstergröße
 _letze go sound
-block platzier sound
+
 _Sounds neu machen weil lauter werden
-draw Reihenfolge Special vor Block
+_draw Reihenfolge Special vor Block
+
 
 verworfen:
 Rote Koopas Clifferkennung
@@ -33,6 +31,12 @@ Koopas zu shells umwandeln
 Skalierung überarbeiten
 Beschleunigung bei Tod
 Gitter zeichnen
+scrollender Hintergrund
+Ingame Blauer Hintergrund
+Zielflagge im Editor vergrößern
+unteren linken Punkt platzieren, nicht Mitte
+block platzier sound
+
 
 Phil:
 _Bewegungsknöpfe durch zoom ersetzen
