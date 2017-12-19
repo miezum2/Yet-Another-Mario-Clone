@@ -2160,38 +2160,6 @@
     {
       "type": "block",
       "name": "Ground",
-      "x": 1376,
-      "y": 112,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1392,
-      "y": 112,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1392,
-      "y": 128,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1376,
-      "y": 128,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
       "x": 1280,
       "y": 0,
       "state": "grass",
@@ -2378,158 +2346,6 @@
       "name": "Ground",
       "x": 1360,
       "y": 96,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1376,
-      "y": 96,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1392,
-      "y": 96,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1408,
-      "y": 96,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1408,
-      "y": 112,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1408,
-      "y": 128,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1424,
-      "y": 128,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1424,
-      "y": 112,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1424,
-      "y": 96,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1440,
-      "y": 96,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1440,
-      "y": 112,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1440,
-      "y": 128,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1456,
-      "y": 128,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1472,
-      "y": 128,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1456,
-      "y": 96,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1456,
-      "y": 112,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1472,
-      "y": 112,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1472,
-      "y": 96,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1488,
-      "y": 96,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1488,
-      "y": 112,
       "state": "grass",
       "data": ""
     },
@@ -2744,22 +2560,6 @@
     {
       "type": "block",
       "name": "Ground",
-      "x": 1344,
-      "y": 80,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1360,
-      "y": 80,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
       "x": 1472,
       "y": 80,
       "state": "grass",
@@ -2770,14 +2570,6 @@
       "name": "Ground",
       "x": 1488,
       "y": 80,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1488,
-      "y": 128,
       "state": "grass",
       "data": ""
     },
@@ -2825,38 +2617,6 @@
       "type": "block",
       "name": "Ground",
       "x": 1360,
-      "y": 144,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1376,
-      "y": 144,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1392,
-      "y": 144,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1408,
-      "y": 144,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 1424,
       "y": 144,
       "state": "grass",
       "data": ""
@@ -3446,54 +3206,6 @@
       "data": ""
     },
     {
-      "type": "special",
-      "name": "Coin",
-      "x": 1376,
-      "y": 80,
-      "state": "default",
-      "data": ""
-    },
-    {
-      "type": "special",
-      "name": "Coin",
-      "x": 1392,
-      "y": 80,
-      "state": "default",
-      "data": ""
-    },
-    {
-      "type": "special",
-      "name": "Coin",
-      "x": 1408,
-      "y": 80,
-      "state": "default",
-      "data": ""
-    },
-    {
-      "type": "special",
-      "name": "Coin",
-      "x": 1424,
-      "y": 80,
-      "state": "default",
-      "data": ""
-    },
-    {
-      "type": "special",
-      "name": "Coin",
-      "x": 1440,
-      "y": 80,
-      "state": "default",
-      "data": ""
-    },
-    {
-      "type": "special",
-      "name": "Coin",
-      "x": 1456,
-      "y": 80,
-      "state": "default",
-      "data": ""
-    },
-    {
       "type": "block",
       "name": "Ground",
       "x": 1504,
@@ -3904,14 +3616,6 @@
     {
       "type": "special",
       "name": "Coin",
-      "x": 1648,
-      "y": 160,
-      "state": "default",
-      "data": ""
-    },
-    {
-      "type": "special",
-      "name": "Coin",
       "x": 1664,
       "y": 144,
       "state": "default",
@@ -3954,6 +3658,366 @@
       "name": "Coin",
       "x": 1744,
       "y": 64,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1360,
+      "y": 80,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1376,
+      "y": 80,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1392,
+      "y": 80,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1408,
+      "y": 80,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1424,
+      "y": 80,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1440,
+      "y": 80,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1456,
+      "y": 80,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1424,
+      "y": 144,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1408,
+      "y": 144,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1392,
+      "y": 144,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1376,
+      "y": 144,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1344,
+      "y": 80,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1344,
+      "y": 64,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1360,
+      "y": 64,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1376,
+      "y": 64,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1392,
+      "y": 64,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1408,
+      "y": 64,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1424,
+      "y": 64,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1440,
+      "y": 64,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1456,
+      "y": 64,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1472,
+      "y": 64,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 1488,
+      "y": 64,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1648,
+      "y": 160,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1376,
+      "y": 96,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1392,
+      "y": 96,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1408,
+      "y": 96,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1424,
+      "y": 96,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1440,
+      "y": 96,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1456,
+      "y": 96,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1472,
+      "y": 96,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1472,
+      "y": 112,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1472,
+      "y": 128,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1456,
+      "y": 128,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1440,
+      "y": 128,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1424,
+      "y": 128,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1408,
+      "y": 128,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1392,
+      "y": 128,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1376,
+      "y": 128,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1376,
+      "y": 112,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1392,
+      "y": 112,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1408,
+      "y": 112,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1424,
+      "y": 112,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1440,
+      "y": 112,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1456,
+      "y": 112,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 1520,
+      "y": 192,
       "state": "default",
       "data": ""
     }

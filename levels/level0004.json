@@ -952,7 +952,7 @@
     {
       "type": "special",
       "name": "Flagpole",
-      "x": 864,
+      "x": 800,
       "y": 32,
       "state": "slim",
       "data": ""

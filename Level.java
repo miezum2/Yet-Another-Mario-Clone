@@ -23,9 +23,8 @@ public class Level
     private boolean simulationPaused = false;
     private static Entity newEntity;
     
-    private String[] controlsP1 = {"w","a","s","d","space","c","q"};
-    
-    private String[] controlsP2 = {"up", "left", "down", "right", "1", "v", "0"};
+    private String[] controlsP1 = {"w","a","s","d","w","q","shift"};
+    private String[] controlsP2 = {"up", "left", "down", "right", "up", "v", "0"};
     
     
     /**
