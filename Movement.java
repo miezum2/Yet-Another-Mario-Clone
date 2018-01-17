@@ -6,6 +6,9 @@ import java.util.*;
  */
 public class Movement
 {
+    // Wer auch immer das hier liest, möge bitte die fast identischen Methoden zur Kollisionsprüfung entschuldigen
+    // ...es war nicht mehr viel Zeit übrig
+    
     //Gibt die Bewegung in Y-Richtung an
     private double Y;
     //Gibt die Beschleunigung der Entity an

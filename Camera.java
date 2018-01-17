@@ -161,7 +161,7 @@ public class Camera
         if (zoomMode.equals("slow"))
         {
             currentPosX = smoothMove(currentPosX, targetPosX, 30);
-            currentPosY = smoothMove(currentPosY, targetPosY, 30);
+            currentPosY = smoothMove(currentPosY, targetPosY, 30);            
         }
         else if (zoomMode.equals("instant"))
         {

@@ -6,14 +6,6 @@
   },
   "levelData": [
     {
-      "type": "player",
-      "name": "Mario",
-      "x": 80,
-      "y": 32,
-      "state": "small",
-      "data": ""
-    },
-    {
       "type": "block",
       "name": "Ground",
       "x": 0,
@@ -304,8 +296,120 @@
     {
       "type": "block",
       "name": "Ground",
-      "x": 128,
+      "x": 160,
+      "y": 48,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 192,
+      "y": 64,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 160,
       "y": 32,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 176,
+      "y": 48,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 176,
+      "y": 32,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 192,
+      "y": 48,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 192,
+      "y": 32,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 176,
+      "y": 64,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 160,
+      "y": 64,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 144,
+      "y": 64,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 144,
+      "y": 80,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 160,
+      "y": 80,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 176,
+      "y": 80,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 192,
+      "y": 80,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 144,
+      "y": 48,
       "state": "grass",
       "data": ""
     },
@@ -319,98 +423,74 @@
     },
     {
       "type": "block",
-      "name": "Ground",
-      "x": 144,
-      "y": 48,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 160,
-      "y": 48,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 160,
+      "name": "Mystery_Block",
+      "x": 80,
       "y": 64,
-      "state": "grass",
+      "state": "yellow",
       "data": ""
     },
     {
-      "type": "block",
-      "name": "Ground",
-      "x": 176,
+      "type": "special",
+      "name": "Coin",
+      "x": 64,
       "y": 64,
-      "state": "grass",
+      "state": "default",
       "data": ""
     },
     {
-      "type": "block",
-      "name": "Ground",
-      "x": 192,
-      "y": 64,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 160,
-      "y": 32,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 176,
-      "y": 48,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 176,
-      "y": 32,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 192,
-      "y": 48,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 192,
-      "y": 32,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "koopa",
-      "name": "Koopa",
+      "type": "special",
+      "name": "Coin",
       "x": 48,
-      "y": 32,
-      "state": "red",
+      "y": 64,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 32,
+      "y": 64,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 96,
+      "y": 64,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 112,
+      "y": 64,
+      "state": "default",
       "data": ""
     },
     {
       "type": "special",
       "name": "Flagpole",
-      "x": 256,
+      "x": 272,
       "y": 32,
       "state": "slim",
+      "data": ""
+    },
+    {
+      "type": "player",
+      "name": "Mario",
+      "x": 32,
+      "y": 32,
+      "state": "small",
+      "data": ""
+    },
+    {
+      "type": "koopa",
+      "name": "Koopa",
+      "x": 192,
+      "y": 96,
+      "state": "red",
       "data": ""
     }
   ]
