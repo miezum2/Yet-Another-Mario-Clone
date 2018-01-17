@@ -400,8 +400,6 @@ public class UserInterface extends World
                     //floatingEntity.setLocation(camera.alignXatGrid(Maus.getX()+(floatingEntity.getImage().getWidth()/2)),camera.alignYatGrid(Maus.getY()));
                     floatingEntity = null;
                 }
-                
-
             }
         }
         //Stempel um mehrer Objekte setzet zu können
@@ -446,7 +444,7 @@ public class UserInterface extends World
 
             if (mouseButtonLeft)
             {
-                //Setz das Flegende Object, fals dieses Exestiert, an die Position der Maus
+                //Setz das Fliegende Object, fals dieses Exestiert, an die Position der Maus
                 if (floatingEntity != null)
                 {
                     //System.out.println(Maus.getX());
@@ -538,6 +536,7 @@ public class UserInterface extends World
                     if (object.equals(newLevel))
                     {
                         //String levelName=JOptionPane.showInputDialog("Benenne deine Welt: ");
+                        //Kommpletes neuzeichnen der Welt um neues Level zu erstellen und  anzuzeigen
                         String levelName=Greenfoot.ask("Benenne deine Welt: ");
                         if (levelName.equals(""))
                         {
@@ -667,7 +666,7 @@ public class UserInterface extends World
                     }
                     if (switchClock == 10)
                     {
-                        //edit
+                        //Edit aus Play
                         if (object.equals(ingameToEditor))
                         {
                             onEditButtonClicked(ingameToEditor);
