@@ -1,0 +1,305 @@
+{
+  "levelInfo": {
+    "date": "Datum einfuegen",
+    "name": "test2",
+    "desc": "Beschreibung"
+  },
+  "levelData": [
+    {
+      "type": "player",
+      "name": "Mario",
+      "x": 80,
+      "y": 32,
+      "state": "small",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 0,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 0,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 16,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 16,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 32,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 32,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 48,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 48,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 64,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 64,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 80,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 80,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 96,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 96,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 112,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 112,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 128,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 128,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 144,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 144,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 160,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 160,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 176,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 176,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 192,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 192,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 208,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 208,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 224,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 224,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 240,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 240,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 256,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 256,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 272,
+      "y": 0,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 272,
+      "y": 16,
+      "state": "grass",
+      "data": ""
+    }
+  ]
+}

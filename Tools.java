@@ -28,6 +28,7 @@ public class Tools
         {
             objects = new File[0];
         }
+        Arrays.sort(objects);
         return objects;                
     }
     
@@ -210,7 +211,7 @@ public class Tools
         }        
         bgm = new GreenfootSound("sounds/"+path);
         bgm.setVolume(volume);
-        bgm.playLoop();
+        //bgm.playLoop();
         bgmVolume = volume;
         if (interrupt != null)
         {
@@ -222,7 +223,7 @@ public class Tools
     {
         GreenfootSound sound = new GreenfootSound("sounds/"+path);
         sound.setVolume(volume);
-        sound.play();    
+        //sound.play();    
     }
     
     public static void playInterrupt(String path, int volume)
@@ -234,7 +235,7 @@ public class Tools
         }
         interrupt = new GreenfootSound("sounds/"+path);
         interrupt.setVolume(volume);
-        interrupt.play();  
+        //interrupt.play();  
     }
     
     public static void checkSound()
