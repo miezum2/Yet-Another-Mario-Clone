@@ -3950,14 +3950,6 @@
       "data": ""
     },
     {
-      "type": "player",
-      "name": "Mario",
-      "x": 96,
-      "y": 32,
-      "state": "small",
-      "data": ""
-    },
-    {
       "type": "block",
       "name": "Ground",
       "x": 1840,
@@ -4035,6 +4027,14 @@
       "x": 144,
       "y": 16,
       "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "player",
+      "name": "Mario",
+      "x": 1200,
+      "y": 144,
+      "state": "small",
       "data": ""
     }
   ]
