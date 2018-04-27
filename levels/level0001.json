@@ -1320,30 +1320,6 @@
     {
       "type": "koopa",
       "name": "Koopa",
-      "x": 368,
-      "y": 32,
-      "state": "red",
-      "data": ""
-    },
-    {
-      "type": "koopa",
-      "name": "Koopa",
-      "x": 432,
-      "y": 32,
-      "state": "red",
-      "data": ""
-    },
-    {
-      "type": "koopa",
-      "name": "Koopa",
-      "x": 400,
-      "y": 32,
-      "state": "red",
-      "data": ""
-    },
-    {
-      "type": "koopa",
-      "name": "Koopa",
       "x": 464,
       "y": 32,
       "state": "red",
@@ -4046,58 +4022,18 @@
       "data": ""
     },
     {
-      "type": "block",
-      "name": "Ground",
-      "x": 32,
+      "type": "koopa",
+      "name": "Koopa",
+      "x": 368,
       "y": 32,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 48,
-      "y": 32,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 64,
-      "y": 32,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 64,
-      "y": 48,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 48,
-      "y": 48,
-      "state": "grass",
-      "data": ""
-    },
-    {
-      "type": "block",
-      "name": "Ground",
-      "x": 32,
-      "y": 48,
-      "state": "grass",
+      "state": "red",
       "data": ""
     },
     {
       "type": "koopa",
       "name": "Koopa",
-      "x": 48,
-      "y": 80,
+      "x": 416,
+      "y": 32,
       "state": "red",
       "data": ""
     }

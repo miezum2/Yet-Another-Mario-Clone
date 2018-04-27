@@ -95,7 +95,7 @@ public class GraphicsManager
             if (lastScale != scale)
             {
                 // if scale changed, delete cache
-                System.out.println("New scale: "+scale);
+                //System.out.println("New scale: "+scale);
                 imageCache = new HashMap<>();
                 lastScale = scale;
             }

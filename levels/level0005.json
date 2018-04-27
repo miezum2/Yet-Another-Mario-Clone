@@ -486,14 +486,6 @@
       "data": ""
     },
     {
-      "type": "special",
-      "name": "Flagpole",
-      "x": 608,
-      "y": 32,
-      "state": "slim",
-      "data": ""
-    },
-    {
       "type": "block",
       "name": "Ground",
       "x": 288,
@@ -587,6 +579,14 @@
       "x": 0,
       "y": 32,
       "state": "red",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Flagpole",
+      "x": 272,
+      "y": 32,
+      "state": "slim",
       "data": ""
     }
   ]

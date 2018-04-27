@@ -209,10 +209,10 @@ public class Tools
         {
             bgm.stop();
         }        
-        bgm = new GreenfootSound("sounds/"+path);
-        bgm.setVolume(volume);
+        //bgm = new GreenfootSound("sounds/"+path);
+        //bgm.setVolume(volume);
         //bgm.playLoop();
-        bgmVolume = volume;
+        //bgmVolume = volume;
         if (interrupt != null)
         {
             interrupt.stop();       
@@ -228,7 +228,7 @@ public class Tools
     
     public static void playInterrupt(String path, int volume)
     {
-        bgm.setVolume(0);
+        //bgm.setVolume(0);
         if (interrupt != null)
         {
             interrupt.stop();       

@@ -102,9 +102,9 @@ public class UserInterface extends World
         
         // Debug Informationen
         fpsCounter = new Text();
-        addObject(fpsCounter, 20, 66);
+        addObject(fpsCounter, 20, 86);
         entityCounter = new Text();
-        addObject(entityCounter, 20, 80);
+        addObject(entityCounter, 20, 100);
         //addObject(new CameraZones(width, height, 50, 100, 50), width/2, height/2);
 
         //addObject(new Player(nameP1, graphics.getImage(nameP1, "small", "walking", "right", 0), controlsP1), 100, 100);
@@ -180,7 +180,7 @@ public class UserInterface extends World
         lastNanoTime = newNanoTime;
 
         fpsCounter.setText(fps);
-        fpsCounter.setLocation(fpsCounter.getImage().getWidth()/2, 66);
+        fpsCounter.setLocation(fpsCounter.getImage().getWidth()/2, 86);
  
         if (mode.equals("init"))
         {
@@ -282,7 +282,7 @@ public class UserInterface extends World
             }
             
             entityCounter.setText(numberOfEntities+" Entities");    
-            entityCounter.setLocation(entityCounter.getImage().getWidth()/2, 80);    
+            entityCounter.setLocation(entityCounter.getImage().getWidth()/2, 100);    
             
         } else if (mode.equals("editor"))   
         {

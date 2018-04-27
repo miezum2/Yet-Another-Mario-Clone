@@ -246,8 +246,8 @@ public class Block extends Entity
         
         if (getName().equals("Spinblock"))
         {
-            setAnimationIndex(globalFrameCounter/8);
-            if (getFrameCounter() > 120)
+            setAnimationIndex(getFrameCounter()/8);
+            if (getFrameCounter() > 130)
             {
                 setActivity("default");
                 setCollisionEnabled(true);

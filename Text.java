@@ -26,6 +26,7 @@ public class Text extends Actor
         int imageWidth= (text.length() + 2) * 10;
         GreenfootImage image = new GreenfootImage(imageWidth, 16);
         image.clear();
+        image.setColor(Color.WHITE);
         image.drawString(text, 1, 12);
         setImage(image);
     }
