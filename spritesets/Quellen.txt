@@ -2,3 +2,4 @@ Mario_Luigi:    MM102      https://www.spriters-resource.com/custom_edited/mario
 Tileset1:       SupaMit    https://www.spriters-resource.com/custom_edited/mariocustoms/sheet/57759/
 Tileset2:       DeeY       https://www.spriters-resource.com/custom_edited/mariocustoms/sheet/28546/
 Mega Tileset: 	BMSantos   https://www.spriters-resource.com/custom_edited/mariocustoms/sheet/64266/
+Koopa:			NO Body	   https://www.spriters-resource.com/custom_edited/mariocustoms/sheet/27495/		

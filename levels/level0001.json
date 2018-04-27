@@ -4032,9 +4032,73 @@
     {
       "type": "player",
       "name": "Mario",
-      "x": 1200,
-      "y": 144,
+      "x": 96,
+      "y": 32,
       "state": "small",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 240,
+      "y": 32,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 32,
+      "y": 32,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 48,
+      "y": 32,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 64,
+      "y": 32,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 64,
+      "y": 48,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 48,
+      "y": 48,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Ground",
+      "x": 32,
+      "y": 48,
+      "state": "grass",
+      "data": ""
+    },
+    {
+      "type": "koopa",
+      "name": "Koopa",
+      "x": 48,
+      "y": 80,
+      "state": "red",
       "data": ""
     }
   ]

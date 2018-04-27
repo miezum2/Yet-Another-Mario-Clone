@@ -15,6 +15,8 @@ public class GraphicsManager
     private Map<String, EntityGraphics> entities;
     private double scale;
     private String mode;
+    private Map<String, GreenfootImage> imageCache;
+    private double lastScale;
         
     /**
      * GraphicsManager erstellen und Grafikverzeichnis übergeben
@@ -26,6 +28,7 @@ public class GraphicsManager
         noImage = Tools.loadImage("");
         scale = 1;
         mode = "ingame";
+        imageCache = new HashMap<>();
         
         // Alle Ordner im angegebenen Pfad suchen
         File[] directories = Tools.getDirContent(path, "dir");
@@ -44,22 +47,26 @@ public class GraphicsManager
      */
     public GreenfootImage getImage(String entityName, String stateName, String activityName, String orientation, int index)
     {
-        EntityGraphics entity = entities.get(entityName);
-        if (entity != null)
+        EntityGraphics entityGraphics = entities.get(entityName);
+        if (entityGraphics != null)
         {
-            GreenfootImage image = entity.getImage(stateName, activityName, orientation, index);
+            GreenfootImage image = entityGraphics.getImage(stateName, activityName, orientation, index);
+            
+            // create unique name for each file
+            String subject = entityName + "_" + stateName + "_" + activityName + "_" + orientation + "_" + image.getFont().getName();
+                      
             if (image != null)
             {
-                return scaleImage(image, scale);
+                return scaleImage(image, subject, scale);
             }
             else
             {
-                return scaleImage(noImage, scale);
+                return scaleImage(noImage, "noImage", scale);
             }
         }
         else
         {
-            return scaleImage(noImage, scale);
+            return scaleImage(noImage, "noImage", scale);
         } 
     }
     
@@ -68,7 +75,7 @@ public class GraphicsManager
      * etwas größere Skalierung im Spiel, um Flimmern zu vermeiden
      * etwas kleinere Skalierung im Editor, um Gitter hervorzuheben
      */
-    private GreenfootImage scaleImage(GreenfootImage image, double scale)
+    private GreenfootImage scaleImage(GreenfootImage image, String identifier, double scale)
     {
         if (scale == 1)
         {
@@ -85,9 +92,29 @@ public class GraphicsManager
                 scale = scale*0.95;
             }
             
-            GreenfootImage scaledImage = new GreenfootImage(image);
-            scaledImage.scale((int)(image.getWidth()*scale), (int)(image.getHeight()*scale));
-            return scaledImage;
+            if (lastScale != scale)
+            {
+                // if scale changed, delete cache
+                System.out.println("New scale: "+scale);
+                imageCache = new HashMap<>();
+                lastScale = scale;
+            }
+            
+            // check if image is in cache
+            if (imageCache.containsKey(identifier))
+            {
+                // return image from cache
+                return imageCache.get(identifier);
+            }
+            else
+            {
+                // scale image and store in cache
+                GreenfootImage scaledImage = new GreenfootImage(image);
+                scaledImage.scale((int)(image.getWidth()*scale), (int)(image.getHeight()*scale));
+                imageCache.put(identifier, scaledImage);
+                //System.out.println("stored " + identifier + " in cache");
+                return scaledImage;
+            }
         }
     }
     

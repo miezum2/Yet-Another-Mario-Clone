@@ -430,7 +430,7 @@ public class Player extends Entity
                 if (jumpabel)
                 {
                     setPosY(getPosY() + movement.jump(1));
-                    if (Greenfoot.isKeyDown(controls[5]))
+                    if (false)
                     {
                         if (!getActivity().equals("spinning")) {
                             setFrameCounter(0);

@@ -145,7 +145,14 @@ public class Camera
         }
         
         double delta = targetValue - currentValue;
-        return currentValue + delta / fraction; 
+        if (Math.abs(delta) < 0.1)
+        {
+            return targetValue;
+        }
+        else
+        {
+            return currentValue + delta / fraction; 
+        }
         
     }
     

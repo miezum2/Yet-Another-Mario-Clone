@@ -29,10 +29,13 @@ public class ActivityGraphics
             Tools.log("   Einzelgrafik: "+path, "image"); 
             
             // Bild speichern
-            facingRight.add(Tools.loadImage(path));
+            GreenfootImage image = Tools.loadImage(path);
+            image.setFont(new Font("0", 12));
+            facingRight.add(image);
             
             // Bild spiegeln und speichern
             GreenfootImage left = Tools.loadImage(path);
+            left.setFont(new Font("0", 12));
             left.mirrorHorizontally();
             facingLeft.add(left);
         }
@@ -42,18 +45,25 @@ public class ActivityGraphics
             File[] files = Tools.getDirContent(path, "file");
         
             // Alle Dateien durchgehen
+            int index = 0;
             for(File file: files)
             {
                 // Logeintrag
                 Tools.log("   Grafik: "+file.getName()+" - "+file.getPath(), "image");                 
                 
                 // GreenfootImage aus Bilddatei erstellen und an Liste anhängen
-                facingRight.add(Tools.loadImage(file.getPath()));
+                GreenfootImage right = Tools.loadImage(file.getPath());
+                right.setFont(new Font(Integer.toString(index), 12));
+                facingRight.add(right);
                 
                 // Bild spiegeln und speichern
                 GreenfootImage left = Tools.loadImage(file.getPath());
+                left.setFont(new Font(Integer.toString(index), 12));
                 left.mirrorHorizontally();
                 facingLeft.add(left);
+                //System.out.println(left.getFont().getName());
+                
+                index++;
             }        
         }
     }

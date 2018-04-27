@@ -24,7 +24,7 @@ public class Level
     private static Entity newEntity;
     
     private String[] controlsP1 = {"w","a","s","d","w","q","shift"};
-    private String[] controlsP2 = {"up", "left", "down", "right", "up", "v", "0"};
+    private String[] controlsP2 = {"up", "left", "down", "right", "up", "v", "control"};
     
     
     /**

@@ -29,6 +29,7 @@ public class Koopa extends Entity
     {
         super.update(entities);                
         
+        /*
         if (getActivity().equals("turning"))
         {
             turningCounter++;
@@ -48,6 +49,7 @@ public class Koopa extends Entity
                 setActivity("walking");
             }
         }
+        */
             
     }   
     
@@ -60,8 +62,8 @@ public class Koopa extends Entity
             || movement.isTouchingLeftObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class))
         {
             
-           setActivity("turning");
-            setOrientation("left");
+           //setActivity("turning");
+            setOrientation("right");
             turningCounter = 0;
             movement.setSpeed(0.5);
         }
@@ -69,8 +71,8 @@ public class Koopa extends Entity
         if (movement.isTouchingRightObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Block.class)
             || movement.isTouchingRightObject(getPosX(), getPosY(), getWidthUnits(), getHeightUnits(), Koopa.class))
         {
-            setActivity("turning");
-            setOrientation("right");
+            //setActivity("turning");
+            setOrientation("left");
             turningCounter = 0;
             movement.setSpeed(-0.5);
         }     
