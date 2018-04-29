@@ -57,6 +57,7 @@ public class UserInterface extends World
     private boolean trashcanActiv;
     private boolean mouseButtonLeft;
     private boolean isDragging;
+    private boolean creditShown;
     //Zählvariable die für Cooldown verwendet wird
     private int switchClock =0;
     private int delayTime;
@@ -127,11 +128,13 @@ public class UserInterface extends World
         levelMakerhaendler();
         //Button neues Level erstellen und zeichenen
         newLevel = new Select("newLevel",0,"newLevel.png",buttonScale);
-        btcredits = new Select("credits",0,"menu.png",buttonScale/4*3);
+        btcredits = new Select("credits",0,"info.png",buttonScale/4*3);
         addObject(newLevel,getWidth()/8*2+(newLevel.getImage().getWidth()/2),buttonYPos);
         //Credits zeichen
         addObject(btcredits,getWidth()/8*2+(btcredits.getImage().getWidth()/2),getHeight()/16*15);
 
+        creditShown = false;
+        
         mode="init";
         initializeSelect();
         initializePlaceable();
@@ -426,6 +429,17 @@ public class UserInterface extends World
                 }
             }
         }
+        
+        if (creditShown)
+        {
+            if (Greenfoot.isKeyDown("escape"))
+            {
+                removeObject(btcredits);
+                btcredits = new Select("credits",0,"info.png",buttonScale/4*3);
+                addObject(btcredits,getWidth()/8*2+(btcredits.getImage().getWidth()/2),getHeight()/16*15);
+                creditShown = false;
+            }
+        }
     }
     
     
@@ -543,8 +557,8 @@ public class UserInterface extends World
                     
                     if (object.equals(btcredits))
                     {
-                        System.out.println("Test");
                         showCredit();
+                        creditShown = true;
                     }
                     
                     if (object.equals(newLevel))
@@ -932,14 +946,30 @@ public class UserInterface extends World
     
     private void showCredit ()
     {
-        imCredit = new GreenfootImage(getWidth(),getHeight());
-        imCredit.setColor(new Color(255,255,255,100));
+        imCredit = new GreenfootImage(getWidth()/2,getHeight()/4*3);
+        imCredit.setColor(new Color(189,189,189,255));
         imCredit.fillRect(0,0,getWidth(),getHeight());
         //Schrift festlegen
         Font font = imCredit.getFont();
         font = font.deriveFont(20.0f);
         imCredit.setFont(font);
         imCredit.setColor(Color.BLACK);
+        textCredit();
+        btcredits.setLocation(getWidth()/4*2,getHeight()/2);
+        btcredits.setImage(imCredit);
+    }
+    
+    private void textCredit()
+    {
+        imCredit.drawString("Creators: ",10,30);
+        imCredit.drawString("Simon Kemmesies und Phil Schneider",10,60);
+        
+        imCredit.drawString("Alle verwendeten Charactere gehören Nintendo",10,150);
+        imCredit.drawString("Grafiken von www.spriters-resource.com",10,180);
+        imCredit.drawString("Nutzer: MM102, SupaMit, DeeY,",10,210);
+        imCredit.drawString("BMSantos, NO Body, Josiah",10,240);
+        
+        imCredit.drawString("Zum schließen ESCAPE drücken",10,getHeight()/4*3-10);
     }
     
 }
