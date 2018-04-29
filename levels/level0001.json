@@ -4036,6 +4036,14 @@
       "y": 32,
       "state": "red",
       "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Mystery_Block",
+      "x": 96,
+      "y": 64,
+      "state": "yellow",
+      "data": ""
     }
   ]
 }
