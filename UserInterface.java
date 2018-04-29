@@ -437,6 +437,7 @@ public class UserInterface extends World
                 removeObject(btcredits);
                 btcredits = new Select("credits",0,"info.png",buttonScale/4*3);
                 addObject(btcredits,getWidth()/8*2+(btcredits.getImage().getWidth()/2),getHeight()/16*15);
+                addObject(newLevel,getWidth()/8*2+(newLevel.getImage().getWidth()/2),buttonYPos);
                 creditShown = false;
             }
         }
@@ -559,6 +560,7 @@ public class UserInterface extends World
                     {
                         showCredit();
                         creditShown = true;
+                        removeObject(newLevel);
                     }
                     
                     if (object.equals(newLevel))
