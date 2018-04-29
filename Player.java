@@ -13,6 +13,7 @@ public class Player extends Entity
     private boolean jumpabel = true;
     private boolean directionChange=false;  
     private boolean invincible = false;
+    private boolean airborn = false;
     private int recoveryTimer = -1;
     private int jumpCount;
     
@@ -35,6 +36,14 @@ public class Player extends Entity
         if (jumpCount<=8)
         {
             jumpCount++;
+        }
+        if(Greenfoot.isKeyDown(controls[4]) || Greenfoot.isKeyDown(controls[5]))
+        {
+            airborn=true;
+        }
+        else
+        {
+            airborn=false;
         }
     }   
     
@@ -427,7 +436,7 @@ public class Player extends Entity
                 {
                     setPosY(getPosY() + movement.jump(3)); 
                 }
-                if (jumpabel)
+                if (jumpabel && !airborn)
                 {
                     setPosY(getPosY() + movement.jump(1));
                     if (false)

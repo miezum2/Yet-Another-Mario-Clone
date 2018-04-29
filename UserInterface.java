@@ -42,6 +42,8 @@ public class UserInterface extends World
     private Select editorToIngame;
     //Object für das erstellen von neuen Leveln(Button)
     private Select newLevel;
+    //Button für die Credits
+    private Select btcredits;
     //Scall in Px für die Buttons
     private int buttonScale;
     //gibt die Postion für die Buttons (obere Bildschrimrand) an
@@ -58,6 +60,8 @@ public class UserInterface extends World
     //Zählvariable die für Cooldown verwendet wird
     private int switchClock =0;
     private int delayTime;
+    //Credits Box
+    private GreenfootImage imCredit;
 
     // Quelle: https://www.greenfoot.org/doc/native_loader
     static {
@@ -123,7 +127,10 @@ public class UserInterface extends World
         levelMakerhaendler();
         //Button neues Level erstellen und zeichenen
         newLevel = new Select("newLevel",0,"newLevel.png",buttonScale);
+        btcredits = new Select("credits",0,"menu.png",buttonScale/4*3);
         addObject(newLevel,getWidth()/8*2+(newLevel.getImage().getWidth()/2),buttonYPos);
+        //Credits zeichen
+        addObject(btcredits,getWidth()/8*2+(btcredits.getImage().getWidth()/2),getHeight()/16*15);
 
         mode="init";
         initializeSelect();
@@ -530,9 +537,16 @@ public class UserInterface extends World
                             removeObject(blockChosing);
                             removeObject(ingameToEditor);
                             addObject(newLevel,getWidth()/8*2+(newLevel.getImage().getWidth()/2),buttonYPos);
+                            addObject(btcredits,getWidth()/8*2+(newLevel.getImage().getWidth()/2),getHeight()/16*15);
                         }
                     } 
-
+                    
+                    if (object.equals(btcredits))
+                    {
+                        System.out.println("Test");
+                        showCredit();
+                    }
+                    
                     if (object.equals(newLevel))
                     {
                         //String levelName=JOptionPane.showInputDialog("Benenne deine Welt: ");
@@ -556,6 +570,10 @@ public class UserInterface extends World
                         //Button neues Level erstellen und zeichenen
                         newLevel = new Select("newLevel",0,"newLevel.png",buttonScale);
                         addObject(newLevel,getWidth()/8*2+(newLevel.getImage().getWidth()/2),buttonYPos);
+                        
+                        addObject(newLevel,getWidth()/8*2+(newLevel.getImage().getWidth()/2),buttonYPos);
+                        //Credits zeichen
+                        addObject(btcredits,getWidth()/8*2+(btcredits.getImage().getWidth()/2),getHeight()/16*15);
                         mouseButtonLeft=false;
 
                     }
@@ -792,6 +810,7 @@ public class UserInterface extends World
     private void removeLevelMaker ()
     {
         removeObjects(getObjects(LevelMaker.class));
+        removeObject(btcredits);
         removeObject(newLevel);
         removeObjects(levelButton);
         levelMaker = new LevelMaker(levelDir,buttonScale);
@@ -910,5 +929,17 @@ public class UserInterface extends World
         editorToIngame = new Select(s.getName()+"Play",s.getLevelNumber(),"play-button.png",buttonScale);
         addObject(editorToIngame,getWidth()-buttonYPos,buttonYPos);
     }
-
+    
+    private void showCredit ()
+    {
+        imCredit = new GreenfootImage(getWidth(),getHeight());
+        imCredit.setColor(new Color(255,255,255,100));
+        imCredit.fillRect(0,0,getWidth(),getHeight());
+        //Schrift festlegen
+        Font font = imCredit.getFont();
+        font = font.deriveFont(20.0f);
+        imCredit.setFont(font);
+        imCredit.setColor(Color.BLACK);
+    }
+    
 }
