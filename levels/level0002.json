@@ -1644,6 +1644,46 @@
       "y": 80,
       "state": "red",
       "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 992,
+      "y": 48,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Cloud",
+      "x": 576,
+      "y": 112,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Cloud",
+      "x": 592,
+      "y": 112,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "block",
+      "name": "Cloud",
+      "x": 608,
+      "y": 112,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 592,
+      "y": 144,
+      "state": "default",
+      "data": ""
     }
   ]
 }

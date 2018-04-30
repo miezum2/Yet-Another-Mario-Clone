@@ -1524,6 +1524,30 @@
       "y": 96,
       "state": "grass",
       "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 320,
+      "y": 128,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 528,
+      "y": 64,
+      "state": "default",
+      "data": ""
+    },
+    {
+      "type": "special",
+      "name": "Coin",
+      "x": 0,
+      "y": 176,
+      "state": "default",
+      "data": ""
     }
   ]
 }
