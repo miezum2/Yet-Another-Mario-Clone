@@ -135,7 +135,10 @@ public class Block extends Entity
                     {
                         setActivity("grass_lower_right_corner");
                     }
-                    
+                    else if (!upperRightIsGround)
+                    {
+                        setActivity("grass_bottom_top_right_corner");
+                    }
                     else
                     {
                         setActivity("grass_lower_edge");
@@ -158,11 +161,19 @@ public class Block extends Entity
                 }                
                 else if (!upperLeftIsGround)
                 {
-                    setActivity("dirt_left_corner");
+                    if (!lowerLeftIsGround)
+                    {
+                        setActivity("dirt_left_corners");
+                    }
+                    else setActivity("dirt_left_corner");
                 }
                 else if (!upperRightIsGround)
                 {
-                    setActivity("dirt_right_corner");
+                    if (!lowerRightIsGround)
+                    {
+                        setActivity("dirt_right_corners");
+                    }
+                    else setActivity("dirt_right_corner");
                 }
                 else if (!lowerLeftIsGround)
                 {
@@ -191,11 +202,27 @@ public class Block extends Entity
                 }
                 else if (!leftIsGround)
                 {
-                    setActivity("grass_left_corner");
+                    if (!belowIsGround)
+                    {
+                        setActivity("grass_left_joint");
+                    }
+                    else setActivity("grass_left_corner");
                 }
                 else if (!rightIsGround)
                 {
-                    setActivity("grass_right_corner");
+                    if (!belowIsGround)
+                    {
+                        setActivity("grass_right_joint");
+                    }
+                    else setActivity("grass_right_corner");
+                }
+                else if (!belowIsGround)
+                {
+                    setActivity("grass_top_bottom");
+                }
+                else if (!lowerLeftIsGround)
+                {
+                    setActivity("grass_top_lower_left_corner");
                 }
                 else
                 {

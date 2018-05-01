@@ -103,7 +103,7 @@ public class Camera
                         
             // Mittelpunkt berechnen
             targetPosX = (playersMinX + playersMaxX) / 2 + 48;
-            targetPosY = (playersMinY + playersMaxY) / 2 - 32;
+            targetPosY = (playersMinY + playersMaxY) / 2;
             
             // Abstand der Spieler in X - und Y-Richtung berechnen
             double distanceX = playersMaxX - playersMinX;
