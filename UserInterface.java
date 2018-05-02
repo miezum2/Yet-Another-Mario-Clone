@@ -139,8 +139,8 @@ public class UserInterface extends World
         addObject(btcredits,getWidth()/8*2+(btcredits.getImage().getWidth()/2),getHeight()/16*15);
 
         field = new Select("fieldQuestion",0,"missingImage.png",1);
-        ok = new Select("OK",0,"newLevel.png",50);
-        cancel = new Select("Cancel",0,"info.png",50);
+        ok = new Select("OK",0,"ja.png",50);
+        cancel = new Select("Cancel",0,"nein.png",50);
         
         creditShown = false;
         
@@ -1034,7 +1034,7 @@ public class UserInterface extends World
         font = font.deriveFont(20.0f);
         deleteQU.setFont(font);
         deleteQU.setColor(Color.BLACK);
-        deleteQU.drawString("Welt wirklich löschen?",55,30);
+        deleteQU.drawString("Level wirklich löschen?",55,30);
         
         addObject(field,getWidth()/2,getHeight()/2);
         field.setImage(deleteQU);
