@@ -18,7 +18,8 @@ public class Select extends Actor
         this.setImage(imag);
         this.scale=scale;
         image = this.getImage();
-        image.scale(scale,scale);
+        double factor = (double)scale / image.getHeight();
+        image.scale((int)(image.getWidth()*factor),scale);
         setImage(image);
         this.levelNumber=levelNumber;
     }

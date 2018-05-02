@@ -139,8 +139,8 @@ public class UserInterface extends World
         addObject(btcredits,getWidth()/8*2+(btcredits.getImage().getWidth()/2),getHeight()/16*15);
 
         field = new Select("fieldQuestion",0,"missingImage.png",1);
-        ok = new Select("OK",0,"ja.png",50);
-        cancel = new Select("Cancel",0,"nein.png",50);
+        ok = new Select("OK",0,"ja.png",40);
+        cancel = new Select("Cancel",0,"nein.png",40);
         
         creditShown = false;
         
@@ -1038,8 +1038,8 @@ public class UserInterface extends World
         
         addObject(field,getWidth()/2,getHeight()/2);
         field.setImage(deleteQU);
-        addObject(ok,getWidth()/2+50,getHeight()/2+20);
-        addObject(cancel,getWidth()/2-50,getHeight()/2+20);
+        addObject(ok,getWidth()/2-50,getHeight()/2+20);
+        addObject(cancel,getWidth()/2+50,getHeight()/2+20);
         
     }
     
