@@ -420,7 +420,7 @@ public class UserInterface extends World
             {
                 if (Maus !=null)
                 {
-                    floatingEntity.setLocation(Maus.getX()+35,Maus.getY()+35);
+                    floatingEntity.setLocation(Maus.getX()+50,Maus.getY()+35);
                     if (mouseButtonLeft)
                     {
                         EntityData newEntity = new EntityData(floatingEntity.getType(), floatingEntity.getName(), camera.mapToWorldX(Maus.getX())/16*16, camera.mapToWorldY(Maus.getY())/16*16, floatingEntity.getState(), "");
@@ -565,8 +565,6 @@ public class UserInterface extends World
                     
                     if (object.equals(newLevel))
                     {
-                        //String levelName=JOptionPane.showInputDialog("Benenne deine Welt: ");
-                        //Kommpletes neuzeichnen der Welt um neues Level zu erstellen und  anzuzeigen
                         String levelName=Greenfoot.ask("Benenne deine Welt: ");
                         if (levelName.equals(""))
                         {
@@ -601,6 +599,7 @@ public class UserInterface extends World
                         {
                             if (s.getName() == "stamp")
                             {
+                                trashcanOut();
                                 if (!stampActiv)
                                 {
                                     stampActiv = true;
@@ -608,17 +607,14 @@ public class UserInterface extends World
                                 }
                                 else
                                 {
-                                    stampActiv= false;
-                                    removeObject(floatingEntity);
-                                    s.setImage(s.scaleImage(Tools.loadImage("images\\stamp.png")));
-                                    floatingEntity = null;
+                                    stampOut();
                                 }
 
                                 trashcanActiv =false;
                             }
                             if (s.getName() == "trashcan")
                             {
-                                stampActiv = false;
+                                stampOut();
                                 if (!trashcanActiv)
                                 {
                                     trashcanActiv = true;
@@ -626,8 +622,7 @@ public class UserInterface extends World
                                 }
                                 else
                                 {
-                                    trashcanActiv =false;
-                                    s.setImage(s.scaleImage(Tools.loadImage("images\\delete.png")));
+                                    trashcanOut();
                                 }
                             }
                             if (s.getName() == "zoomin")
@@ -640,6 +635,8 @@ public class UserInterface extends World
                             }
                             if (s.getName() == "bloecke")
                             {
+                                stampOut();
+                                trashcanOut();
                                 if (switchClock ==10)
                                 {
                                     if (blockChosing == null )
@@ -905,6 +902,8 @@ public class UserInterface extends World
         removeEditor();
         //Löscht die Levelauswahl
         removeLevelMaker();
+        trashcanOut();
+        stampOut();
         trashcanActiv=false;
         GreenfootImage image = Tools.loadImage("images/background.png");
         image.scale(getWidth(), getHeight());
@@ -972,6 +971,32 @@ public class UserInterface extends World
         imCredit.drawString("BMSantos, NO Body, Josiah",10,240);
         
         imCredit.drawString("Zum schließen ESCAPE drücken",10,getHeight()/4*3-10);
+    }
+    
+    private void trashcanOut ()
+    {
+        trashcanActiv = false;
+        for (Select d:editor)
+        {
+            if (d.getName() == "trashcan")
+            {
+                d.setImage(d.scaleImage(Tools.loadImage("images\\delete.png")));
+            }
+        }
+    }
+    
+    private void stampOut ()
+    {
+        stampActiv= false;
+        removeObject(floatingEntity);
+        for (Select d:editor)
+        {
+            if (d.getName() == "stamp")
+            {
+                d.setImage(d.scaleImage(Tools.loadImage("images\\stamp.png")));
+            }
+        }
+        floatingEntity = null;                        
     }
     
 }
