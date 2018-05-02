@@ -44,6 +44,11 @@ public class UserInterface extends World
     private Select newLevel;
     //Button für die Credits
     private Select btcredits;
+    //Buttons für Welt Löschen frage
+    private Select field;
+    private Select ok;
+    private Select cancel;
+    private Select objectInter;
     //Scall in Px für die Buttons
     private int buttonScale;
     //gibt die Postion für die Buttons (obere Bildschrimrand) an
@@ -133,11 +138,16 @@ public class UserInterface extends World
         //Credits zeichen
         addObject(btcredits,getWidth()/8*2+(btcredits.getImage().getWidth()/2),getHeight()/16*15);
 
+        field = new Select("fieldQuestion",0,"missingImage.png",1);
+        ok = new Select("OK",0,"newLevel.png",50);
+        cancel = new Select("Cancel",0,"info.png",50);
+        
         creditShown = false;
         
         mode="init";
         initializeSelect();
         initializePlaceable();
+        
     }
 
     private long lastNanoTime = 0;
@@ -666,7 +676,20 @@ public class UserInterface extends World
                             }
                         }
                     } 
-
+                    
+                    if (object.equals(ok))
+                    {
+                        Tools.deleteFile(levelLoader.getLevelList().get(objectInter.getLevelNumber()));
+                        objectInter = null;
+                        Greenfoot.setWorld(new UserInterface());
+                    }
+                    if (object.equals(cancel))
+                    {
+                        removeObject(field);
+                        removeObject(ok);
+                        removeObject(cancel);
+                    }
+                    
                     //Buttonabfrage für die Levelauswahl oder das Editiren der jeweiligen Level
                     if (!levelButton.isEmpty())
                     {
@@ -689,8 +712,9 @@ public class UserInterface extends World
                                 }
                                 if (s.getName().contains("Delete"))
                                 {
-                                    Tools.deleteFile(levelLoader.getLevelList().get(s.getLevelNumber()));
-                                    Greenfoot.setWorld(new UserInterface());
+                                    deleteQU();
+                                    objectInter = s;
+                                   
                                 }
                             }
                         }
@@ -997,6 +1021,25 @@ public class UserInterface extends World
             }
         }
         floatingEntity = null;                        
+    }
+    
+    private void deleteQU()
+    {
+        GreenfootImage deleteQU = new GreenfootImage(300,150);
+        deleteQU.setColor(new Color(189,189,189,255));
+        deleteQU.fillRect(0,0,getWidth(),getHeight());
+        //Schrift festlegen
+        Font font = deleteQU.getFont();
+        font = font.deriveFont(20.0f);
+        deleteQU.setFont(font);
+        deleteQU.setColor(Color.BLACK);
+        deleteQU.drawString("Welt wirklich löschen?",55,30);
+        
+        addObject(field,getWidth()/2,getHeight()/2);
+        field.setImage(deleteQU);
+        addObject(ok,getWidth()/2+50,getHeight()/2+20);
+        addObject(cancel,getWidth()/2-50,getHeight()/2+20);
+        
     }
     
 }
