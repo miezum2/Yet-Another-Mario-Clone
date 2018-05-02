@@ -568,6 +568,7 @@ public class UserInterface extends World
                     
                     if (object.equals(btcredits))
                     {
+                        removeOU();
                         showCredit();
                         creditShown = true;
                         removeObject(newLevel);
@@ -575,6 +576,7 @@ public class UserInterface extends World
                     
                     if (object.equals(newLevel))
                     {
+                        removeOU();
                         String levelName=Greenfoot.ask("Benenne deine Welt: ");
                         if (levelName.equals(""))
                         {
@@ -685,9 +687,7 @@ public class UserInterface extends World
                     }
                     if (object.equals(cancel))
                     {
-                        removeObject(field);
-                        removeObject(ok);
-                        removeObject(cancel);
+                        removeOU();
                     }
                     
                     //Buttonabfrage für die Levelauswahl oder das Editiren der jeweiligen Level
@@ -703,18 +703,19 @@ public class UserInterface extends World
                                     Tools.playBgm("Overworld.wav", 40);
                                     delayTime = 20;
                                     onPlayButtonClicked(s);
+                                    removeOU();
                                     
                                 }
                                 if (s.getName().contains("Edit"))
                                 {
                                     onEditButtonClicked(s);
+                                    removeOU();
 
                                 }
                                 if (s.getName().contains("Delete"))
                                 {
                                     deleteQU();
                                     objectInter = s;
-                                   
                                 }
                             }
                         }
@@ -1040,6 +1041,13 @@ public class UserInterface extends World
         addObject(ok,getWidth()/2+50,getHeight()/2+20);
         addObject(cancel,getWidth()/2-50,getHeight()/2+20);
         
+    }
+    
+    private void removeOU()
+    {
+        removeObject(field);
+        removeObject(ok);
+        removeObject(cancel);
     }
     
 }
